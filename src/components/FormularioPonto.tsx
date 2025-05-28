@@ -15,7 +15,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    console.log(iconeUrl)
     // 1. Cria o ponto
     const res = await fetch('http://localhost:3000/pontos', {
       method: 'POST',
@@ -25,7 +25,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         descricao,
         latitude: coordenadas[0],
         longitude: coordenadas[1],
-        iconeUrl: iconeUrl || undefined,
+        iconeUrl: iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png"
       }),
     });
 

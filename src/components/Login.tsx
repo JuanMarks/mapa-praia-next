@@ -2,17 +2,26 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email:', email, 'Senha:', senha);
-    router.push('/'); // redireciona para o mapa após o login
+    try {
+      const res = await axios.post('http://localhost:3000/auth/login', { email, senha });
+      Cookies.set('token', res.data.access_token);
+      Cookies.set('role', res.data.role);
+      router.push('/'); // redireciona pro mapa ou dashboard
+    } catch (err) {
+      alert('Erro ao fazer login');
+    }
   };
+
 
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center vh-100 position-relative bg-dark">

@@ -5,7 +5,7 @@ import { PontoTuristico } from '@/types/ponto';
 import PopupContent from './PopupContent';
 import FormularioPonto from './FormularioPonto';
 import 'leaflet/dist/leaflet.css';
-
+import { useAuth } from '../hooks/useAuth';
 // Corrige ícones do Leaflet em Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -24,6 +24,7 @@ const bounds: [[number, number], [number, number]] = [
 const MapaInterativo = () => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
     const [novaPosicao, setNovaPosicao] = useState<[number, number] | null>(null);
+    const { role, loading } = useAuth();
 
     const MapClickHandler = () => {
         useMapEvents({
@@ -42,12 +43,37 @@ const MapaInterativo = () => {
     };
 
     useEffect(() => {
-
+        console.log(role)
         fetchPontos();
     }, []);
 
     return (
         <div className=''>
+            <div className="flex justify-end mb-2">
+                {loading ? null : role === 'admin' ? (
+                    <button
+                        className="bg-red-500 text-white px-4 py-2 rounded"
+                        onClick={() => {
+                            // Adapte conforme seu hook de auth
+                            if (typeof window !== 'undefined') {
+                                localStorage.removeItem('token');
+                                window.location.reload();
+                            }
+                        }}
+                    >
+                        Logout
+                    </button>
+                ) : (
+                    <button
+                        className="bg-blue-500 text-black px-4 py-2 rounded "
+                        onClick={() => {
+                            window.location.href = '/login';
+                        }}
+                    >
+                        Login
+                    </button>
+                )}
+            </div>
             <h1 className="text-center">Mapa Interativo de Pontos Turísticos</h1>
             <div id='map'>
                 <MapContainer
