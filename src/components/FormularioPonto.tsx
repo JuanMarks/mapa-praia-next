@@ -78,7 +78,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
 
           <Form.Group className="mb-2">
             <Form.Label>Ícone (URL)</Form.Label>
-            <Form.Control value={iconeUrl} onChange={(e) => setIconeUrl(e.target.value)} />
+            <Form.Control value={iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png"} onChange={(e) => setIconeUrl(e.target.value)} />
           </Form.Group>
 
           <Form.Group className="mb-2">

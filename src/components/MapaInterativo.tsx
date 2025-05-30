@@ -48,84 +48,57 @@ const MapaInterativo = () => {
     }, []);
 
     return (
-        <div className=''>
-            <div className="flex justify-end mb-2">
-                {loading ? null : role === 'admin' ? (
-                    <button
-                        className="bg-red-500 text-white px-4 py-2 rounded"
-                        onClick={() => {
-                            // Adapte conforme seu hook de auth
-                            if (typeof window !== 'undefined') {
-                                localStorage.removeItem('token');
-                                window.location.reload();
-                            }
-                        }}
-                    >
-                        Logout
-                    </button>
-                ) : (
-                    <button
-                        className="bg-blue-500 text-black px-4 py-2 rounded "
-                        onClick={() => {
-                            window.location.href = '/login';
-                        }}
-                    >
-                        Login
-                    </button>
-                )}
-            </div>
+        <div className='m-3'>
             <h1 className="text-center">Mapa Interativo de Pontos Turísticos</h1>
-            <div id='map'>
-                <MapContainer
-                    center={centro}
-                    zoom={14}
-                    minZoom={14}
-                    maxBounds={bounds}
-                    maxBoundsViscosity={1.0}
-                    style={{ height: '80vh', width: '100%'}}
+            <div id='map' className="rounded-lg overflow-hidden">
+            <MapContainer
+                center={centro}
+                zoom={14}
+                minZoom={14}
+                maxBounds={bounds}
+                maxBoundsViscosity={1.0}
+                style={{ height: '80vh', width: '100%'}}
+            >
+                <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+
+                <MapClickHandler />
+
+                {/* Exibe o modal quando o mapa é clicado */}
+                {novaPosicao && (
+                <FormularioPonto
+                    coordenadas={novaPosicao}
+                    onClose={() => setNovaPosicao(null)}
+                    onCriado={() => {
+                    setNovaPosicao(null);
+                    fetchPontos();
+                    }}
+                />
+                )}
+
+                {pontos.map((ponto) => (
+                <Marker
+                    key={ponto.id}
+                    position={[ponto.latitude, ponto.longitude]}
+                    icon={
+                    ponto.iconeUrl
+                        ? L.icon({
+                        iconUrl: ponto.iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png",
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32],
+                        })
+                        : undefined
+                    }
                 >
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    />
-
-                    <MapClickHandler />
-
-                    {/* Exibe o modal quando o mapa é clicado */}
-                    {novaPosicao && (
-                        <FormularioPonto
-                            coordenadas={novaPosicao}
-                            onClose={() => setNovaPosicao(null)}
-                            onCriado={() => {
-                                setNovaPosicao(null);
-                                fetchPontos();
-                            }}
-                        />
-                    )}
-
-
-                    {pontos.map((ponto) => (
-                        <Marker
-                            key={ponto.id}
-                            position={[ponto.latitude, ponto.longitude]}
-                            icon={
-                                ponto.iconeUrl
-                                    ? L.icon({
-                                        iconUrl: ponto.iconeUrl,
-                                        iconSize: [32, 32],
-                                        iconAnchor: [16, 32],
-                                    })
-                                    : undefined
-                            }
-                        >
-                            <Popup>
-                                <PopupContent ponto={ponto} />
-                            </Popup>
-                        </Marker>
-                    ))}
-                </MapContainer>
+                    <Popup>
+                    <PopupContent ponto={ponto} />
+                    </Popup>
+                </Marker>
+                ))}
+            </MapContainer>
             </div>
-
         </div>
 
     );
