@@ -14,8 +14,9 @@ const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:3000/auth/login', { email, senha });
-      Cookies.set('token', res.data.access_token);
-      Cookies.set('role', res.data.role);
+      console.log(res.data.token.role);
+      Cookies.set('token', res.data.token);
+      Cookies.set('role', res.data.token.role);
       router.push('/'); // redireciona pro mapa ou dashboard
     } catch (err) {
       alert('Erro ao fazer login');

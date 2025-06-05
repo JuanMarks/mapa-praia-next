@@ -93,7 +93,7 @@ const MapaInterativo = () => {
                     }
                 >
                     <Popup>
-                    <PopupContent ponto={ponto} />
+                        <PopupContent ponto={ponto} />
                     </Popup>
                 </Marker>
                 ))}

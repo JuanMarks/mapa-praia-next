@@ -5,6 +5,13 @@ import { useAuth } from '../hooks/useAuth';
 
 export default function Header(){
     const { role, loading } = useAuth();
+    function logout() {
+        if (typeof window !== 'undefined') {
+            // Remove token from cookies
+            document.cookie = 'token=; Max-Age=0; path=/;';
+            window.location.reload();
+        }
+    }
     return(
         <header className="bg-black text-white py-4 px-6 flex items-center justify-between">
         <h2 className=" font-bold">Mapa Praia</h2>
@@ -27,13 +34,7 @@ export default function Header(){
                 </li>
                 <li>
                     {loading ? null : role === 'admin' ? (
-                        <a href="#" className=" text-white hover:text-gray-300 transition-colors" style={{textDecoration: 'none'}}  onClick={() => {
-                                // Adapte conforme seu hook de auth
-                                if (typeof window !== 'undefined') {
-                                    localStorage.removeItem('token');
-                                    window.location.reload();
-                                }
-                            }}>
+                        <a href="#" className=" text-white hover:text-gray-300 transition-colors" style={{textDecoration: 'none'}}  onClick={logout}>
                             Logout
                         </a>
                     ) : (
