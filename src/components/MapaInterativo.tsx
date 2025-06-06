@@ -48,9 +48,9 @@ const MapaInterativo = () => {
     }, []);
 
     return (
-        <div className='m-3'>
+        <div className='m-3 sm:m-0'>
             <h1 className="text-center">Mapa Interativo de Pontos Turísticos</h1>
-            <div id='map' className="rounded-lg overflow-hidden">
+            <div id='map' className="rounded-lg overflow-hidden sm:container-fluid ">
             <MapContainer
                 center={centro}
                 zoom={14}
@@ -79,23 +79,36 @@ const MapaInterativo = () => {
                 )}
 
                 {pontos.map((ponto) => (
-                <Marker
-                    key={ponto.id}
-                    position={[ponto.latitude, ponto.longitude]}
-                    icon={
-                    ponto.iconeUrl
-                        ? L.icon({
-                        iconUrl: ponto.iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png",
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 32],
-                        })
-                        : undefined
-                    }
-                >
-                    <Popup>
-                        <PopupContent ponto={ponto} />
-                    </Popup>
-                </Marker>
+                    <Marker
+                        key={ponto.id}
+                        position={[ponto.latitude, ponto.longitude]}
+                        icon={
+                            ponto.iconeUrl
+                                ? L.icon({
+                                    iconUrl: ponto.iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png",
+                                    iconSize: [32, 32],
+                                    iconAnchor: [16, 32],
+                                })
+                                : undefined
+                        }
+                        eventHandlers={{
+                            mouseover: (e) => {
+                                e.target.openPopup();
+                            },
+                            mouseout: (e) => {
+                                e.target.closePopup();
+                            },
+                        }}
+                    >
+                        <Popup
+                            closeButton={false}
+                            autoClose={false}
+                            closeOnClick={false}
+                            autoPan={false}
+                        >
+                            <PopupContent ponto={ponto} />
+                        </Popup>
+                    </Marker>
                 ))}
             </MapContainer>
             </div>
