@@ -1,5 +1,5 @@
 export interface PontoTuristico {
-  id: number;
+  id: string;
   nome: string;
   descricao: string;
   latitude: number;

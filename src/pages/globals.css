@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+
+
+.emoji-icon {
+  background: transparent;
+  border: none;
+  text-align: center;
+  font-size: 30px; /* Ajuste o tamanho do emoji se necessário */
+  line-height: 30px; /* Alinha o emoji verticalmente */
+}

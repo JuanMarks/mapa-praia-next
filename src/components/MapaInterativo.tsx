@@ -6,6 +6,8 @@ import PopupContent from './PopupContent';
 import FormularioPonto from './FormularioPonto';
 import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/services/firebase';
 // Corrige ícones do Leaflet em Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -36,10 +38,15 @@ const MapaInterativo = () => {
     };
 
     const fetchPontos = async () => {
-        const res = await fetch('http://localhost:3000/pontos');
-        const data = await res.json();
-        console.log('Pontos carregados:', data);
-        setPontos(data);
+      try {
+        const querySnapshot = await getDocs(collection(db, "pontos")); // "pontos" é um exemplo de coleção
+        const pointsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log("Pontos carregados do Firebase:", pointsData);
+        setPontos(pointsData as PontoTuristico[]); // Certifique-se de que os dados estão no formato correto
+        // Aqui você pode usar os dados para popular seu mapa, por exemplo.
+      } catch (error) {
+        console.error("Erro ao buscar dados do Firebase:", error);
+      }
     };
 
     useEffect(() => {
@@ -54,7 +61,7 @@ const MapaInterativo = () => {
             <MapContainer
                 center={centro}
                 zoom={14}
-                minZoom={14}
+                minZoom={12}
                 maxBounds={bounds}
                 maxBoundsViscosity={1.0}
                 style={{ height: '80vh', width: '100%'}}
@@ -69,6 +76,7 @@ const MapaInterativo = () => {
                 {/* Exibe o modal quando o mapa é clicado */}
                 {novaPosicao && (
                 <FormularioPonto
+                    show={!!novaPosicao}
                     coordenadas={novaPosicao}
                     onClose={() => setNovaPosicao(null)}
                     onCriado={() => {
@@ -78,24 +86,30 @@ const MapaInterativo = () => {
                 />
                 )}
 
+                // Dentro do seu componente MapaInterativo.tsx
+
                 {pontos.map((ponto) => (
-                <Marker
-                    key={ponto.id}
-                    position={[ponto.latitude, ponto.longitude]}
-                    icon={
-                    ponto.iconeUrl
-                        ? L.icon({
-                        iconUrl: ponto.iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png",
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 32],
-                        })
-                        : undefined
-                    }
-                >
-                    <Popup>
+                    <Marker
+                        key={ponto.id}
+                        position={[ponto.latitude, ponto.longitude]}
+                        icon={
+                        // Verificamos se existe um iconeUrl (nosso emoji)
+                        ponto.iconeUrl
+                            // Se existir, usamos L.divIcon
+                            ? L.divIcon({
+                                html: ponto.iconeUrl,      // 👈 AQUI passamos o emoji como HTML
+                                className: 'emoji-icon',  // 👈 Uma classe CSS para estilizar e remover o fundo branco padrão
+                                iconSize: [80, 80],       // Tamanho do ícone
+                                iconAnchor: [15, 30],     // Ponto de "ancoragem" do ícone no mapa
+                            })
+                            // Se não existir, ele usará o ícone padrão do Leaflet que já corrigimos
+                            : undefined 
+                        }
+                    >
+                        <Popup>
                         <PopupContent ponto={ponto} />
-                    </Popup>
-                </Marker>
+                        </Popup>
+                    </Marker>
                 ))}
             </MapContainer>
             </div>
