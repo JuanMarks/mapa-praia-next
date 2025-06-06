@@ -55,9 +55,9 @@ const MapaInterativo = () => {
     }, []);
 
     return (
-        <div className='m-3'>
+        <div className='m-3 sm:m-0'>
             <h1 className="text-center">Mapa Interativo de Pontos Turísticos</h1>
-            <div id='map' className="rounded-lg overflow-hidden">
+            <div id='map' className="rounded-lg overflow-hidden sm:container-fluid ">
             <MapContainer
                 center={centro}
                 zoom={14}
@@ -105,6 +105,14 @@ const MapaInterativo = () => {
                             // Se não existir, ele usará o ícone padrão do Leaflet que já corrigimos
                             : undefined 
                         }
+                        eventHandlers={{
+                            mouseover: (e) => {
+                                e.target.openPopup();
+                            },
+                            mouseout: (e) => {
+                                e.target.closePopup();
+                            },
+                        }}
                     >
                         <Popup>
                         <PopupContent ponto={ponto} />
