@@ -29,6 +29,7 @@ const MapaInterativo = () => {
     const { role, loading } = useAuth();
 
     const MapClickHandler = () => {
+        if (novaPosicao) return null;
         useMapEvents({
             click(e) {
                 setNovaPosicao([e.latlng.lat, e.latlng.lng]);
@@ -99,7 +100,7 @@ const MapaInterativo = () => {
                             ? L.divIcon({
                                 html: ponto.iconeUrl,      // 👈 AQUI passamos o emoji como HTML
                                 className: 'emoji-icon',  // 👈 Uma classe CSS para estilizar e remover o fundo branco padrão
-                                iconSize: [80, 80],       // Tamanho do ícone
+                                iconSize: [40, 40],       // Tamanho do ícone
                                 iconAnchor: [15, 30],     // Ponto de "ancoragem" do ícone no mapa
                             })
                             // Se não existir, ele usará o ícone padrão do Leaflet que já corrigimos
