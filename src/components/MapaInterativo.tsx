@@ -26,7 +26,7 @@ const bounds: [[number, number], [number, number]] = [
 const MapaInterativo = () => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
     const [novaPosicao, setNovaPosicao] = useState<[number, number] | null>(null);
-    const { role, loading } = useAuth();
+    const { user, profile, loading } = useAuth();
 
     const MapClickHandler = () => {
         if (novaPosicao) return null;
@@ -51,13 +51,13 @@ const MapaInterativo = () => {
     };
 
     useEffect(() => {
-        console.log(role)
+        console.log(profile?.role)
         fetchPontos();
     }, []);
 
     return (
-        <div className='m-3 sm:m-0'>
-            <h1 className="text-center">Mapa Interativo de Pontos Turísticos</h1>
+        <div className=' sm:m-0'>
+            {/* <h1 className="text-center">Mapa Interativo de Pontos Turísticos</h1> */}
             <div id='map' className="rounded-lg overflow-hidden sm:container-fluid ">
             <MapContainer
                 center={centro}
@@ -65,7 +65,8 @@ const MapaInterativo = () => {
                 minZoom={12}
                 maxBounds={bounds}
                 maxBoundsViscosity={1.0}
-                style={{ height: '80vh', width: '100%'}}
+                style={{ height: '100vh', width: '100%'}}
+                className='map-container'
             >
                 <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -1,70 +1,74 @@
 'use client';
 
+import { useState, FormEvent } from 'react';
+import { useAuth } from '@/hooks/useAuth'; // Importe o hook
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import Cookies from 'js-cookie';
-import axios from 'axios';
 
-export default function Login() {
-  const router = useRouter();
+const Login = () => {
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
+  const { login } = useAuth(); // Use o hook para obter a função de login
+  const router = useRouter();
 
-const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await axios.post('http://localhost:3000/auth/login', { email, senha });
-      console.log(res.data.token.role);
-      Cookies.set('token', res.data.token);
-      Cookies.set('role', res.data.token.role);
-      router.push('/'); // redireciona pro mapa ou dashboard
-    } catch (err) {
-      alert('Erro ao fazer login');
+    if (!email || !password) {
+      alert('Por favor, preencha todos os campos.');
+      return;
     }
+    await login(email, password);
   };
 
-
   return (
-    <div className="container-fluid d-flex justify-content-center align-items-center vh-100 position-relative bg-dark">
-      {/* Botão de Voltar */}
+    <div className="flex items-center justify-center min-h-screen bg-dark">
       <button
         className="btn btn-outline-primary position-absolute top-0 start-0 m-3"
         onClick={() => router.push('/')}
       >
         ← Voltar ao mapa
       </button>
-
-      {/* Card de login */}
-      <div className="card shadow p-4" style={{ minWidth: '300px', maxWidth: '400px', width: '100%' }}>
-        <h2 className="text-center mb-4">Login</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">E-mail</label>
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
-              type="email"
-              className="form-control"
               id="email"
-              required
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="senha" className="form-label">Senha</label>
-            <input
-              type="password"
-              className="form-control"
-              id="senha"
+              className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               required
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-success w-100">
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Senha
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
             Entrar
           </button>
         </form>
       </div>
     </div>
   );
-}
+};
+
+export default Login;

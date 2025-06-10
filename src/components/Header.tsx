@@ -4,15 +4,9 @@ import image1 from '../../public/Gemini_Generated_Image_1nnkta1nnkta1nnk.png';
 
 
 export default function Header(){
-    const { role, loading } = useAuth();
+    const { user, profile, loading, logout } = useAuth();
     const [menuOpen, setMenuOpen] = React.useState(false);
-    function logout() {
-        if (typeof window !== 'undefined') {
-            // Remove token from cookies
-            document.cookie = 'token=; Max-Age=0; path=/;';
-            window.location.reload();
-        }
-    }
+    
     return(
         <header
             className="bg-black text-white py-4 px-6 flex items-center justify-between"
@@ -23,7 +17,7 @@ export default function Header(){
             }}
         >
 
-        <h2 className=" font-bold">Mapa Praia</h2>
+        <h2 className=" font-bold">Mapa Interativo</h2>
         <nav>
             <button
                 className="sm:hidden flex items-center px-3 py-2 border rounded text-black border-black bg-white"
@@ -52,7 +46,7 @@ export default function Header(){
                         </a>
                     </li>
                     <li className="w-full">
-                        {loading ? null : role === 'admin' ? (
+                        {loading ? null : profile?.role === 'admin' ? (
                             <a href="#" className="block text-black text-xl font-semibold hover:text-gray-300 w-full" style={{textDecoration: 'none'}} onClick={logout}>
                                 Logout
                             </a>
@@ -86,7 +80,7 @@ export default function Header(){
                     </a>
                 </li>
                 <li>
-                    {loading ? null : role === 'admin' ? (
+                    {loading ? null : profile?.role === 'admin' ? (
                         <a href="#" className=" text-black text-xl font-semibold hover:text-gray-300 transition-colors" style={{textDecoration: 'none'}}  onClick={logout}>
                             Logout
                         </a>
