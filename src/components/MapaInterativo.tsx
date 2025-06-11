@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/services/firebase';
+import Sidebar from './SideBar';
 // Corrige ícones do Leaflet em Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -27,6 +28,15 @@ const MapaInterativo = () => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
     const [novaPosicao, setNovaPosicao] = useState<[number, number] | null>(null);
     const { user, profile, loading } = useAuth();
+    const [selectedPonto, setSelectedPonto] = useState<PontoTuristico | null>(null);
+
+    const handleMarkerClick = (ponto: PontoTuristico) => {
+        setSelectedPonto(ponto);
+    };
+
+    const handleSidebarClose = () => {
+        setSelectedPonto(null);
+    };
 
     const MapClickHandler = () => {
         if (novaPosicao) return null;
@@ -58,11 +68,12 @@ const MapaInterativo = () => {
     return (
         <div className=' sm:m-0'>
             {/* <h1 className="text-center">Mapa Interativo de Pontos Turísticos</h1> */}
+            <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} />
             <div id='map' className="rounded-lg overflow-hidden sm:container-fluid ">
             <MapContainer
                 center={centro}
                 zoom={14}
-                minZoom={12}
+                minZoom={14}
                 maxBounds={bounds}
                 maxBoundsViscosity={1.0}
                 style={{ height: '100vh', width: '100%'}}
@@ -108,6 +119,7 @@ const MapaInterativo = () => {
                             : undefined 
                         }
                         eventHandlers={{
+                            click: () => handleMarkerClick(ponto),
                             mouseover: (e) => {
                                 e.target.openPopup();
                             },
