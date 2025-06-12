@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { useState, useEffect } from 'react';
 import { PontoTuristico } from '@/types/ponto';
@@ -80,8 +80,8 @@ const MapaInterativo = () => {
                 className='map-container'
             >
                 <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                 />
 
                 <MapClickHandler />
@@ -131,6 +131,15 @@ const MapaInterativo = () => {
                         <Popup>
                         <PopupContent ponto={ponto} />
                         </Popup>
+                        <Tooltip
+                            permanent // <-- A propriedade mais importante! Faz o texto ficar sempre visível.
+                            direction="bottom" // Posição do texto: 'top', 'bottom', 'left', 'right'
+                            offset={[0, 10]} // Ajusta a posição (horizontal, vertical) em pixels
+                            opacity={1}
+                            className="text-2xl text-black" // Classe CSS para estilização personalizada
+                        >
+                            {ponto.nome}
+                        </Tooltip>
                     </Marker>
                 ))}
             </MapContainer>
