@@ -24,7 +24,7 @@ const PopupContent = ({ ponto }: Props) => {
         {ponto.fotosOficiais?.map((url, index) => (
           <div key={index} className="w-full cursor-pointer">
             <img
-              src={`http://localhost:3000${url}`}
+              src={`http://localhost:3003${url}`}
               alt={`Imagem ${index + 1}`}
               className="w-75 h-75 md:h-40 lg:h-48 object-cover rounded"
               onClick={() => handleImageClick(index)}
@@ -50,7 +50,7 @@ const PopupContent = ({ ponto }: Props) => {
                   <Carousel.Item key={idx}>
                     <img
                       className="block w-full h-[400px] object-cover rounded-lg"
-                      src={`http://localhost:3000${url}`}
+                      src={`http://localhost:3003${url}`}
                       alt={`Imagem ${idx + 1}`}
                     />
                   </Carousel.Item>

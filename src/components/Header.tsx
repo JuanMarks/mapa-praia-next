@@ -15,15 +15,11 @@ export default function Header(){
     }
     return(
         <header
-            className="bg-black text-white py-4 px-6 flex items-center justify-between"
-            style={{
-                backgroundImage: `url(${image1.src})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-            }}
+            className="bg-white py-4 px-6 flex items-center justify-between"
+            
         >
 
-        <h2 className=" font-bold">Mapa Praia</h2>
+        <h2 className=" font-bold text-amber-500">AMOTUR</h2>
         <nav>
             <button
                 className="sm:hidden flex items-center px-3 py-2 border rounded text-black border-black bg-white"

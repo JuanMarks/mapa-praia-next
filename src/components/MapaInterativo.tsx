@@ -48,7 +48,7 @@ const MapaInterativo = () => {
     };
 
     const fetchPontos = async () => {
-        const res = await fetch('http://localhost:3000/pontos');
+        const res = await fetch('http://localhost:3003/pontos');
         const data = await res.json();
         console.log('Pontos carregados:', data);
         setPontos(data);
@@ -96,9 +96,9 @@ const MapaInterativo = () => {
                 style={{ height: '100vh', width: '100%'}}
             >
                 <TileLayer
-                    attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                />
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
 
                 <MapClickHandler />
 
