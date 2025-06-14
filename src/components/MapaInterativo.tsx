@@ -48,7 +48,7 @@ const MapaInterativo = () => {
     };
 
     const fetchPontos = async () => {
-        const res = await fetch('http://localhost:3003/pontos');
+        const res = await fetch('http://25.49.224.61:3003/pontos');
         const data = await res.json();
         console.log('Pontos carregados:', data);
         setPontos(data);

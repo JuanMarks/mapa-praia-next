@@ -33,7 +33,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     e.preventDefault();
     console.log(iconeUrl)
     // 1. Cria o ponto
-    const res = await fetch('http://localhost:3003/pontos', {
+    const res = await fetch('http://25.49.224.61:3003/pontos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -54,7 +54,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         formData.append('fotos', fotos[i]);
       }
 
-      await fetch(`http://localhost:3003/pontos/${novoPonto.id}/fotos`, {
+      await fetch(`http://25.49.224.61:3003/pontos/${novoPonto.id}/fotos`, {
         method: 'POST',
         body: formData,
       });
