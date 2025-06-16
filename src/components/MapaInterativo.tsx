@@ -93,6 +93,8 @@ const MapaInterativo = () => {
                 minZoom={14}
                 maxBounds={bounds}
                 maxBoundsViscosity={1.0}
+                // tirar o zomm ao usar scrol do mouse
+                scrollWheelZoom = {false}
                 style={{ height: '100vh', width: '100%'}}
             >
                 <TileLayer
