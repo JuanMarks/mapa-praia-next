@@ -1,1 +1,18 @@
+@tailwind utilities;
 @import "tailwindcss";
+
+.emoji-icon {
+  background: transparent;
+  border: none;
+  text-align: center;
+  font-size: 30px; /* Ajuste o tamanho do emoji se necessário */
+  line-height: 30px; /* Alinha o emoji verticalmente */
+}
+
+.map-container {
+  /* Define uma cor de fundo para o mapa, para que não fique cinza enquanto carrega */
+  background-color: #aadaff; /* Um tom de azul claro */
+  
+  /* Remove qualquer contorno que o navegador possa adicionar, que pode parecer uma grade */
+  outline: none;
+}
