@@ -8,6 +8,8 @@ import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
 import Sidebar from './SideBar';
 import { divIcon, icon } from 'leaflet';
+
+
 // Corrige ícones do Leaflet em Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -77,12 +79,13 @@ const MapaInterativo = () => {
             html: `<span style="font-size: 30px;">${iconeUrl}</span>`, // Emoji dentro de um span para controlar o tamanho
             className: 'emoji-icon', // Classe para remover o fundo branco padrão
             iconSize: [40, 40],
-            iconAnchor: [20, 40], // Ancoragem ajustada para o centro inferior do emoji
+            iconAnchor: [15, 20], // Ancoragem ajustada para o centro inferior do emoji
             });
         }
     };
 
     return (
+        
         <div className='sm:m-0'>
             
             <div id='map' className="rounded-lg overflow-hidden sm:container-fluid ">

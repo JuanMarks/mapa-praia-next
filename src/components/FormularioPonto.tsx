@@ -2,26 +2,28 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 interface Props {
-  coordenadas: [number, number];
-  onClose: () => void;
-  onCriado: () => void;
+    coordenadas: [number, number];
+    onClose: () => void;
+    onCriado: () => void;
 }
+
+
 
 const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐'];
 
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
-  const [nome, setNome] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [iconeUrl, setIconeUrl] = useState('');
-  const [fotos, setFotos] = useState<FileList | null>(null);
-  const [imagens, setImagens] = useState<File[]>([]);
+    const [nome, setNome] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [iconeUrl, setIconeUrl] = useState('');
+    // Unificar o estado para armazenar os arquivos de imagem
+    const [imagens, setImagens] = useState<File[]>([]);
 
-  // Estados para feedback da UI
+    // Estados para feedback da UI
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-  // Função para lidar com a seleção de múltiplos arquivos
+    // Função para lidar com a seleção de múltiplos arquivos
     const handleImagemChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             // Converte o FileList (que não é um array) para um array de verdade
@@ -29,48 +31,63 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         }
     };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    console.log(iconeUrl)
-    // 1. Cria o ponto
-    const res = await fetch('http://25.20.79.62:3003/pontos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nome,
-        descricao,
-        latitude: coordenadas[0],
-        longitude: coordenadas[1],
-        iconeUrl: iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png"
-      }),
-    });
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        setSuccess(false);
 
-    const novoPonto = await res.json();
+        try {
+            // 1. Cria o ponto
+            const res = await fetch('http://25.20.79.62:3003/pontos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome,
+                    descricao,
+                    latitude: coordenadas[0],
+                    longitude: coordenadas[1],
+                    iconeUrl: iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png"
+                }),
+            });
 
-    // 2. Envia as imagens, se tiver
-    if (fotos && fotos.length > 0) {
-      const formData = new FormData();
-      for (let i = 0; i < fotos.length; i++) {
-        formData.append('fotos', fotos[i]);
-      }
+            if (!res.ok) {
+                throw new Error('Falha ao criar o ponto.');
+            }
 
-      await fetch(`http://25.20.79.62:3003/pontos/${novoPonto.id}/fotos`, {
-        method: 'POST',
-        body: formData,
-      });
-    }
+            const novoPonto = await res.json();
 
-    onCriado();
-  };
+            // 2. Envia as imagens, se houver
+            if (imagens.length > 0) {
+                const formData = new FormData();
+                imagens.forEach((imagem) => {
+                    formData.append('fotos', imagem);
+                });
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFotos(e.target.files);
-    }
-  };
+                const resFotos = await fetch(`http://25.20.79.62:3003/pontos/${novoPonto.id}/fotos`, {
+                    method: 'POST',
+                    body: formData,
+                });
 
-  return (
-     <div className="fixed inset-0 bg-black bg-opacity-50 z-[5000] flex justify-center items-center" onClick={onClose}>
+                if (!resFotos.ok) {
+                    throw new Error('Ponto criado, mas falha ao enviar as imagens.');
+                }
+            }
+
+            setSuccess(true);
+            setTimeout(() => {
+                onCriado();
+            }, 1500); // Fecha o modal após um tempo para o usuário ver a mensagem
+
+        } catch (err: any) {
+            setError(err.message || 'Ocorreu um erro desconhecido.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black z-[5000] flex justify-center items-center" onClick={onClose}>
             <div className="bg-white rounded shadow-xl w-full max-w-lg m-4" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-4 border-b border-gray-200">
                     <h3 className="text-xl font-semibold text-gray-800">Adicionar novo ponto</h3>
@@ -110,16 +127,15 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             <label htmlFor="imagem" className="block text-sm font-medium text-gray-700">
                                 Imagens do Ponto (Opcional)
                             </label>
-                            {/* 4. Adicione o atributo "multiple" ao input */}
                             <input
                                 id="imagem"
                                 type="file"
                                 accept="image/*"
-                                multiple // Permite selecionar vários arquivos
+                                multiple
                                 onChange={handleImagemChange}
                                 className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                                disabled={isLoading}
                             />
-                            {/* Opcional: Mostrar quantas imagens foram selecionadas */}
                             {imagens.length > 0 && (
                                 <p className="mt-1 text-xs text-gray-500">{imagens.length} imagem(ns) selecionada(s)</p>
                             )}
@@ -134,7 +150,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                 </form>
             </div>
         </div>
-  );
+    );
 };
 
 export default FormularioPonto;
