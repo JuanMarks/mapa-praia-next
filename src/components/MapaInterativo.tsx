@@ -99,6 +99,7 @@ const MapaInterativo = () => {
         }
     };
 
+
   return (
     <div className="relative sm:m-0">
       {/* Camada para bloquear o toque no mobile */}
@@ -126,6 +127,7 @@ const MapaInterativo = () => {
           />
 
           <MapClickHandler />
+
 
           {novaPosicao && (
             <FormularioPonto

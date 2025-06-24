@@ -6,6 +6,7 @@ import { PontoTuristico } from '@/types/ponto';
 import { FaMapMarkerAlt, FaShare, FaBookmark, FaRoute, FaTimes, FaInfoCircle } from 'react-icons/fa';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import Image from 'next/image';
+import '../pages/globals.css'; 
 
 const API_BASE_URL = 'http://25.20.79.62:3003';
 
@@ -40,19 +41,19 @@ const Sidebar = ({ ponto, onClose }: SidebarProps) => {
     <>
       {/* Overlay escuro para o fundo */}
       <div 
-        className={`fixed inset-0 bg-black bg-opacity-25 z-10 transition-opacity ${ponto ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={` bg-opacity-50 z-10 transition-opacity ${ponto ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       ></div>
 
       {/* Container Principal da Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
+        className={`fixed top-0 left-0 h-200 mt-31 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
                    ${isOpen ? 'transform-none' : '-translate-x-full'}`}
       >
         {/* Botão para esconder/mostrar a sidebar */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute top-1/2 -right-6 bg-white p-2 rounded-r-full shadow-lg focus:outline-none z-30"
+          className="absolute top-1/2 -right-6 bg-white p-2 rounded-r-full shadow-lg focus:outline-none z-10"
           aria-label={isOpen ? 'Esconder sidebar' : 'Mostrar sidebar'}
         >
           {isOpen ? <IoChevronBack size={20} /> : <IoChevronForward size={20} />}
