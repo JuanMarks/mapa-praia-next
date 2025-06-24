@@ -45,7 +45,7 @@ export default function Header() {
 
         {/* Menu mobile */}
         {menuOpen && (
-          <ul className="absolute top-16 right-0 w-56 bg-white shadow-lg flex flex-col items-start p-4 sm:hidden z-50">
+          <ul className=" z-[5000] absolute top-16 right-0 w-56 bg-white shadow-lg flex flex-col items-start p-4 sm:hidden">
             <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Início</a></li>
             <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Sobre</a></li>
             <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Contato</a></li>

@@ -1,7 +1,5 @@
 import dynamic from 'next/dynamic';
 import './globals.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import HeroBanner from '@/components/HeroBanner';

@@ -9,6 +9,9 @@ import FormularioPonto from './FormularioPonto';
 import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
 import Sidebar from './SideBar';
+import { divIcon, icon } from 'leaflet';
+
+
 
 // Corrige ícones do Leaflet em Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -78,6 +81,24 @@ const MapaInterativo = () => {
   const createCustomIcon = (iconeUrl: string) => {
     const isUrl = iconeUrl.startsWith('http') || iconeUrl.startsWith('/');
 
+        if (isUrl) {
+            // Se for uma URL, cria um ícone de imagem
+            return icon({
+            iconUrl: iconeUrl,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32],
+            });
+        } else {
+            // Se não for uma URL, cria um ícone de div com o emoji
+            return divIcon({
+            html: `<span style="font-size: 30px;">${iconeUrl}</span>`, // Emoji dentro de um span para controlar o tamanho
+            className: 'emoji-icon', // Classe para remover o fundo branco padrão
+            iconSize: [40, 40],
+            iconAnchor: [15, 20], // Ancoragem ajustada para o centro inferior do emoji
+            });
+        }
+    };
     if (isUrl) {
       return icon({
         iconUrl: iconeUrl,
@@ -95,6 +116,23 @@ const MapaInterativo = () => {
     }
   };
 
+    return (
+        
+        <div className='sm:m-0'>
+            
+            <div id='map' className="rounded-lg overflow-hidden sm:container-fluid ">
+            <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} />
+            <MapContainer
+                center={centro}
+                zoom={14}
+                minZoom={14}
+                maxBounds={bounds}
+                maxBoundsViscosity={1.0}
+                // tirar o zomm ao usar scrol do mouse
+                scrollWheelZoom = {false}
+                style={{ height: '100vh', width: '100%'}}
+            >
+                <TileLayer
   return (
     <div className="relative sm:m-0">
       {/* Camada para bloquear o toque no mobile */}

@@ -13,7 +13,7 @@ export default function Login() {
 const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3000/auth/login', { email, senha });
+      const res = await axios.post('http://25.20.79.62:3003/auth/login', { email, senha });
       console.log(res.data.token.role);
       Cookies.set('token', res.data.token);
       Cookies.set('role', res.data.token.role);
