@@ -9,7 +9,6 @@ import FormularioPonto from './FormularioPonto';
 import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
 import Sidebar from './SideBar';
-import { divIcon, icon } from 'leaflet';
 
 
 
@@ -95,44 +94,11 @@ const MapaInterativo = () => {
             html: `<span style="font-size: 30px;">${iconeUrl}</span>`, // Emoji dentro de um span para controlar o tamanho
             className: 'emoji-icon', // Classe para remover o fundo branco padrão
             iconSize: [40, 40],
-            iconAnchor: [15, 20], // Ancoragem ajustada para o centro inferior do emoji
+            iconAnchor: [20, 40], // Ancoragem ajustada para o centro inferior do emoji
             });
         }
     };
-    if (isUrl) {
-      return icon({
-        iconUrl: iconeUrl,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32],
-      });
-    } else {
-      return divIcon({
-        html: `<span style="font-size: 30px;">${iconeUrl}</span>`,
-        className: 'emoji-icon',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-      });
-    }
-  };
 
-    return (
-        
-        <div className='sm:m-0'>
-            
-            <div id='map' className="rounded-lg overflow-hidden sm:container-fluid ">
-            <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} />
-            <MapContainer
-                center={centro}
-                zoom={14}
-                minZoom={14}
-                maxBounds={bounds}
-                maxBoundsViscosity={1.0}
-                // tirar o zomm ao usar scrol do mouse
-                scrollWheelZoom = {false}
-                style={{ height: '100vh', width: '100%'}}
-            >
-                <TileLayer
   return (
     <div className="relative sm:m-0">
       {/* Camada para bloquear o toque no mobile */}
