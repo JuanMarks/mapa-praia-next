@@ -16,10 +16,10 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white shadow-md py-4 px-8 flex items-center justify-between relative">
+    <header className="bg-white shadow-md py-3 px-8 flex items-center justify-between relative z-[5000]">
       {/* Logo */}
       <div className="flex items-center">
-        <div className="w-[140px] h-[90px] relative"> {/* ajusta o tamanho sem aumentar a div */}
+        <div className="w-[140px] h-[60px] relative"> {/* ajusta o tamanho sem aumentar a div */}
           <Image
             src="/images/logo_amotur.png"
             alt="Logo AMOTUR"
@@ -65,7 +65,7 @@ export default function Header() {
         )}
 
         {/* Menu desktop */}
-        <ul className="hidden sm:flex space-x-6 items-center">
+        <ul className="hidden sm:flex space-x-6 items-center p-1">
           <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Início</a></li>
           <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Sobre</a></li>
           <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Contato</a></li>
