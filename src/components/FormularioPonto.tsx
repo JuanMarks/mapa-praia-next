@@ -112,6 +112,21 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                         </div>
 
                         <div>
+                            <label htmlFor="tipo" className="block mb-2 text-sm font-medium text-gray-700">Tipo</label>
+                            <select
+                                id="tipo"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required
+                                disabled={isLoading}
+                            >
+                                <option value="">Selecione o tipo</option>
+                                <option value="restaurante">Restaurante</option>
+                                <option value="sorveteria">Sorveteria</option>
+                                <option value="praia">Praia</option>
+                            </select>
+                        </div>
+
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone do Marcador</label>
                             <div className="flex flex-wrap gap-3">
                                 {ICONS.map((icon, index) => (
