@@ -1,68 +1,105 @@
-import { useState } from 'react';
-import { Modal, Carousel, Image } from 'react-bootstrap';
+'use client';
+
 import { PontoTuristico } from '@/types/ponto';
+import Image from 'next/image';
+
+// Importando o Swiper e seus módulos
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+
+// Importando os estilos do Swiper
+import 'swiper/css';
+import 'swiper/css/pagination';
+
+// Importando ícones
+import { FaStar, FaMapMarkerAlt, FaBookmark, FaWheelchair } from 'react-icons/fa';
+
+const API_BASE_URL = 'http://25.20.79.62:3003';
 
 interface Props {
   ponto: PontoTuristico;
 }
 
 const PopupContent = ({ ponto }: Props) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [startIndex, setStartIndex] = useState(0);
 
-  const handleImageClick = (index: number) => {
-    setStartIndex(index);
-    setModalOpen(true);
-  };
+  const temFotos = ponto.fotosOficiais && ponto.fotosOficiais.length > 0;
 
   return (
-    <div className=' w-[400px]'>
-      <h5>{ponto.nome}</h5>
-      <p>{ponto.descricao}</p>
-
-      <div className="grid grid-cols-3 w-60">
-        {ponto.fotosOficiais?.map((url, index) => (
-          <div key={index} className="w-full cursor-pointer">
-            <img
-              src={`http://25.20.79.62:3003${url}`}
-              alt={`Imagem ${index + 1}`}
-              className="w-75 h-75 md:h-40 lg:h-48 object-cover rounded"
-              onClick={() => handleImageClick(index)}
-            />
-          </div>
-        ))}
+    // Card principal: largura reduzida de 320px para 192px (60%)
+    <div className="w-[192px] bg-white rounded-lg overflow-hidden shadow-lg font-sans">
+      
+      {/* Seção do Carrossel: altura reduzida de h-48 para h-28 (aprox. 60%) */}
+      <div className="relative h-28">
+        {temFotos ? (
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={0}
+            slidesPerView={1}
+            autoplay={{ delay: 2500, disableOnInteraction: false }}
+            pagination={{ clickable: true }}
+            className="w-full h-full"
+          >
+            {ponto.fotosOficiais?.map((url, index) => (
+              <SwiperSlide key={index}>
+                <Image
+                  src={`${API_BASE_URL}${url}`}
+                  alt={`Foto de ${ponto.nome} ${index + 1}`}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="192px" // Tamanho da imagem atualizado
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <Image
+            src="/images/img1.jpeg" 
+            alt="Imagem padrão do local"
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="192px" // Tamanho da imagem atualizado
+          />
+        )}
       </div>
 
-      <Modal
-        show={modalOpen}
-        onHide={() => setModalOpen(false)}
-        centered
-        className='w-[50vw]'
-      >
-        <div className='w-[50vw] mx-auto'>
-          <Modal.Header closeButton>
-            <Modal.Title>{ponto.nome}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="p-0">
-            <div className="w-full h-full p-4">
-              <Carousel activeIndex={startIndex} onSelect={(i) => setStartIndex(i)} interval={null}>
-                {ponto.fotosOficiais?.map((url, idx) => (
-                  <Carousel.Item key={idx}>
-                    <img
-                      className="block w-full h-[400px] object-cover rounded-lg"
-                      src={`http://25.20.79.62:3003${url}`}
-                      alt={`Imagem ${idx + 1}`}
-                    />
-                  </Carousel.Item>
-                ))}
-              </Carousel>
+      {/* Seção de Informações: padding reduzido de p-4 para p-2.5 */}
+      <div className="p-2.5">
+        <div className="flex justify-between items-start">
+          <div>
+            {/* Título: fonte reduzida de text-lg para text-base */}
+            <h3 className="font-bold text-base text-gray-800">{ponto.nome}</h3>
+            
+            {/* Demais textos: fonte reduzida de text-sm para text-xs */}
+            <div className="flex items-center text-xs text-gray-600 mt-1">
+              <FaStar className="text-yellow-500 mr-1" />
+              <span>4,9</span>
+              <span className="ml-1.5">(7)</span>
             </div>
-          </Modal.Body>
-        </div>
-      </Modal>
 
+            <div className="flex items-center text-xs text-gray-600 mt-1">
+              <span>Quadra</span>
+              <FaWheelchair className="ml-1.5" />
+            </div>
+
+            <p className="text-xs mt-1">
+              <span className="text-green-600 font-semibold">Aberto</span>
+              <span className="text-gray-600"> ⋅ Fecha 00:00</span>
+            </p>
           </div>
-        );
-      };
+          
+          {/* Botões de Ação: tamanho reduzido de h/w-10 para h/w-8 e ícones de 18 para 14 */}
+          <div className="flex flex-col gap-2">
+            <button className="h-8 w-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">
+              <FaMapMarkerAlt size={14} />
+            </button>
+            <button className="h-8 w-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">
+              <FaBookmark size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default PopupContent;

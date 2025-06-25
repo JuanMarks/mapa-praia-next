@@ -16,10 +16,10 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white shadow-md py-4 px-8 flex items-center justify-between relative">
+    <header className="bg-white shadow-md py-3 px-8 flex items-center justify-between relative z-[5000]">
       {/* Logo */}
       <div className="flex items-center">
-        <div className="w-[140px] h-[90px] relative"> {/* ajusta o tamanho sem aumentar a div */}
+        <div className="w-[140px] h-[60px] relative"> {/* ajusta o tamanho sem aumentar a div */}
           <Image
             src="/images/logo_amotur.png"
             alt="Logo AMOTUR"
@@ -45,13 +45,16 @@ export default function Header() {
 
         {/* Menu mobile */}
         {menuOpen && (
-          <ul className=" z-[5000] absolute top-16 right-0 w-56 bg-white shadow-lg flex flex-col items-start p-4 sm:hidden">
+          <ul className=" z-[5000] absolute top-16 right-0 w-56 bg-white shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
             <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Início</a></li>
             <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Sobre</a></li>
             <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Contato</a></li>
             <li className="w-full mt-2">
               {loading ? null : role === 'admin' ? (
-                <a onClick={logout} className="block text-lg font-medium text-black">Logout</a>
+                <>
+                  <a onClick={logout} className="block text-lg font-medium text-black">Logout</a>
+                  <a href='pageadmin' className="block text-lg font-medium text-black">Dashboard Admin</a>
+                </>
               ) : (
                 <button
                   className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg text-lg font-semibold w-full"
@@ -65,13 +68,19 @@ export default function Header() {
         )}
 
         {/* Menu desktop */}
-        <ul className="hidden sm:flex space-x-6 items-center">
+        <ul className="hidden sm:flex space-x-6 items-center p-1">
           <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Início</a></li>
           <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Sobre</a></li>
           <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Contato</a></li>
-          <li>
             {loading ? null : role === 'admin' ? (
-              <a onClick={logout} className="text-black hover:text-red-500 font-medium text-lg cursor-pointer">Logout</a>
+              <>
+                <li>
+                  <a onClick={logout} className="text-black hover:text-red-500 font-medium text-lg cursor-pointer">Logout</a>
+                </li>
+                <li>
+                  <a href='pageadmin' className="block text-black  hover:text-red-500 font-medium text-lg cursor-pointer">Dashboard Admin</a>
+                </li>
+              </>
             ) : (
               <button
                 className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg text-lg font-semibold"
@@ -79,8 +88,9 @@ export default function Header() {
               >
                 Login
               </button>
+              
             )}
-          </li>
+          
         </ul>
       </nav>
     </header>
