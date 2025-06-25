@@ -94,7 +94,7 @@ const MapaInterativo = () => {
             html: `<span style="font-size: 30px;">${iconeUrl}</span>`, // Emoji dentro de um span para controlar o tamanho
             className: 'emoji-icon', // Classe para remover o fundo branco padrão
             iconSize: [40, 40],
-            iconAnchor: [20, 40], // Ancoragem ajustada para o centro inferior do emoji
+            iconAnchor: [15, 30], // Ancoragem ajustada para o centro inferior do emoji
             });
         }
     };
@@ -128,6 +128,18 @@ const MapaInterativo = () => {
         
           <MapClickHandler />
 
+            
+          {/* {novaPosicao && (
+            role === 'admin' && (
+            <FormularioPonto
+              coordenadas={novaPosicao}
+              onClose={() => setNovaPosicao(null)}
+              onCriado={() => {
+                setNovaPosicao(null);
+                fetchPontos();
+              }}
+            />
+          ))} */}
 
           {novaPosicao && (
             <FormularioPonto
@@ -139,6 +151,8 @@ const MapaInterativo = () => {
               }}
             />
           )}
+
+          
 
           {pontos?.map((ponto) => (
             <Marker
