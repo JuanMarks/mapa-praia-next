@@ -111,7 +111,7 @@ const MapaInterativo = () => {
       )}
 
       <div id="map" className="rounded-lg overflow-hidden mt-8 mx-auto lg:px-4 shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)]">
-        <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} />
+        <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onCriado={() => setNovaPosicao(null)} />
         <MapContainer
           center={centro}
           zoom={13}
@@ -125,7 +125,7 @@ const MapaInterativo = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-
+        
           <MapClickHandler />
 
 

@@ -13,9 +13,10 @@ const API_BASE_URL = 'http://25.20.79.62:3003';
 interface SidebarProps {
   ponto: PontoTuristico | null;
   onClose: () => void;
+  onCriado:() => void;
 }
 
-const Sidebar = ({ ponto, onClose }: SidebarProps) => {
+const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [imagemCapa, setImagemCapa] = useState('/images/img1.jpeg'); // Imagem padrão inicial
 
@@ -47,7 +48,7 @@ const Sidebar = ({ ponto, onClose }: SidebarProps) => {
 
       {/* Container Principal da Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-200 mt-31 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
+        className={`absolute top-0 left-0 h-170 rounded-2xl mt-15 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
                    ${isOpen ? 'transform-none' : '-translate-x-full'}`}
       >
         {/* Botão para esconder/mostrar a sidebar */}
@@ -69,6 +70,7 @@ const Sidebar = ({ ponto, onClose }: SidebarProps) => {
               style={{ objectFit: 'cover' }}
               sizes="350px"
               priority
+              className="rounded-t-2xl transition-transform duration-300 hover:scale-105"
             />
           </div>
 
