@@ -10,12 +10,6 @@ import { PontoTuristico } from '@/types/ponto';
 import { motion } from 'framer-motion';
 
 
-const slides = [
-    { id: 1, title: 'Lojinha do Sol', image: '/images/img1.jpeg' },
-    { id: 2, title: 'Café da Praia', image: '/images/img2.jpeg' },
-    { id: 3, title: 'Restaurante Mar Azul', image: '/images/img3.jpeg' },
-    { id: 4, title: 'Pousada do Zé', image: '/images/img4.jpeg' },
-];
 
 const API_BASE_URL = 'http://25.20.79.62:3003';
 
@@ -87,59 +81,59 @@ const CarrosselHorizontal: FC = () => {
                         </div>
 
                         {mostrar && (
-                                <div className="max-w-screen-xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                    <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados 🌟</h2>
-                                    <div className="flex flex-wrap gap-2">
-                                        {['Pontos Turísticos', 'Praças', 'Mercados', 'Restaurantes', 'Hotéis'].map((cat) => (
-                                            <button
-                                                key={cat}
-                                                className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-orange-100 transition-all"
-                                            >
-                                                {cat}
-                                            </button>
-                                        ))}
-                                    </div>
+                            <div className="max-w-screen-xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados 🌟</h2>
+                                <div className="flex flex-wrap gap-2">
+                                    {['Pontos Turísticos', 'Praças', 'Mercados', 'Restaurantes', 'Hotéis'].map((cat) => (
+                                        <button
+                                            key={cat}
+                                            className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-orange-100 transition-all"
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
                                 </div>
+                            </div>
 
 
-                                )
-                            }
+                        )
+                        }
                     </div>
-                        </motion.div>
-                        <Swiper
-                            slidesPerView={1.2}
-                            breakpoints={{
-                                640: { slidesPerView: 2.2 },
-                                1024: { slidesPerView: 3.5 },
-                            }}
-                            spaceBetween={20}
-                            navigation
-                            modules={[Navigation]}
-                            >
-                            {/* Alteração: Mapeando os 'pontos' da API em vez dos 'slides' estáticos */}
-                            {pontos.map((ponto) => (
-                                <SwiperSlide key={ponto.id}>
-                                    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-2 h-full">
-                                        <div className="w-full h-40 sm:h-48 relative">
-                                            <Image
-                                                src={getImagemDoPonto(ponto)}
-                                                alt={ponto.nome}
-                                                fill
-                                                style={{ objectFit: 'cover' }}
-                                                className="rounded-xl"
-                                                sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 28vw"
-                                            />
-                                        </div>
-                                        <p className="mt-2 text-center text-sm font-medium text-gray-700">
-                                            {ponto.nome}
-                                        </p>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
+                </motion.div>
+                <Swiper
+                    slidesPerView={1.2}
+                    breakpoints={{
+                        640: { slidesPerView: 2.2 },
+                        1024: { slidesPerView: 3.5 },
+                    }}
+                    spaceBetween={20}
+                    navigation
+                    modules={[Navigation]}
+                >
+                    {/* Alteração: Mapeando os 'pontos' da API em vez dos 'slides' estáticos */}
+                    {pontos.map((ponto) => (
+                        <SwiperSlide key={ponto.id}>
+                            <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-2 h-full">
+                                <div className="w-full h-40 sm:h-48 relative">
+                                    <Image
+                                        src={getImagemDoPonto(ponto)}
+                                        alt={ponto.nome}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        className="rounded-xl"
+                                        sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 28vw"
+                                    />
+                                </div>
+                                <p className="mt-2 text-center text-sm font-medium text-gray-700">
+                                    {ponto.nome}
+                                </p>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
-        );
+        </div>
+    );
 };
 
 export default CarrosselHorizontal;
