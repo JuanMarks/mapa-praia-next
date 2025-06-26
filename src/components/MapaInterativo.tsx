@@ -94,10 +94,11 @@ const MapaInterativo = () => {
             html: `<span style="font-size: 30px;">${iconeUrl}</span>`, // Emoji dentro de um span para controlar o tamanho
             className: 'emoji-icon', // Classe para remover o fundo branco padrão
             iconSize: [40, 40],
-            iconAnchor: [20, 40], // Ancoragem ajustada para o centro inferior do emoji
+            iconAnchor: [15, 30], // Ancoragem ajustada para o centro inferior do emoji
             });
         }
     };
+
 
   return (
     <div className="relative sm:m-0">
@@ -112,8 +113,7 @@ const MapaInterativo = () => {
       <div
         id="map"
         className="overflow-hidden mt-6 mx-auto px-0 sm:px-4 md:px-6 lg:px-8 shadow-2xl rounded-md sm:rounded-lg w-full max-w-[95vw]"
-      >
-        <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} />
+        <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onCriado={() => setNovaPosicao(null)} />
         <MapContainer
           center={centro}
           zoom={13}
@@ -128,8 +128,21 @@ const MapaInterativo = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-
+        
           <MapClickHandler />
+
+            
+          {/* {novaPosicao && (
+            role === 'admin' && (
+            <FormularioPonto
+              coordenadas={novaPosicao}
+              onClose={() => setNovaPosicao(null)}
+              onCriado={() => {
+                setNovaPosicao(null);
+                fetchPontos();
+              }}
+            />
+          ))} */}
 
           {novaPosicao && (
             <FormularioPonto
@@ -141,6 +154,8 @@ const MapaInterativo = () => {
               }}
             />
           )}
+
+          
 
           {pontos?.map((ponto) => (
             <Marker
