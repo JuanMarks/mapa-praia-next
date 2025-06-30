@@ -116,7 +116,10 @@ const MapaInterativo = () => {
         />
       )}
 
-      <div id="map" className="rounded-lg overflow-hidden mt-8 mx-auto lg:px-4 shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)]">
+      <div
+        id="map"
+        className="overflow-hidden mt-6 mx-auto px-0 sm:px-4 md:px-6 lg:px-8 shadow-2xl rounded-md sm:rounded-lg w-full max-w-[95vw]"
+      >
         <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onCriado={() => setNovaPosicao(null)} />
         <MapContainer
           center={centro}
@@ -125,7 +128,8 @@ const MapaInterativo = () => {
           maxBounds={bounds}
           maxBoundsViscosity={1.0}
           scrollWheelZoom={false}
-          style={{ height: '100vh', width: '100% '}}
+          style={{
+          height: typeof window !== 'undefined' && window.innerWidth < 640 ? '80vh' : '100vh', width: '100%',}}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

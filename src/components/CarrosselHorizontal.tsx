@@ -10,12 +10,6 @@ import { PontoTuristico } from '@/types/ponto';
 import { motion } from 'framer-motion';
 import api from '@/axios/config';
 
-const slides = [
-    { id: 1, title: 'Lojinha do Sol', image: '/images/img1.jpeg' },
-    { id: 2, title: 'Café da Praia', image: '/images/img2.jpeg' },
-    { id: 3, title: 'Restaurante Mar Azul', image: '/images/img3.jpeg' },
-    { id: 4, title: 'Pousada do Zé', image: '/images/img4.jpeg' },
-];
 
 
 
@@ -88,19 +82,19 @@ const CarrosselHorizontal: FC = () => {
                         </div>
 
                         {mostrar && (
-                                <div className="max-w-screen-xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                    <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados 🌟</h2>
-                                    <div className="flex flex-wrap gap-2">
-                                        {['Pontos Turísticos', 'Praças', 'Mercados', 'Restaurantes', 'Hotéis'].map((cat) => (
-                                            <button
-                                                key={cat}
-                                                className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-orange-100 transition-all"
-                                            >
-                                                {cat}
-                                            </button>
-                                        ))}
-                                    </div>
+                            <div className="max-w-screen-xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados 🌟</h2>
+                                <div className="flex flex-wrap gap-2">
+                                    {['Pontos Turísticos', 'Praças', 'Mercados', 'Restaurantes', 'Hotéis'].map((cat) => (
+                                        <button
+                                            key={cat}
+                                            className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-orange-100 transition-all"
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
                                 </div>
+                            </div>
 
 
                             )
