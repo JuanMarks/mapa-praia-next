@@ -11,7 +11,7 @@ export default function QuemSomos() {
             </div>
             <div className="lg:w-1/2 w-full flex justify-center">
                 <Image
-                src="/images/icaraizinho.jpg"
+                src="/images/equipe.jpeg"
                 alt="Imagem do grupo"
                 width={600}
                 height={400}

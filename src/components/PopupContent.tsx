@@ -22,7 +22,7 @@ interface Props {
 
 const PopupContent = ({ ponto }: Props) => {
 
-  const temFotos = ponto.fotosOficiais && ponto.fotosOficiais.length > 0;
+  const temFotos = ponto.photos && ponto.photos.length > 0;
 
   return (
     // Card principal: largura reduzida de 320px para 192px (60%)
@@ -39,11 +39,11 @@ const PopupContent = ({ ponto }: Props) => {
             pagination={{ clickable: true }}
             className="w-full h-full"
           >
-            {ponto.fotosOficiais?.map((url, index) => (
+            {ponto.photos?.map((url, index) => (
               <SwiperSlide key={index}>
                 <Image
-                  src={`${API_BASE_URL}${url}`}
-                  alt={`Foto de ${ponto.nome} ${index + 1}`}
+                  src={`${url}`} // Substitua pela URL correta se necessário
+                  alt={`Foto de ${ponto.name} ${index + 1}`}
                   fill
                   style={{ objectFit: 'cover' }}
                   sizes="192px" // Tamanho da imagem atualizado
@@ -67,7 +67,7 @@ const PopupContent = ({ ponto }: Props) => {
         <div className="flex justify-between items-start">
           <div>
             {/* Título: fonte reduzida de text-lg para text-base */}
-            <h3 className="font-bold text-base text-gray-800">{ponto.nome}</h3>
+            <h3 className="font-bold text-base text-gray-800">{ponto.name}</h3>
             
             {/* Demais textos: fonte reduzida de text-sm para text-xs */}
             <div className="flex items-center text-xs text-gray-600 mt-1">

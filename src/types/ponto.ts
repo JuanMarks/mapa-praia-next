@@ -1,11 +1,13 @@
 export interface PontoTuristico {
   id: number;
-  nome: string;
-  descricao: string;
-  endereco?: object
+  name: string;
+  description: string;
+  address?: object
   latitude: number;
   longitude: number;
-  iconeUrl?: string;
-  fotosOficiais?: string[];
-  fotosUsuarios?: string[];
+  iconURL?: string;
+  type?: string;
+  rating?: number;
+  photos?: string[];
+  
 }

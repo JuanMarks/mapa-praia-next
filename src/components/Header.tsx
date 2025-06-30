@@ -16,12 +16,12 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white shadow-md py-3 px-8 flex items-center justify-between relative z-[5000]">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-2xl shadow-lg flex justify-between items-center z-50">
       {/* Logo */}
       <div className="flex items-center">
         <div className="w-[140px] h-[60px] relative"> {/* ajusta o tamanho sem aumentar a div */}
           <Image
-            src="/images/logo_amotur.png"
+            src="/images/logo_amotur2.png"
             alt="Logo AMOTUR"
             fill
             style={{ objectFit: 'contain' }}
@@ -46,8 +46,8 @@ export default function Header() {
         {/* Menu mobile */}
         {menuOpen && (
           <ul className=" z-[5000] absolute top-16 right-0 w-56 bg-white shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
-            <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Início</a></li>
-            <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Sobre</a></li>
+            <li className="mb-2 w-full"><a href="/" className="block text-lg font-medium text-black">Início</a></li>
+            <li className="mb-2 w-full"><a href="/sobre" className="block text-lg font-medium text-black">Sobre</a></li>
             <li className="mb-2 w-full"><a href="#" className="block text-lg font-medium text-black">Contato</a></li>
             <li className="w-full mt-2">
               {loading ? null : role === 'admin' ? (
@@ -69,16 +69,16 @@ export default function Header() {
 
         {/* Menu desktop */}
         <ul className="hidden sm:flex space-x-6 items-center p-1">
-          <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Início</a></li>
-          <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Sobre</a></li>
-          <li><a href="#" className="text-black hover:text-amber-500 font-medium text-lg">Contato</a></li>
+          <li><a href="/" className="text-white hover:text-amber-500 font-medium text-lg">Início</a></li>
+          <li><a href="/sobre" className="text-white hover:text-amber-500 font-medium text-lg">Sobre</a></li>
+          <li><a href="#" className="text-white hover:text-amber-500 font-medium text-lg">Contato</a></li>
             {loading ? null : role === 'admin' ? (
               <>
                 <li>
-                  <a onClick={logout} className="text-black hover:text-red-500 font-medium text-lg cursor-pointer">Logout</a>
+                  <a onClick={logout} className="text-white hover:text-amber-500 font-medium text-lg cursor-pointer">Logout</a>
                 </li>
                 <li>
-                  <a href='pageadmin' className="block text-black  hover:text-red-500 font-medium text-lg cursor-pointer">Dashboard Admin</a>
+                  <a href='pageadmin' className="block text-white  hover:text-amber-500 font-medium text-lg cursor-pointer">Dashboard Admin</a>
                 </li>
               </>
             ) : (

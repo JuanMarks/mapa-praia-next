@@ -9,7 +9,8 @@ import FormularioPonto from './FormularioPonto';
 import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
 import Sidebar from './SideBar';
-
+import api from '@/axios/config';
+import { AxiosError } from 'axios';
 
 
 // Corrige ícones do Leaflet em Next.js
@@ -68,22 +69,27 @@ const MapaInterativo = () => {
   };
 
   const fetchPontos = async () => {
-    const res = await fetch('http://25.20.79.62:3003/pontos');
-    const data = await res.json();
-    setPontos(data);
+     try {
+      const response = await api.get('/places/getPlaces');
+      console.log(response.data);
+      setPontos(response.data);
+    } catch (error: any) {
+      console.error('Erro ao buscar pontos:', error.message);
+      // Aqui você pode exibir um toast ou setar um erro no estado
+    }
   };
 
   useEffect(() => {
     fetchPontos();
   }, []);
 
-  const createCustomIcon = (iconeUrl: string) => {
-    const isUrl = iconeUrl.startsWith('http') || iconeUrl.startsWith('/');
+  const createCustomIcon = (iconURL: string) => {
+    const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
 
         if (isUrl) {
             // Se for uma URL, cria um ícone de imagem
             return icon({
-            iconUrl: iconeUrl,
+            iconUrl: iconURL,
             iconSize: [32, 32],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32],
@@ -91,7 +97,7 @@ const MapaInterativo = () => {
         } else {
             // Se não for uma URL, cria um ícone de div com o emoji
             return divIcon({
-            html: `<span style="font-size: 30px;">${iconeUrl}</span>`, // Emoji dentro de um span para controlar o tamanho
+            html: `<span style="font-size: 30px;">${iconURL}</span>`, // Emoji dentro de um span para controlar o tamanho
             className: 'emoji-icon', // Classe para remover o fundo branco padrão
             iconSize: [40, 40],
             iconAnchor: [15, 30], // Ancoragem ajustada para o centro inferior do emoji
@@ -115,7 +121,7 @@ const MapaInterativo = () => {
         <MapContainer
           center={centro}
           zoom={13}
-          minZoom={13}
+          minZoom={14}
           maxBounds={bounds}
           maxBoundsViscosity={1.0}
           scrollWheelZoom={false}
@@ -129,7 +135,7 @@ const MapaInterativo = () => {
           <MapClickHandler />
 
             
-          {/* {novaPosicao && (
+          {novaPosicao && (
             role === 'admin' && (
             <FormularioPonto
               coordenadas={novaPosicao}
@@ -139,9 +145,9 @@ const MapaInterativo = () => {
                 fetchPontos();
               }}
             />
-          ))} */}
+          ))}
 
-          {novaPosicao && (
+          {/* {novaPosicao && (
             <FormularioPonto
               coordenadas={novaPosicao}
               onClose={() => setNovaPosicao(null)}
@@ -150,7 +156,7 @@ const MapaInterativo = () => {
                 fetchPontos();
               }}
             />
-          )}
+          )} */}
 
           
 
@@ -158,7 +164,7 @@ const MapaInterativo = () => {
             <Marker
               key={ponto.id}
               position={[ponto.latitude, ponto.longitude]}
-              icon={createCustomIcon(ponto.iconeUrl ?? '📍')}
+              icon={createCustomIcon(ponto.iconURL ?? '📍')}
               eventHandlers={{
                 click: () => handleMarkerClick(ponto),
                 mouseover: (e) => e.target.openPopup(),
@@ -175,7 +181,7 @@ const MapaInterativo = () => {
                 opacity={1}
                 className="text-2xl text-black"
               >
-                {ponto.nome}
+                {ponto.name}
               </Tooltip>
             </Marker>
           ))}
