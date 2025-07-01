@@ -55,10 +55,6 @@ const CarrosselHorizontal: FC = () => {
         return <div className="text-center p-10 text-red-500">Erro: {error}</div>;
     }
 
-
-
-
-
     return (
         <div className="w-full bg-white">
             <div className="w-full shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] px-2 py-4">
@@ -77,18 +73,18 @@ const CarrosselHorizontal: FC = () => {
                                 onClick={() => setMostrar(!mostrar)}
                                 className="text-sm text-gray-700 border border-gray-300 px-3 py-1 rounded-full"
                             >
-                                {mostrar ? '⬇️ Esconder' : '⬆️ Mostrar'}
+                                {mostrar ? '⬇️ Fechar' : '⬆️ Abrir'}
                             </button>
                         </div>
 
                         {mostrar && (
                             <div className="max-w-screen-xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados 🌟</h2>
+                                <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados ⭐</h2>
                                 <div className="flex flex-wrap gap-2">
                                     {['Pontos Turísticos', 'Praças', 'Mercados', 'Restaurantes', 'Hotéis'].map((cat) => (
                                         <button
                                             key={cat}
-                                            className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-orange-100 transition-all"
+                                            className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-blue-100 transition-all"
                                         >
                                             {cat}
                                         </button>
@@ -125,7 +121,7 @@ const CarrosselHorizontal: FC = () => {
                                         sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 28vw"
                                     />
                                 </div>
-                                <p className="mt-2 text-center text-sm font-medium text-gray-700">
+                                <p className="mt-2 text-center text-sm font-bold text-gray-700">
                                     {ponto.name}
                                 </p>
                             </div>

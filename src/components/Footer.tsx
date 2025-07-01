@@ -35,7 +35,7 @@ export default function Footer() {
         </a>
         <a
           href="mailto:contato@amotur.org"
-          className="flex items-center gap-1 bg-blue-500 text-white rounded-4xl px-3 py-1.5 hover:bg-blue-700 transition"
+          className="flex items-center gap-1 bg-blue-900 text-white rounded-4xl px-3 py-1.5 hover:bg-blue-600 transition"
         >
           <FaEnvelope /> Contato
         </a>
