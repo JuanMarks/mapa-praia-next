@@ -16,12 +16,12 @@ export default function Header() {
   }
 
   return (
-    <header className="absolute top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-2xl shadow-lg flex justify-between items-center z-40">
+    <header className="absolute top-2 left-1/2 -translate-x-1/2 w-[100%] max-w-7xl bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-2xl shadow-lg flex justify-between items-center z-40">
       {/* Logo */}
       <div className="flex items-center">
         <div className="w-[140px] h-[60px] relative">
           <Image
-            src="/images/logo_amotur2.png"
+            src="/images/logo_amoturOFC.png"
             alt="Logo AMOTUR"
             fill
             style={{ objectFit: 'contain' }}
@@ -69,21 +69,21 @@ export default function Header() {
 
         {/* Menu desktop */}
         <ul className="hidden sm:flex space-x-6 items-center">
-          <li><a href="/" className="text-white hover:text-amber-500 font-medium text-lg">Início</a></li>
-          <li><a href="/sobre" className="text-white hover:text-amber-500 font-medium text-lg">Sobre</a></li>
-          <li><a href="#" className="text-white hover:text-amber-500 font-medium text-lg">Contato</a></li>
+          <li><a href="/" className="text-white hover:text-blue-500 font-medium text-lg">Início</a></li>
+          <li><a href="/sobre" className="text-white hover:text-blue-500 font-medium text-lg">Sobre</a></li>
+          <li><a href="#" className="text-white hover:text-blue-500 font-medium text-lg">Contato</a></li>
           {loading ? null : role === 'admin' ? (
             <>
               <li>
-                <a onClick={logout} className="text-white hover:text-red-400 font-medium text-lg cursor-pointer">Logout</a>
+                <a onClick={logout} className="text-white hover:text-blue-500 font-medium text-lg cursor-pointer">Logout</a>
               </li>
               <li>
-                <a href="/pageadmin" className="text-white hover:text-amber-500 font-medium text-lg">Dashboard</a>
+                <a href="/pageadmin" className="text-white hover:text-blue-500 font-medium text-lg">Dashboard</a>
               </li>
             </>
           ) : (
             <button
-              className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg text-lg font-semibold"
+              className="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-lg font-semibold"
               onClick={() => (window.location.href = '/login')}
             >
               Login

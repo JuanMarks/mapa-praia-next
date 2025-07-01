@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <HeroBanner/>
-      <MapaInterativo />
+      <MapaInterativo/>
       <main className="p-4 bg-white">
         <CarrosselHorizontal />
       </main>

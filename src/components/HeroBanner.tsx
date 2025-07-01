@@ -2,54 +2,44 @@
 
 import { motion } from 'framer-motion';
 import React from 'react';
-import Image from 'next/image'; // 1. Importe o componente Image
+import Image from 'next/image';
 import Header from './Header';
 
 export default function HeroBanner() {
   return (
     <motion.section
-      className="relative w-full h-[60vh]" // O contêiner precisa ser relativo
+      className="relative w-full h-[30vh] md:h-[30vh]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1.5 }}
     >
-      {/* 2. Use o componente Image para o fundo */}
       <Image
-        src="/images/img_icarai1.jpg" // O caminho continua o mesmo (relativo à pasta `public`)
+        src="/images/img_icarai1.jpg"
         alt="Vista panorâmica da praia de Icaraí de Amontada"
-        fill // 'fill' faz a imagem preencher o contêiner pai
-        style={{ objectFit: 'cover', objectPosition: 'center 80%' }} // Substitui bg-cover e bg-position
-        quality={80} // Opcional: ajusta a qualidade da imagem
-        priority // Opcional: carrega a imagem prioritariamente (bom para imagens "hero")
+        fill
+        style={{ objectFit: 'cover', objectPosition: 'center 80%' }}
+        quality={80}
+        priority
       />
-      <Header/>
+      <Header />
 
-      {/* Camada de sobreposição e conteúdo */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center bg-black/50 px-4 text-center">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center bg-black/50 px-6 text-center pt-16">
         <motion.h1
-          className="text-4xl font-bold text-white drop-shadow-lg md:text-5xl"
+          className="text-xl font-extrabold text-white drop-shadow-lg sm:text-2xl md:text-4xl"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          Descubra o melhor de <span className='text-orange-500'>Amontada</span>
+          Do pôr do sol em <span className="text-blue-400">Icaraí</span> às águas calmas de <span className="text-blue-400">Moitas</span> e <span className="text-blue-400">Caetanos</span>
         </motion.h1>
         <motion.p
-          className="mt-4 max-w-2xl text-lg text-white drop-shadow-md md:text-xl"
+          className="mt-4 max-w-2xl text-sm text-white drop-shadow-md sm:text-base md:text-lg"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Explore trilhas, restaurantes, praias e tudo que nossa região tem de melhor direto no seu mapa interativo.
+          Viva experiências únicas nas praias mais encantadoras do litoral cearense.
         </motion.p>
-        <motion.a
-          href="#map"
-          className="mt-6 rounded-lg bg-orange-500 px-6 py-3 text-lg font-semibold text-white shadow-lg transition-all hover:bg-orange-600"
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          Explorar o Mapa
-        </motion.a>
       </div>
     </motion.section>
   );

@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="flex items-center gap-2">
         <div className="relative w-[140px] h-[60px]">
           <Image
-            src="/images/logo_amotur.png"
+            src="/images/logo_amoturOFC.png"
             alt="Logo AMOTUR"
             fill
             style={{ objectFit: 'contain' }}
@@ -35,7 +35,7 @@ export default function Footer() {
         </a>
         <a
           href="mailto:contato@amotur.org"
-          className="flex items-center gap-1 bg-orange-600 text-white rounded-4xl px-3 py-1.5 hover:bg-orange-700 transition"
+          className="flex items-center gap-1 bg-blue-500 text-white rounded-4xl px-3 py-1.5 hover:bg-blue-700 transition"
         >
           <FaEnvelope /> Contato
         </a>
