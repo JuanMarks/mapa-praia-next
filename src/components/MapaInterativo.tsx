@@ -11,7 +11,7 @@ import { useAuth } from '../hooks/useAuth';
 import Sidebar from './SideBar';
 import api from '@/axios/config';
 import { AxiosError } from 'axios';
-
+import RightSidebar from './RightSideBar';
 
 // Corrige ícones do Leaflet em Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -33,6 +33,7 @@ const MapaInterativo = () => {
   const [novaPosicao, setNovaPosicao] = useState<[number, number] | null>(null);
   const { role, loading } = useAuth();
   const [selectedPonto, setSelectedPonto] = useState<PontoTuristico | null>(null);
+  const [map, setMap] = useState<L.Map | null>(null);
 
   // Bloqueio de toque no mobile
   const [touchBloqueado, setTouchBloqueado] = useState(true);
@@ -52,6 +53,9 @@ const MapaInterativo = () => {
 
   const handleMarkerClick = (ponto: PontoTuristico) => {
     setSelectedPonto(ponto);
+    if (map) {
+      map.flyTo([ponto.latitude, ponto.longitude], 15);
+    }
   };
 
   const handleSidebarClose = () => {
@@ -104,6 +108,14 @@ const MapaInterativo = () => {
             });
         }
     };
+
+  const handleLocationSelect = (ponto: PontoTuristico) => {
+    console.log('clicado')
+    setSelectedPonto(ponto);
+    if (map) {
+      map.flyTo([ponto.latitude, ponto.longitude], 17);
+    }
+  };
 
 
   return (
@@ -191,6 +203,7 @@ const MapaInterativo = () => {
           ))}
         </MapContainer>
       </div>
+      <RightSidebar onLocationSelect={handleLocationSelect} />
     </div>
   );
 };
