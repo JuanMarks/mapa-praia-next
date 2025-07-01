@@ -78,7 +78,7 @@ const RightSidebar = ({ onLocationSelect }: RightSidebarProps) => {
     return (
       <button
         onClick={() => setIsVisible(true)}
-        className="fixed top-1/2 right-0 transform -translate-y-1/2 bg-white p-2 rounded-l-full shadow-lg z-40"
+        className="absolute z-[5000] top-1/2 right-0 transform -translate-y-1/2 bg-white p-2 rounded-l-full shadow-lg"
         aria-label="Mostrar sidebar"
       >
         <FaChevronLeft size={20} />
