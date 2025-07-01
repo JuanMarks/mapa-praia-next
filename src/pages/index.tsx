@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic';
 import './globals.css';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import HeroBanner from '@/components/HeroBanner';
 
@@ -10,7 +9,6 @@ const CarrosselHorizontal = dynamic(() => import ('@/components/CarrosselHorizon
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <Header />
       <HeroBanner/>
       <MapaInterativo />
       <main className="p-4 bg-white">

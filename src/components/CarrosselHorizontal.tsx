@@ -97,45 +97,45 @@ const CarrosselHorizontal: FC = () => {
                             </div>
 
 
-                            )
+                        )
                         }
                     </div>
                 </motion.div>
-                        <Swiper
-                            slidesPerView={1.2}
-                            breakpoints={{
-                                640: { slidesPerView: 2.2 },
-                                1024: { slidesPerView: 3.5 },
-                            }}
-                            spaceBetween={20}
-                            navigation
-                            modules={[Navigation]}
-                            >
-                            {/* Alteração: Mapeando os 'pontos' da API em vez dos 'slides' estáticos */}
-                            {pontos.map((ponto) => (
-                                <SwiperSlide key={ponto.id}>
-                                    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-2 h-full">
-                                        <div className="w-full h-40 sm:h-48 relative">
-                                            <Image
-                                                src={getImagemDoPonto(ponto)}
-                                                alt={ponto.name}
-                                                fill
-                                                style={{ objectFit: 'cover' }}
-                                                className="rounded-xl"
-                                                sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 28vw"
-                                            />
-                                        </div>
-                                        <p className="mt-2 text-center text-sm font-medium text-gray-700">
-                                            {ponto.name}
-                                        </p>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
+                <Swiper
+                    slidesPerView={1.2}
+                    breakpoints={{
+                        640: { slidesPerView: 2.2 },
+                        1024: { slidesPerView: 3.5 },
+                    }}
+                    spaceBetween={20}
+                    navigation
+                    modules={[Navigation]}
+                >
+                    {/* Alteração: Mapeando os 'pontos' da API em vez dos 'slides' estáticos */}
+                    {pontos.map((ponto) => (
+                        <SwiperSlide key={ponto.id}>
+                            <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-2 h-full">
+                                <div className="w-full h-40 sm:h-48 relative">
+                                    <Image
+                                        src={getImagemDoPonto(ponto)}
+                                        alt={ponto.name}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        className="rounded-xl"
+                                        sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 28vw"
+                                    />
+                                </div>
+                                <p className="mt-2 text-center text-sm font-medium text-gray-700">
+                                    {ponto.name}
+                                </p>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
         </div>
-            
-        );
+
+    );
 };
 
 export default CarrosselHorizontal;

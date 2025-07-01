@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import Image from 'next/image'; // 1. Importe o componente Image
+import Header from './Header';
 
 export default function HeroBanner() {
   return (
@@ -21,6 +22,7 @@ export default function HeroBanner() {
         quality={80} // Opcional: ajusta a qualidade da imagem
         priority // Opcional: carrega a imagem prioritariamente (bom para imagens "hero")
       />
+      <Header/>
 
       {/* Camada de sobreposição e conteúdo */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center bg-black/50 px-4 text-center">
