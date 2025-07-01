@@ -21,7 +21,7 @@ export default function Header() {
       <div className="flex items-center">
         <div className="w-[140px] h-[60px] relative"> {/* ajusta o tamanho sem aumentar a div */}
           <Image
-            src="/images/logo_amotur2.png"
+            src="/images/logo1.png"
             alt="Logo AMOTUR"
             fill
             style={{ objectFit: 'contain' }}

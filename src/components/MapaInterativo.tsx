@@ -121,7 +121,7 @@ const MapaInterativo = () => {
         <MapContainer
           center={centro}
           zoom={13}
-          minZoom={14}
+          minZoom={13}
           maxBounds={bounds}
           maxBoundsViscosity={1.0}
           scrollWheelZoom={false}
