@@ -8,10 +8,10 @@ import 'swiper/css/navigation';
 import Image from 'next/image';
 import { PontoTuristico } from '@/types/ponto';
 import { motion } from 'framer-motion';
+import api from '@/axios/config';
 
 
 
-const API_BASE_URL = 'http://25.20.79.62:3003';
 
 const CarrosselHorizontal: FC = () => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
@@ -19,28 +19,29 @@ const CarrosselHorizontal: FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [mostrar, setMostrar] = useState(true);
 
+    const fetchPontos = async () => {
+        try {
+            setLoading(true);
+            const response = await api.get('/places/getPlaces');
+            console.log(response.data);
+            setPontos(response.data);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     useEffect(() => {
-        const fetchPontos = async () => {
-            try {
-                setLoading(true);
-                const res = await fetch(`${API_BASE_URL}/pontos`);
-                if (!res.ok) throw new Error('Falha ao buscar os pontos.');
-                const data: PontoTuristico[] = await res.json();
-                setPontos(data);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchPontos();
     }, []);
 
     const getImagemDoPonto = (ponto: PontoTuristico): string => {
-        if (ponto.fotosOficiais && ponto.fotosOficiais.length > 0) {
-            const randomIndex = Math.floor(Math.random() * ponto.fotosOficiais.length);
-            const caminhoDaFoto = ponto.fotosOficiais[randomIndex];
-            return `${API_BASE_URL}${caminhoDaFoto}`;
+        if (ponto.photos && ponto.photos.length > 0) {
+            const randomIndex = Math.floor(Math.random() * ponto.photos.length);
+            const caminhoDaFoto = ponto.photos[randomIndex];
+            return `${caminhoDaFoto}`;
         }
         // Usando uma de suas imagens estáticas como placeholder
         return '/images/img1.jpeg';
@@ -60,7 +61,7 @@ const CarrosselHorizontal: FC = () => {
 
     return (
         <div className="w-full bg-white">
-            <div className="w-full shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] px-4 py-8">
+            <div className="w-full shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] px-2 py-4">
                 <motion.div
                     className="w-full bg-white"
                     initial={{ opacity: 0, y: 20 }}
@@ -117,7 +118,7 @@ const CarrosselHorizontal: FC = () => {
                                 <div className="w-full h-40 sm:h-48 relative">
                                     <Image
                                         src={getImagemDoPonto(ponto)}
-                                        alt={ponto.nome}
+                                        alt={ponto.name}
                                         fill
                                         style={{ objectFit: 'cover' }}
                                         className="rounded-xl"
@@ -125,7 +126,7 @@ const CarrosselHorizontal: FC = () => {
                                     />
                                 </div>
                                 <p className="mt-2 text-center text-sm font-medium text-gray-700">
-                                    {ponto.nome}
+                                    {ponto.name}
                                 </p>
                             </div>
                         </SwiperSlide>
@@ -133,6 +134,7 @@ const CarrosselHorizontal: FC = () => {
                 </Swiper>
             </div>
         </div>
+
     );
 };
 

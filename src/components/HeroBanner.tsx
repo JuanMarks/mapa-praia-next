@@ -2,41 +2,44 @@
 
 import { motion } from 'framer-motion';
 import React from 'react';
+import Image from 'next/image';
+import Header from './Header';
 
 export default function HeroBanner() {
   return (
     <motion.section
-      className="relative w-full h-[60vh] bg-cover bg-[center_80%]"
-      style={{ backgroundImage: "url('/images/img_icarai1.jpg')" }}
+      className="relative w-full h-[30vh] md:h-[30vh]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 2 }}
+      transition={{ duration: 1.5 }}
     >
-      <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center px-4">
+      <Image
+        src="/images/img_icarai1.jpg"
+        alt="Vista panorâmica da praia de Icaraí de Amontada"
+        fill
+        style={{ objectFit: 'cover', objectPosition: 'center 80%' }}
+        quality={80}
+        priority
+      />
+      <Header />
+
+      <div className="relative z-10 flex h-full flex-col items-center justify-center bg-black/50 px-6 text-center pt-16">
         <motion.h1
-          className="text-white text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg"
+          className="text-xl font-extrabold text-white drop-shadow-lg sm:text-2xl md:text-4xl"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          Descubra o melhor de <span className='text-orange-500'>Amontada</span>
+          Do pôr do sol em <span className="text-blue-400">Icaraí</span> às águas calmas de <span className="text-blue-400">Moitas</span> e <span className="text-blue-400">Caetanos</span>
         </motion.h1>
         <motion.p
-          className="text-white text-lg md:text-xl mb-6 max-w-2xl drop-shadow-md"
+          className="mt-4 max-w-2xl text-sm text-white drop-shadow-md sm:text-base md:text-lg"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Explore trilhas, restaurantes, praias e tudo que nossa região tem de melhor direto no seu mapa interativo.
+          Viva experiências únicas nas praias mais encantadoras do litoral cearense.
         </motion.p>
-        <motion.a
-          href="#map"
-          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all shadow-lg"
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          Explorar o Mapa
-        </motion.a>
       </div>
     </motion.section>
   );

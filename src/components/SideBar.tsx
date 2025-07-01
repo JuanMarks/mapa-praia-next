@@ -8,7 +8,7 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import Image from 'next/image';
 import '../pages/globals.css'; 
 
-const API_BASE_URL = 'http://25.20.79.62:3003';
+const API_BASE_URL = 'http://25.20.79.62:3000';
 
 interface SidebarProps {
   ponto: PontoTuristico | null;
@@ -21,11 +21,11 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
   const [imagemCapa, setImagemCapa] = useState('/images/img1.jpeg'); // Imagem padrão inicial
 
   useEffect(() => {
-    if (ponto?.fotosOficiais && ponto.fotosOficiais.length > 0) {
+    if (ponto?.photos && ponto.photos.length > 0) {
       // Seleciona uma imagem aleatória das fotos oficiais para ser a capa
-      const randomIndex = Math.floor(Math.random() * ponto.fotosOficiais.length);
-      const fotoAleatoria = ponto.fotosOficiais[randomIndex];
-      setImagemCapa(`${API_BASE_URL}${fotoAleatoria}`);
+      const randomIndex = Math.floor(Math.random() * ponto.photos.length);
+      const fotoAleatoria = ponto.photos[randomIndex];
+      setImagemCapa(`${fotoAleatoria}`);
     } else {
       // Usa uma imagem padrão se não houver fotos
       setImagemCapa('/images/img1.jpeg');
@@ -36,7 +36,7 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
     return null; // Não renderiza nada se nenhum ponto estiver selecionado
   }
 
-  const temFotos = ponto.fotosOficiais && ponto.fotosOficiais.length > 0;
+  const temFotos = ponto.photos && ponto.photos.length > 0;
 
   return (
     <>
@@ -48,7 +48,7 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
 
       {/* Container Principal da Sidebar */}
       <div
-        className={`absolute top-0 left-0 h-170 rounded-2xl mt-15 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
+        className={`absolute top-0 left-0 h-170 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
                    ${isOpen ? 'transform-none' : '-translate-x-full'}`}
       >
         {/* Botão para esconder/mostrar a sidebar */}
@@ -65,7 +65,7 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
           <div className="relative w-full h-48">
             <Image 
               src={imagemCapa} 
-              alt={`Foto de ${ponto.nome}`} 
+              alt={`Foto de ${ponto.name}`} 
               fill
               style={{ objectFit: 'cover' }}
               sizes="350px"
@@ -81,7 +81,7 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
           
           {/* Conteúdo */}
           <div className="p-4 flex-grow overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-800">{ponto.nome}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{ponto.name}</h2>
 
             {/* Botões de Ação */}
             <div className="grid grid-cols-4 gap-2 my-4 text-center">
@@ -92,18 +92,18 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
             </div>
 
             {/* Descrição do Ponto */}
-            <InfoItem icon={<FaInfoCircle />} text={ponto.descricao} />
+            <InfoItem icon={<FaInfoCircle />} text={ponto.description} />
 
             {/* Galeria de Fotos */}
             {temFotos && (
               <div className="mt-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Galeria</h3>
                 <div className="grid grid-cols-3 gap-2">
-                  {ponto.fotosOficiais?.map((fotoUrl, index) => (
+                  {ponto.photos?.map((fotoUrl, index) => (
                     <div key={index} className="relative w-full h-24 rounded-lg overflow-hidden">
                       <Image
-                        src={`${API_BASE_URL}${fotoUrl}`}
-                        alt={`Galeria de ${ponto.nome} ${index + 1}`}
+                        src={`${fotoUrl}`}
+                        alt={`Galeria de ${ponto.name} ${index + 1}`}
                         fill
                         style={{ objectFit: 'cover' }}
                         sizes="100px"

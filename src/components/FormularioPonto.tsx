@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import api from '@/axios/config';
 
 interface Props {
     coordenadas: [number, number];
@@ -7,26 +7,26 @@ interface Props {
     onCriado: () => void;
 }
 
-
-
-const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐'];
+const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻'];
 
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
-    const [nome, setNome] = useState('');
-    const [descricao, setDescricao] = useState('');
-    const [iconeUrl, setIconeUrl] = useState('');
-    // Unificar o estado para armazenar os arquivos de imagem
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [iconURL, setIconURL] = useState('');
+    const [type, setType] = useState('');
+    const [rating, setRating] = useState<number>(1); // Inicia com 1
+    const [bairro, setBairro] = useState('');
+    const [numero, setNumero] = useState('');
+    const [logradouro, setLogradouro] = useState('');
+    const [complemento, setComplemento] = useState('');
     const [imagens, setImagens] = useState<File[]>([]);
 
-    // Estados para feedback da UI
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    // Função para lidar com a seleção de múltiplos arquivos
     const handleImagemChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            // Converte o FileList (que não é um array) para um array de verdade
             setImagens(Array.from(e.target.files));
         }
     };
@@ -37,58 +37,58 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         setError(null);
         setSuccess(false);
 
+        // 1. Criar um objeto FormData para enviar dados de formulário e arquivos
+        const formData = new FormData();
+
+        // 2. Anexar todos os campos de texto e outros dados
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('latitude', String(coordenadas[0]));
+        formData.append('longitude', String(coordenadas[1]));
+        formData.append('iconURL', iconURL || "https://cdn-icons-png.flaticon.com/512/854/854878.png");
+        formData.append('type', type || 'outro');
+        formData.append('rating', String(rating));
+
+        // Para objetos aninhados como 'address', anexe cada propriedade individualmente
+        // O NestJS irá reconstruir o objeto no DTO
+        formData.append('address[logradouro]', logradouro);
+        formData.append('address[numero]', String(numero));
+        formData.append('address[bairro]', bairro);
+        formData.append('address[complemento]', complemento);
+
+
+        // 3. Anexar cada arquivo de imagem
+        imagens.forEach((imagem) => {
+            // O nome do campo 'photos' deve corresponder ao usado no FilesInterceptor do NestJS
+            formData.append('photos', imagem);
+        });
+
         try {
-            // 1. Cria o ponto
-            const res = await fetch('http://25.20.79.62:3003/pontos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nome,
-                    descricao,
-                    latitude: coordenadas[0],
-                    longitude: coordenadas[1],
-                    iconeUrl: iconeUrl || "https://cdn-icons-png.flaticon.com/512/854/854878.png"
-                }),
+            // 4. Enviar tudo em uma única requisição POST
+            const res = await api.post('/places/createPlace', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
-            if (!res.ok) {
-                throw new Error('Falha ao criar o ponto.');
-            }
-
-            const novoPonto = await res.json();
-
-            // 2. Envia as imagens, se houver
-            if (imagens.length > 0) {
-                const formData = new FormData();
-                imagens.forEach((imagem) => {
-                    formData.append('fotos', imagem);
-                });
-
-                const resFotos = await fetch(`http://25.20.79.62:3003/pontos/${novoPonto.id}/fotos`, {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                if (!resFotos.ok) {
-                    throw new Error('Ponto criado, mas falha ao enviar as imagens.');
-                }
-            }
-
+            console.log(res.data);
             setSuccess(true);
             setTimeout(() => {
-                onCriado();
-            }, 1500); // Fecha o modal após um tempo para o usuário ver a mensagem
+                onCriado(); // Chama a função para fechar o modal e atualizar a lista
+            }, 1500);
 
         } catch (err: any) {
-            setError(err.message || 'Ocorreu um erro desconhecido.');
+            console.error("Erro ao criar ponto:", err);
+            const errorMessage = err.response?.data?.message || err.message || 'Ocorreu um erro desconhecido.';
+            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="fixed inset-0 bg-black z-[5000] flex justify-center items-center" onClick={onClose}>
-            <div className="bg-white rounded shadow-xl w-full max-w-lg m-4" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-[5000] flex justify-center items-center" onClick={onClose}>
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto m-4" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-4 border-b border-gray-200">
                     <h3 className="text-xl font-semibold text-gray-800">Adicionar novo ponto</h3>
                     <button onClick={onClose} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
@@ -97,18 +97,38 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                    <div className="p-5 space-y-4">
+                    <div className="p-4 space-y-3">
                         {success && <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert"><p>Ponto criado com sucesso!</p></div>}
                         {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert"><p>{error}</p></div>}
 
-                        <div>
+                        {/* ... o restante do seu formulário permanece igual ... */}
+                         <div>
                             <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">Nome</label>
-                            <input type="text" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                            <input type="text" id="nome" value={name} onChange={(e) => setName(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
                         </div>
 
                         <div>
                             <label htmlFor="descricao" className="block mb-2 text-sm font-medium text-gray-700">Descrição</label>
-                            <textarea id="descricao" rows={3} value={descricao} onChange={(e) => setDescricao(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading}></textarea>
+                            <textarea id="descricao" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading}></textarea>
+                        </div>
+
+                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label htmlFor="bairro" className="block mb-2 text-sm font-medium text-gray-700">Bairro</label>
+                                <input type="text" id="bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                            <div>
+                                <label htmlFor="numero" className="block mb-2 text-sm font-medium text-gray-700">Número</label>
+                                <input type="text" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                            <div>
+                                <label htmlFor="logradouro" className="block mb-2 text-sm font-medium text-gray-700">Logradouro</label>
+                                <input type="text" id="logradouro" value={logradouro} onChange={(e) => setLogradouro(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                            <div>
+                                <label htmlFor="complemento" className="block mb-2 text-sm font-medium text-gray-700">Complemento</label>
+                                <input type="text" id="complemento" value={complemento} onChange={(e) => setComplemento(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                            </div>
                         </div>
 
                         <div>
@@ -118,6 +138,8 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 required
                                 disabled={isLoading}
+                                value={type}
+                                onChange={(e) => setType(e.target.value)}
                             >
                                 <option value="">Selecione o tipo</option>
                                 <option value="restaurante">Restaurante</option>
@@ -125,19 +147,17 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                                 <option value="praia">Praia</option>
                             </select>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone do Marcador</label>
                             <div className="flex flex-wrap gap-3">
                                 {ICONS.map((icon, index) => (
                                     <label className="cursor-pointer" key={index}>
-                                        <input type="radio" name="icon" value={icon} className="sr-only peer" checked={iconeUrl === icon} onChange={() => setIconeUrl(icon)} />
+                                        <input type="radio" name="icon" value={icon} className="sr-only peer" checked={iconURL === icon} onChange={() => setIconURL(icon)} />
                                         <div className="text-3xl p-1 rounded-md transition-all duration-200 hover:bg-gray-200 peer-checked:bg-indigo-200 peer-checked:ring-2 peer-checked:ring-indigo-500">{icon}</div>
                                     </label>
                                 ))}
                             </div>
                         </div>
-
                         <div className="mb-4">
                             <label htmlFor="imagem" className="block text-sm font-medium text-gray-700">
                                 Imagens do Ponto (Opcional)
