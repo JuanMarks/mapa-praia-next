@@ -1,14 +1,28 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import api from '@/axios/config';
-
+import Image from 'next/image';
 interface Props {
     coordenadas: [number, number];
     onClose: () => void;
     onCriado: () => void;
 }
 
-const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻'];
-
+const ICONS = [ '🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448609.png', // Exemplo: Restaurante
+    'https://cdn-icons-png.flaticon.com/512/2923/2923500.png', // Exemplo: Sorvete
+    'https://cdn-icons-png.flaticon.com/512/854/854878.png',   // Exemplo: Ponto no mapa
+    'https://cdn-icons-png.flaticon.com/512/1046/1046751.png', // Exemplo: Praia
+    'https://cdn-icons-png.flaticon.com/512/4901/4901802.png',
+    'https://cdn-icons-png.flaticon.com/512/2271/2271030.png',
+    'https://cdn-icons-png.flaticon.com/512/4287/4287284.png',
+    'https://cdn-icons-png.flaticon.com/512/6978/6978255.png',
+    'https://cdn-icons-png.flaticon.com/512/1669/1669668.png',
+    'https://cdn-icons-png.flaticon.com/512/3656/3656972.png',
+    'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
+    'https://cdn-icons-png.flaticon.com/512/814/814405.png',
+    'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
+    //;
+]
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -150,12 +164,26 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone do Marcador</label>
                             <div className="flex flex-wrap gap-3">
-                                {ICONS.map((icon, index) => (
-                                    <label className="cursor-pointer" key={index}>
-                                        <input type="radio" name="icon" value={icon} className="sr-only peer" checked={iconURL === icon} onChange={() => setIconURL(icon)} />
-                                        <div className="text-3xl p-1 rounded-md transition-all duration-200 hover:bg-gray-200 peer-checked:bg-indigo-200 peer-checked:ring-2 peer-checked:ring-indigo-500">{icon}</div>
-                                    </label>
-                                ))}
+                                {ICONS.map((icon, index) => {
+                                    // Verifica se o item da lista é uma URL
+                                    const isUrl = icon.startsWith('http');
+
+                                    return (
+                                        <label className="cursor-pointer" key={index}>
+                                            <input type="radio" name="icon" value={icon} className="sr-only peer" checked={iconURL === icon} onChange={() => setIconURL(icon)} />
+                                            {/* Define um tamanho fixo para alinhar emojis e imagens */}
+                                            <div className="h-12 w-12 flex items-center justify-center p-1 rounded-md transition-all duration-200 hover:bg-gray-200 peer-checked:bg-indigo-200 peer-checked:ring-2 peer-checked:ring-indigo-500">
+                                                {isUrl ? (
+                                                    // Se for URL, renderiza a imagem
+                                                    <Image src={icon} alt="Ícone" width={32} height={32} className="object-contain" />
+                                                ) : (
+                                                    // Se não for, renderiza o emoji
+                                                    <span className="text-3xl">{icon}</span>
+                                                )}
+                                            </div>
+                                        </label>
+                                    );
+                                })}
                             </div>
                         </div>
                         <div className="mb-4">
