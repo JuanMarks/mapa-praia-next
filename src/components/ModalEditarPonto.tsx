@@ -1,13 +1,29 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { PontoTuristico } from '@/types/ponto'; // Certifique-se que o tipo PontoTuristico tenha `photos: string[]`
 import api from '@/axios/config';
+import Image from 'next/image';
 
 // Ícone para o botão de excluir
 const TrashIcon = () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
 );
 
-const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐'];
+const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448609.png', // Exemplo: Restaurante
+    'https://cdn-icons-png.flaticon.com/512/2923/2923500.png', // Exemplo: Sorvete
+    'https://cdn-icons-png.flaticon.com/512/854/854878.png',   // Exemplo: Ponto no mapa
+    'https://cdn-icons-png.flaticon.com/512/1046/1046751.png', // Exemplo: Praia
+    'https://cdn-icons-png.flaticon.com/512/4901/4901802.png',
+    'https://cdn-icons-png.flaticon.com/512/2271/2271030.png',
+    'https://cdn-icons-png.flaticon.com/512/4287/4287284.png',
+    'https://cdn-icons-png.flaticon.com/512/6978/6978255.png',
+    'https://cdn-icons-png.flaticon.com/512/1669/1669668.png',
+    'https://cdn-icons-png.flaticon.com/512/3656/3656972.png',
+    'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
+    'https://cdn-icons-png.flaticon.com/512/814/814405.png',
+    'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
+    //;
+]
 
 interface Props {
     ponto: PontoTuristico;
@@ -20,7 +36,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [iconURL, setIconURL] = useState('');
-    
+
     // Estados para gerenciamento de fotos
     const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
     const [newPhotos, setNewPhotos] = useState<File[]>([]);
@@ -106,7 +122,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                 <form onSubmit={handleSubmit}>
                     <div className="p-5 space-y-6">
                         {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert"><p>{error}</p></div>}
-                        
+
                         {/* Campos de texto */}
                         <div>
                             <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">Nome</label>
@@ -119,12 +135,26 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone</label>
                             <div className="flex flex-wrap gap-3">
-                                {ICONS.map((icon) => (
-                                    <label className="cursor-pointer" key={icon}>
-                                        <input type="radio" name="icon" value={icon} className="sr-only peer" checked={iconURL === icon} onChange={() => setIconURL(icon)} />
-                                        <div className="text-3xl p-1 rounded-md transition-all hover:bg-gray-200 peer-checked:bg-indigo-200 ring-indigo-500 peer-checked:ring-2">{icon}</div>
-                                    </label>
-                                ))}
+                                {ICONS.map((icon, index) => {
+                                    // Verifica se o item da lista é uma URL
+                                    const isUrl = icon.startsWith('http');
+
+                                    return (
+                                        <label className="cursor-pointer" key={index}>
+                                            <input type="radio" name="icon" value={icon} className="sr-only peer" checked={iconURL === icon} onChange={() => setIconURL(icon)} />
+                                            {/* Define um tamanho fixo para alinhar emojis e imagens */}
+                                            <div className="h-12 w-12 flex items-center justify-center p-1 rounded-md transition-all duration-200 hover:bg-gray-200 peer-checked:bg-indigo-200 peer-checked:ring-2 peer-checked:ring-indigo-500">
+                                                {isUrl ? (
+                                                    // Se for URL, renderiza a imagem
+                                                    <Image src={icon} alt="Ícone" width={32} height={32} className="object-contain" />
+                                                ) : (
+                                                    // Se não for, renderiza o emoji
+                                                    <span className="text-3xl">{icon}</span>
+                                                )}
+                                            </div>
+                                        </label>
+                                    );
+                                })}
                             </div>
                         </div>
 
@@ -136,7 +166,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                                     {existingPhotos.map(photoUrl => (
                                         <div key={photoUrl} className="relative group">
                                             <img src={photoUrl} alt="Ponto turístico" className="w-full h-24 object-cover rounded-md" />
-                                            <button 
+                                            <button
                                                 type="button"
                                                 onClick={() => handleMarkForDeletion(photoUrl)}
                                                 className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -157,7 +187,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                             <label htmlFor="imagem" className="block text-sm font-medium text-gray-700">
                                 Adicionar Novas Imagens
                             </label>
-                            <input id="imagem" type="file" accept="image/*" multiple onChange={handleNewPhotosChange} className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" disabled={isLoading}/>
+                            <input id="imagem" type="file" accept="image/*" multiple onChange={handleNewPhotosChange} className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" disabled={isLoading} />
                             {newPhotos.length > 0 && <p className="text-xs text-gray-500 mt-1">{newPhotos.length} nova(s) imagem(ns) selecionada(s).</p>}
                         </div>
 
