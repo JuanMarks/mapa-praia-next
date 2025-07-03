@@ -90,7 +90,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
             <div 
                 ref={searchContainerRef}
                 // Posiciona o componente no canto superior direito sobre o mapa
-                className="absolute top-4 right-25 z-[5000] w-full max-w-sm"
+                className="absolute top-4 right-5 md:right-25 z-[5000] md:w-full w-50 max-w-sm"
             >
                 <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden">
                     {/* Ícone de busca dentro do input */}

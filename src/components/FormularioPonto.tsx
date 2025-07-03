@@ -159,6 +159,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                                 <option value="restaurante">Restaurante</option>
                                 <option value="sorveteria">Sorveteria</option>
                                 <option value="praia">Praia</option>
+                                <option value="hotel">Hotel</option>
                             </select>
                         </div>
                         <div>
