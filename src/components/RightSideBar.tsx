@@ -88,7 +88,7 @@ const RightSidebar = ({ onLocationSelect }: RightSidebarProps) => {
 
   return (
     <>
-      <div className="absolute top-0 right-0 h-150 bg-white shadow-lg z-[5005] w-80 p-4 transition-transform duration-300 ease-in-out rounded m-10">
+      <div className="absolute top-0 right-20 h-170 bg-white shadow-lg z-[5005] w-80 p-4 transition-transform duration-300 ease-in-out rounded m-10">
         <button
           onClick={() => setIsVisible(false)}
           className="absolute top-1/2 -left-6 transform -translate-y-1/2 bg-white p-2 rounded-l-full shadow-lg"

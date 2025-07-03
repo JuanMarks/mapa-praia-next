@@ -14,7 +14,6 @@ import 'swiper/css/pagination';
 // Importando ícones
 import { FaStar, FaMapMarkerAlt, FaBookmark, FaWheelchair } from 'react-icons/fa';
 
-const API_BASE_URL = 'http://25.20.79.62:3003';
 
 interface Props {
   ponto: PontoTuristico;
