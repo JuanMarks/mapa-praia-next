@@ -1,145 +1,166 @@
-// src/components/RightSidebar.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PontoTuristico } from '@/types/ponto';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/axios/config';
-import { FaEdit, FaTrash, FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaSearch, FaMapMarkerAlt } from 'react-icons/fa';
 import ModalEditarPonto from './ModalEditarPonto';
 
-interface RightSidebarProps {
+interface LocationSearchProps {
   onLocationSelect: (ponto: PontoTuristico) => void;
 }
 
-const RightSidebar = ({ onLocationSelect }: RightSidebarProps) => {
-  const [pontos, setPontos] = useState<PontoTuristico[]>([]);
-  const [filteredPontos, setFilteredPontos] = useState<PontoTuristico[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isVisible, setIsVisible] = useState(true);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [pontoParaEditar, setPontoParaEditar] = useState<PontoTuristico | null>(null);
-  const { role } = useAuth();
+const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
+    const [pontos, setPontos] = useState<PontoTuristico[]>([]);
+    const [filteredPontos, setFilteredPontos] = useState<PontoTuristico[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
+    const [pontoParaEditar, setPontoParaEditar] = useState<PontoTuristico | null>(null);
+    const { role } = useAuth();
+    const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  const fetchPontos = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get('/places/getPlaces');
-      setPontos(response.data);
-      setFilteredPontos(response.data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    // Busca os pontos turísticos da API
+    useEffect(() => {
+        const fetchPontos = async () => {
+            try {
+                const response = await api.get('/places/getPlaces');
+                setPontos(response.data);
+            } catch (err) {
+                console.error("Erro ao buscar pontos:", err);
+            }
+        };
+        fetchPontos();
+    }, []);
 
-  useEffect(() => {
-    fetchPontos();
-  }, []);
+    // Filtra os pontos com base no termo de busca
+    useEffect(() => {
+        if (searchTerm) {
+            const lowercasedFilter = searchTerm.toLowerCase();
+            const filtered = pontos.filter(ponto =>
+                ponto.name.toLowerCase().includes(lowercasedFilter)
+            );
+            setFilteredPontos(filtered);
+            setIsDropdownOpen(true);
+        } else {
+            setFilteredPontos([]);
+            setIsDropdownOpen(false);
+        }
+    }, [searchTerm, pontos]);
 
-  useEffect(() => {
-    const lowercasedFilter = searchTerm.toLowerCase();
-    const filtered = pontos.filter(ponto =>
-      ponto.name.toLowerCase().includes(lowercasedFilter)
-    );
-    setFilteredPontos(filtered);
-  }, [searchTerm, pontos]);
+    // Hook para fechar o dropdown ao clicar fora do componente
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [searchContainerRef]);
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Tem certeza que deseja apagar este ponto?')) {
-      try {
-        await api.delete(`/places/${id}`);
-        setPontos(pontos.filter((ponto) => ponto.id !== id));
-      } catch (err: any) {
-        alert(err.message);
-      }
-    }
-  };
+    const handleSelectLocation = (ponto: PontoTuristico) => {
+        onLocationSelect(ponto);
+        setSearchTerm(''); // Limpa a busca após a seleção
+        setIsDropdownOpen(false);
+    };
 
-  const handleEdit = (ponto: PontoTuristico) => {
-    setPontoParaEditar(ponto);
-    setIsEditModalOpen(true);
-  };
+    const handleDelete = async (e: React.MouseEvent, id: number) => {
+        e.stopPropagation(); // Impede que o dropdown feche
+        if (window.confirm('Tem certeza que deseja apagar este ponto?')) {
+            try {
+                await api.delete(`/places/${id}`);
+                setPontos(pontos.filter((p) => p.id !== id));
+            } catch (err: any) {
+                alert(err.message);
+            }
+        }
+    };
+    
+    const handleEdit = (e: React.MouseEvent, ponto: PontoTuristico) => {
+        e.stopPropagation(); // Impede que o dropdown feche
+        setPontoParaEditar(ponto);
+    };
 
-  const handleCloseModal = () => {
-    setIsEditModalOpen(false);
-    setPontoParaEditar(null);
-  };
-
-  const handlePontoAtualizado = (pontoAtualizado: PontoTuristico) => {
-    setPontos(pontos.map(p => (p.id === pontoAtualizado.id ? pontoAtualizado : p)));
-    handleCloseModal();
-  };
-
-  if (!isVisible) {
     return (
-      <button
-        onClick={() => setIsVisible(true)}
-        className="absolute z-[5000] top-1/2 right-0 transform -translate-y-1/2 bg-white p-2 rounded-l-full shadow-lg"
-        aria-label="Mostrar sidebar"
-      >
-        <FaChevronLeft size={20} />
-      </button>
-    );
-  }
-
-  return (
-    <>
-      <div className="absolute top-0 right-20 h-170 bg-white shadow-lg z-[5005] w-80 p-4 transition-transform duration-300 ease-in-out rounded m-10">
-        <button
-          onClick={() => setIsVisible(false)}
-          className="absolute top-1/2 -left-6 transform -translate-y-1/2 bg-white p-2 rounded-l-full shadow-lg"
-          aria-label="Esconder sidebar"
-        >
-          <FaChevronRight size={20} />
-        </button>
-        <h2 className="text-xl font-bold mb-4">Locais</h2>
-        <input
-          type="text"
-          placeholder="Filtrar locais..."
-          className="w-full p-2 border rounded mb-4"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        {loading && <p>Carregando...</p>}
-        {error && <p className="text-red-500">{error}</p>}
-        <ul className="overflow-y-auto h-[calc(100%-100px)]">
-          {filteredPontos.map(ponto => (
-            <li onClick={() => onLocationSelect(ponto)} key={ponto.id} className="mb-2 p-2 border-b">
-              <h3 className="font-semibold">{ponto.name}</h3>
-              <p className="text-sm text-gray-600">{ponto.description}</p>
-              {role === 'admin' && (
-                <div className="flex justify-end mt-2">
-                  <button
-                    onClick={() => handleEdit(ponto)}
-                    className="text-blue-500 hover:text-blue-700 mr-2"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(ponto.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <FaTrash />
-                  </button>
+        <>
+            <div 
+                ref={searchContainerRef}
+                // Posiciona o componente no canto superior direito sobre o mapa
+                className="absolute top-4 right-25 z-[5000] w-full max-w-sm"
+            >
+                <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden">
+                    {/* Ícone de busca dentro do input */}
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <FaSearch className="text-gray-400" />
+                    </div>
+                    
+                    <input
+                        type="text"
+                        placeholder="Pesquisar locais..."
+                        className="w-full p-3 pl-10 text-base border-none rounded-full shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onFocus={() => { if(searchTerm) setIsDropdownOpen(true) }}
+                    />
                 </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-      {isEditModalOpen && pontoParaEditar && (
-        <ModalEditarPonto
-          ponto={pontoParaEditar}
-          onClose={handleCloseModal}
-          onAtualizado={handlePontoAtualizado}
-        />
-      )}
-    </>
-  );
+
+                {/* Dropdown com a lista de resultados */}
+                {isDropdownOpen && filteredPontos.length > 0 && (
+                    <ul className="absolute mt-2 w-full bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in-down">
+                        {filteredPontos.map(ponto => (
+                            <li 
+                                key={ponto.id} 
+                                onClick={() => handleSelectLocation(ponto)}
+                                className="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-100 transition-colors"
+                            >
+                                <div className="flex items-center">
+                                    <FaMapMarkerAlt className="text-gray-400 mr-3" />
+                                    <div>
+                                        <h3 className="font-semibold">{ponto.name}</h3>
+                                        <p className="text-sm text-gray-500">{ponto.description.substring(0, 30)}...</p>
+                                    </div>
+                                </div>
+                                
+                                {role === 'admin' && (
+                                    <div className="flex items-center space-x-3">
+                                        <button
+                                            onClick={(e) => handleEdit(e, ponto)}
+                                            className="text-blue-500 hover:text-blue-700 p-1"
+                                            aria-label="Editar"
+                                        >
+                                            <FaEdit />
+                                        </button>
+                                        <button
+                                            onClick={(e) => handleDelete(e, ponto.id)}
+                                            className="text-red-500 hover:text-red-700 p-1"
+                                            aria-label="Apagar"
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
+            {pontoParaEditar && (
+                <ModalEditarPonto
+                    ponto={pontoParaEditar}
+                    onClose={() => setPontoParaEditar(null)}
+                    onAtualizado={(pontoAtualizado) => {
+                        setPontos(pontos.map(p => (p.id === pontoAtualizado.id ? pontoAtualizado : p)));
+                        setPontoParaEditar(null);
+                    }}
+                />
+            )}
+        </>
+    );
 };
 
-export default RightSidebar;
+export default LocationSearch;

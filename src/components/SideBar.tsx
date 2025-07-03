@@ -48,7 +48,7 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
 
       {/* Container Principal da Sidebar */}
       <div
-        className={`absolute top-0 left-0 h-170 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
+        className={`absolute top-0 left-15 h-170 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
                    ${isOpen ? 'transform-none' : '-translate-x-full'}`}
       >
         {/* Botão para esconder/mostrar a sidebar */}
