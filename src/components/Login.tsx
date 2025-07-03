@@ -40,7 +40,7 @@ export default function Login() {
         <div className="relative min-h-screen w-full flex items-center justify-center">
             {/* Imagem de Fundo */}
             <Image
-                src="/images/fundoLogin.gif"
+                src="/images/background img.gif"
                 alt="Praia de Icaraizinho de Amontada"
                 layout="fill"
                 objectFit="cover"
