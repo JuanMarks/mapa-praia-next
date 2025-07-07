@@ -75,8 +75,26 @@ const MapaInterativo = () => {
     const fetchPontos = async () => {
         try {
             const response = await api.get('/places/getPlaces');
-            console.log(response.data);
-            setPontos(response.data);
+            
+            const pontosProcessados = response.data.map((ponto: any) => {
+                
+                // Cria uma cópia para evitar modificar o objeto original diretamente
+                const pontoNormalizado = { ...ponto };
+
+                // 2. Adiciona a data de criação fictícia (se não existir)
+                pontoNormalizado.createdAt = ponto.createdAt || new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString();
+
+                // 3. Verifica se a propriedade 'address' existe e se dentro dela existe a chave 'update'
+                //    O operador 'in' é a forma mais segura de fazer essa verificação.
+                if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
+                    // Substitui o objeto 'address' pelo conteúdo de 'update'
+                    pontoNormalizado.address = pontoNormalizado.address.update;
+                }
+                
+                return pontoNormalizado;
+            });
+            console.log('Pontos processados:', pontosProcessados);
+            setPontos(pontosProcessados);
         } catch (error: any) {
             console.error('Erro ao buscar pontos:', error.message);
             // Aqui você pode exibir um toast ou setar um erro no estado

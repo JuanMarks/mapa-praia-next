@@ -92,7 +92,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
                 // Posiciona o componente no canto superior direito sobre o mapa
                 className="absolute top-4 right-25 z-[5000] w-full max-w-sm"
             >
-                <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="relative shadow-lg overflow-hidden">
                     {/* Ícone de busca dentro do input */}
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <FaSearch className="text-gray-400" />
@@ -101,7 +101,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
                     <input
                         type="text"
                         placeholder="Pesquisar locais..."
-                        className="w-full p-3 pl-10 text-base border-none rounded-full shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full p-3 pl-10 text-base bg-white border-none rounded-full shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onFocus={() => { if(searchTerm) setIsDropdownOpen(true) }}
