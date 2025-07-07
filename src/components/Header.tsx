@@ -82,7 +82,7 @@ export default function Header() {
         <ul className="hidden sm:flex space-x-6 items-center">
           <li><a href="/" className="text-white hover:text-blue-900 font-medium text-lg">Início</a></li>
           <li><a href="/sobre" className="text-white hover:text-blue-900 font-medium text-lg">Sobre</a></li>
-          <li><a href="#" className="text-white hover:text-blue-900 font-medium text-lg">Contato</a></li>
+          <li><a href="/contato" className="text-white hover:text-blue-900 font-medium text-lg">Contato</a></li>
           {loading ? null : role === 'admin' ? (
             <>
               <li>
