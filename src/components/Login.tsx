@@ -38,17 +38,15 @@ export default function Login() {
 
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center">
+            <div className="absolute inset-0 bg-black opacity-60"></div>
             {/* Imagem de Fundo */}
             <Image
-                src="/images/background img.gif"
+                src="/images/icaraizinho2.jpeg"
                 alt="Praia de Icaraizinho de Amontada"
-                layout="fill"
-                objectFit="cover"
+                fill 
+                className="object-cover -z-10"
                 quality={85}
-                className="-z-10" // Coloca a imagem atrás de todo o conteúdo
             />
-
-            <button className='text-blue-900 p-2.5 border-2 font-bold border-blue-900 rounded hover:bg-white hover:text-blue-900 transition absolute top-5 left-5'><a href="/">Voltar</a></button>
 
             <div className="relative w-full max-w-6xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 
@@ -63,19 +61,18 @@ export default function Login() {
                 </div>
 
                 {/* Coluna da Direita: Formulário de Login */}
-                <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-4 border-gray-200">
+                <div className="bg-gray-100 rounded-2xl p-8 shadow-2xl">
                     <div className="text-center mb-6">
                         {/* Use seu logo aqui, se tiver. Exemplo: */}
                         <Image 
-                          src="/images/logoAmotur-branco.png" 
+                          src="/images/logo_amoturOFC.png" 
                           alt="Logo AMOTUR"
                           width={150}
                           height={60}
                           className="mx-auto"
                         />
-                        <h2 className="text-2xl font-bold text-blue-900 mt-4">Login</h2>
                         
-                        <p className="text-gray-200">Bem-vindo a bordo conosco</p>
+                        <p className="text-blue-900">Boas-vindas à nossa plataforma!</p>
                     </div>
 
                     <form className="space-y-6" onSubmit={handleLogin}>
@@ -86,7 +83,7 @@ export default function Login() {
                         )}
                         
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-white">
+                            <label htmlFor="email" className="block text-sm text-blue-900 font-bold">
                                 Email
                             </label>
                             <input
@@ -97,12 +94,12 @@ export default function Login() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Digite seu email"
-                                className="mt-1 block w-full bg-white text-blue-500 placeholder-blue-500 border-none rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
+                                className="mt-1 block w-full bg-gray-300 text-blue-900 placeholder-blue-900 border-none rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
                             />
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-white">
+                            <label htmlFor="password" className="block text-sm text-blue-900 font-bold">
                                 Senha
                             </label>
                             <input
@@ -113,12 +110,12 @@ export default function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Digite sua senha"
-                                className="mt-1 block w-full bg-white text-blue-500 placeholder-blue-500 border-none rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
+                                className="mt-1 block w-full bg-gray-300 text-blue-900 placeholder-blue-900 border-none rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
                             />
                         </div>
                         
                         <div className="text-right text-sm">
-                            <a href="#" className="font-medium text-white hover:text-blue-600">
+                            <a href="#" className="font-medium text-blue-900 hover:text-blue-600">
                                 Esqueceu sua senha?
                             </a>
                         </div>
@@ -135,7 +132,7 @@ export default function Login() {
                     </form>
 
                     <div className="text-center mt-6">
-                        <p className="text-sm text-white font-bold">
+                        <p className="text-sm text-blue-900 font-bold">
                             Novo usuário?{' '}
                             <a href="#" className="font-bold text-blue-900 underline hover:underline">
                                 Registre-se Aqui
