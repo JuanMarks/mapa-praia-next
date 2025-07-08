@@ -103,11 +103,14 @@ const PageAdmin = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-100 font-sans">
+        <div className="flex min-h-screen bg-gray-100 font-sans ">
+
             {/* Sidebar Esquerda */}
             <aside className="w-64 bg-gray-800 text-white flex-shrink-0">
                 <div className="h-16 flex items-center justify-center bg-gray-900">
-                    <Image src="/images/logo1.png" alt="Logo AMOTUR" width={120} height={40} />
+                    <a href="/">
+                        <Image src="/images/logoAmotur-branco.png" alt="Logo AMOTUR" width={120} height={40} />
+                    </a>
                 </div>
                 <nav className="mt-4">
                     <span className="px-4 text-xs text-gray-400 uppercase">Principal</span>

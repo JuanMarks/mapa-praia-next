@@ -6,7 +6,8 @@ export default function ContatoPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
+    empresa: '',
+    phone: '',
     message: '',
   });
 
@@ -21,10 +22,26 @@ export default function ContatoPage() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    const { name, email, subject, message } = formData;
-    const emailTarget = "josenilsonsousa366@gmail.com"; // Seu email
-    const body = `Olá, Meu nome é ${name}. ${message}\n\nAtenciosamente,\n${name}\nEmail: ${email}`;
-    const mailtoLink = `mailto:${emailTarget}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const { name, email, empresa, phone, message } = formData;
+    const emailTarget = "josenilsonsousa366@gmail.com";
+
+    const body = `
+    Olá, meu nome é ${name}.
+
+    ${message}
+
+    ----------------------------------------
+    📩 Email: ${email}
+    🏢 Empresa: ${empresa}
+    📞 Telefone: ${phone}
+    ----------------------------------------
+
+    Atenciosamente,  
+    ${name}
+    `;
+
+    const mailtoLink = `mailto:${emailTarget}?subject=${encodeURIComponent(`Contato de ${name} - ${empresa}`)}&body=${encodeURIComponent(body)}`;
+
 
     window.location.href = mailtoLink;
 
@@ -32,7 +49,8 @@ export default function ContatoPage() {
     setFormData({
       name: '',
       email: '',
-      subject: '',
+      empresa: '',
+      phone: '',
       message: '',
     });
   };
@@ -44,7 +62,7 @@ export default function ContatoPage() {
       <div className="container mx-auto px-4 md:max-w-3/5 max-w-full">
         {/* Card do Formulário com gradiente e sombra aprimorada */}
         <div className="w-full
-                      bg-gradient-to-br from-blue-500 to-blue-700
+                       bg-gradient-to-r from-cyan-200 to-sky-500
                       p-8 rounded-xl shadow-2xl transform transition-all duration-300 hover:shadow-3xl
                       dark:from-blue-600 dark:to-blue-800
                       ">
@@ -87,22 +105,41 @@ export default function ContatoPage() {
                 required
                 className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500
                            rounded-lg shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300
+                           focus:outline-none focus:ring-2 focus:ring-blue-800
                            transition duration-200 ease-in-out
                            "
               />
             </div>
             {/* Campo Assunto */}
             <div>
-              <label htmlFor="subject" className="block text-sm font-semibold text-white mb-1">
-                Assunto
+              <label htmlFor="empresa" className="block text-sm font-semibold text-white mb-1">
+                Empresa
               </label>
               <input
                 type="text"
-                id="subject"
-                name="subject"
-                placeholder="Assunto da Mensagem"
-                value={formData.subject}
+                id="empresa"
+                name="empresa"
+                placeholder="Nome da sua empresa"
+                value={formData.empresa}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500
+                           rounded-lg shadow-sm
+                           focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300
+                           transition duration-200 ease-in-out
+                           "
+              />
+            </div>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-semibold text-white mb-1">
+                Número de Telefone
+              </label>
+              <input
+                type="text"
+                id="phone"
+                name="phone"
+                placeholder="Telefone"
+                value={formData.phone}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500
@@ -136,7 +173,7 @@ export default function ContatoPage() {
             <button
               type="submit"
               className="w-full
-                         bg-blue-800 hover:bg-blue-900
+                         bg-gradient-to-r from-blue-800 to-blue-700 hover:bg-blue-900
                          text-white font-bold py-3 px-6 rounded-lg shadow-lg
                          transition duration-300 ease-in-out transform hover:scale-103
                          focus:outline-none focus:ring-3 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-blue-700

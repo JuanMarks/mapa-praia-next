@@ -5,7 +5,7 @@ import { FaGithub, FaEnvelope, FaInfoCircle } from 'react-icons/fa';
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t py-5 px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-700">
+    <footer className="bg-white py-5 px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-700">
       
       {/* Logo à esquerda */}
       <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ export default function Footer() {
           <FaInfoCircle /> Sobre
         </a>
         <a
-          href="mailto:contato@amotur.org"
+          href="/contato"
           className="flex items-center gap-1 bg-blue-900 text-white rounded-4xl px-3 py-1.5 hover:bg-blue-600 transition"
         >
           <FaEnvelope /> Contato

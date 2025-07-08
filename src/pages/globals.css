@@ -16,3 +16,8 @@
   /* Remove qualquer contorno que o navegador possa adicionar, que pode parecer uma grade */
   outline: none;
 }
+@media (max-width: 640px) {
+  .leaflet-top.leaflet-left {
+    top: 6rem !important; /* ou ajuste o valor para empurrar os botões para baixo */
+  }
+}

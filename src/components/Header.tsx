@@ -16,25 +16,33 @@ export default function Header() {
   }
 
   return (
-    <header className="absolute top-2 left-1/2 -translate-x-1/2 w-full max-w-7xl bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-2xl shadow-lg flex justify-between items-center z-40">
+    <header
+      className={`z-[9999] absolute top-2 left-1/2 -translate-x-1/2 w-full max-w-7xl 
+        bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-2xl shadow-lg
+        flex flex-row items-center justify-between
+        sm:flex-row sm:items-center sm:justify-between
+        ${menuOpen ? 'sm:flex-row flex-col  ' : ''}`}
+    >
       {/* Logo */}
       <div className="flex items-center">
         <div className="w-[140px] h-[60px] relative">
-          <Image
-            src="/images/logoAmotur-branco.png"
-            alt="Logo AMOTUR"
-            fill
-            style={{ objectFit: 'contain' }}
-            priority
-          />
+          <a href="/">
+            <Image
+              src="/images/logoAmotur-branco.png"
+              alt="Logo AMOTUR"
+              fill
+              style={{ objectFit: 'contain' }}
+              priority
+            />
+          </a>
         </div>
       </div>
 
-      {/* Menu */}
-      <nav className="relative items-center">
-        {/* Botão de menu mobile */}
+      {/* Navegação */}
+      <nav className="relative w-full sm:w-auto">
+        {/* Botão hamburguer (mobile) */}
         <button
-          className="sm:hidden flex items-center px-3 py-2 border rounded text-white border-white"
+          className="sm:hidden flex items-center px-3 py-2 border rounded text-white border-white ml-auto"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Abrir menu"
         >
@@ -45,7 +53,7 @@ export default function Header() {
 
         {/* Menu mobile */}
         {menuOpen && (
-          <ul className="z-[9999] absolute top-16 right-0 w-56 bg-white text-black shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
+          <ul className="absolute top-16 right-0 w-56 bg-white text-black shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200 z-[9999]">
             <li className="mb-2 w-full">
               <a href="/" className="block text-lg font-medium">Início</a>
             </li>
@@ -53,16 +61,20 @@ export default function Header() {
               <a href="/sobre" className="block text-lg font-medium">Sobre</a>
             </li>
             <li className="mb-2 w-full">
-              <a href="#" className="block text-lg font-medium">Contato</a>
+              <a href="/contato" className="block text-lg font-medium">Contato</a>
             </li>
 
             {loading ? null : role === 'admin' ? (
               <>
                 <li className="mb-2 w-full">
-                  <a onClick={logout} className="block text-lg font-medium cursor-pointer bg-blue-900 hover:bg-blue-600 rounded-lg  px-20">Sair</a>
+                  <a onClick={logout} className="block text-lg font-medium cursor-pointer bg-blue-900 hover:bg-blue-600 rounded-lg px-20 text-white text-center">
+                    Sair
+                  </a>
                 </li>
                 <li className="w-full">
-                  <a href="/pageadmin" className="block text-lg font-medium bg-blue-900 hover:bg-blue-600 rounded-lg px-18">Editar</a>
+                  <a href="/pageadmin" className="block text-lg font-medium bg-blue-900 hover:bg-blue-600 rounded-lg px-18 text-white text-center">
+                    Editar
+                  </a>
                 </li>
               </>
             ) : (
@@ -93,12 +105,14 @@ export default function Header() {
               </li>
             </>
           ) : (
-            <button
-              className="bg-blue-900 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-lg font-semibold"
-              onClick={() => (window.location.href = '/login')}
-            >
-              Login
-            </button>
+            <li>
+              <button
+                className="bg-blue-900 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-lg font-semibold"
+                onClick={() => (window.location.href = '/login')}
+              >
+                Login
+              </button>
+            </li>
           )}
         </ul>
       </nav>

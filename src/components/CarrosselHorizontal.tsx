@@ -52,7 +52,6 @@ const CarrosselHorizontal: FC = () => {
 
     return (
         <div className="w-full bg-white">
-            <div className="w-full shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] px-2 py-4">
                 <motion.div
                     className="w-full bg-white"
                     initial={{ opacity: 0, y: 20 }}
@@ -60,7 +59,7 @@ const CarrosselHorizontal: FC = () => {
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                 >
-                    <div className="w-full shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] px-4 py-6 rounded-xl">
+                    <div className="w-full rounded-xl">
                         {/* Botão mobile */}
                         <div className="flex justify-end sm:hidden mb-2">
                             <button
@@ -101,7 +100,7 @@ const CarrosselHorizontal: FC = () => {
                                 >
                                     {pontos.map((ponto) => (
                                         <SwiperSlide key={ponto.id}>
-                                            <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-2 h-full">
+                                            <div className="bg-white rounded-2xl transition p-2 h-full">
                                                 <div className="w-full h-40 sm:h-48 relative">
                                                     <Image
                                                         src={getImagemDoPonto(ponto)}
@@ -123,7 +122,7 @@ const CarrosselHorizontal: FC = () => {
                         )}
                     </div>
                 </motion.div>
-            </div>
+            
         </div>
     );
 };
