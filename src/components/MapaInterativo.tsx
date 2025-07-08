@@ -39,7 +39,7 @@ const MapaInterativo = () => {
     const [touchBloqueado, setTouchBloqueado] = useState(true);
     const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-       // --- CORREÇÃO APLICADA AQUI ---
+    // --- CORREÇÃO APLICADA AQUI ---
 
     // 1. A função handleLocationSelect agora SÓ atualiza o estado.
     const handleLocationSelect = (ponto: PontoTuristico) => {
@@ -98,9 +98,9 @@ const MapaInterativo = () => {
     const fetchPontos = async () => {
         try {
             const response = await api.get('/places/getPlaces');
-            
+
             const pontosProcessados = response.data.map((ponto: any) => {
-                
+
                 // Cria uma cópia para evitar modificar o objeto original diretamente
                 const pontoNormalizado = { ...ponto };
 
@@ -113,7 +113,7 @@ const MapaInterativo = () => {
                     // Substitui o objeto 'address' pelo conteúdo de 'update'
                     pontoNormalizado.address = pontoNormalizado.address.update;
                 }
-                
+
                 return pontoNormalizado;
             });
             console.log('Pontos processados:', pontosProcessados);
@@ -151,13 +151,32 @@ const MapaInterativo = () => {
     };
 
     // const handleLocationSelect = (ponto: PontoTuristico) => {
-        
+
     //     setSelectedPonto(ponto);
     //     if (map) {
     //         console.log('clicado')
     //         map.flyTo([ponto.latitude, ponto.longitude], 17);
     //     }
     // };
+
+    const handlePontoAtualizado = (pontoAtualizado: PontoTuristico) => {
+        // A lógica de normalização do endereço, se a API retornar { update: ... }
+        const pontoNormalizado = { ...pontoAtualizado };
+        if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
+            // @ts-ignore
+            pontoNormalizado.address = pontoNormalizado.address.update;
+        }
+
+        // Atualiza a lista de pontos principal
+        setPontos(prevPontos =>
+            prevPontos.map(p =>
+                p.id === pontoNormalizado.id ? pontoNormalizado : p
+            )
+        );
+
+        // Também atualiza o ponto que está selecionado na sidebar, para refletir a nova avaliação
+        setSelectedPonto(pontoNormalizado);
+    };
 
 
     return (
@@ -174,7 +193,7 @@ const MapaInterativo = () => {
                 id="map"
                 className="overflow-hidden w-full z-[30]"
             >
-                <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onCriado={() => setNovaPosicao(null)} />
+                <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onCriado={() => setNovaPosicao(null)} onAtualizado={handlePontoAtualizado} />
                 <MapContainer
                     center={centro}
                     zoom={13}
