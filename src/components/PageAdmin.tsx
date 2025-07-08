@@ -26,26 +26,47 @@ const PageAdmin = () => {
     const [pontoParaEditar, setPontoParaEditar] = useState<PontoTuristico | null>(null);
 
     // Busca inicial dos dados
-    useEffect(() => {
-        const fetchPontos = async () => {
-            try {
-                setLoading(true);
-                const response = await api.get('/places/getPlaces');
-                // Adicionando uma data de criação fictícia para o gráfico funcionar
-                // **IMPORTANTE**: No seu backend, você deve retornar um campo como 'createdAt'
-                const pontosComData = response.data.map((p: any) => ({
-                    ...p,
-                    createdAt: p.createdAt || new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString()
-                }));
-                setPontos(pontosComData);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchPontos();
-    }, []);
+useEffect(() => {
+    const fetchPontos = async () => {
+        try {
+            setLoading(true);
+            const response = await api.get('/places/getPlaces');
+
+            // 1. Processa a lista de pontos em uma única passagem (mais eficiente)
+            const pontosProcessados = response.data.map((ponto: any) => {
+                
+                // Cria uma cópia para evitar modificar o objeto original diretamente
+                const pontoNormalizado = { ...ponto };
+
+                // 2. Adiciona a data de criação fictícia (se não existir)
+                pontoNormalizado.createdAt = ponto.createdAt || new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString();
+
+                // 3. Verifica se a propriedade 'address' existe e se dentro dela existe a chave 'update'
+                //    O operador 'in' é a forma mais segura de fazer essa verificação.
+                if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
+                    // Substitui o objeto 'address' pelo conteúdo de 'update'
+                    pontoNormalizado.address = pontoNormalizado.address.update;
+                }
+                
+                return pontoNormalizado;
+            });
+
+            console.log("Dados finais a serem renderizados:", pontosProcessados);
+
+            // 4. Atualiza o estado uma única vez com os dados já processados
+            setPontos(pontosProcessados);
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchPontos();
+}, []);
+
+    
 
     // Memoiza os dados dos cards para evitar recálculos desnecessários
     const cardData = useMemo(() => {

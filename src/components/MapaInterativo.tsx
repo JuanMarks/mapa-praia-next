@@ -39,6 +39,28 @@ const MapaInterativo = () => {
     const [touchBloqueado, setTouchBloqueado] = useState(true);
     const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+       // --- CORREÇÃO APLICADA AQUI ---
+
+    // 1. A função handleLocationSelect agora SÓ atualiza o estado.
+    const handleLocationSelect = (ponto: PontoTuristico) => {
+        console.log("Ponto selecionado:", ponto.name);
+        setSelectedPonto(ponto);
+    };
+
+    // 2. Este useEffect reage à mudança de 'selectedPonto'.
+    useEffect(() => {
+        // Se não houver ponto selecionado ou o mapa não estiver pronto, não faz nada.
+        if (!selectedPonto || !map) {
+            return;
+        }
+
+        // Se ambos estiverem prontos, executa o flyTo.
+        console.log("Mapa está pronto. Voando para o local...");
+        map.flyTo([selectedPonto.latitude, selectedPonto.longitude], 17);
+
+    }, [selectedPonto, map]); // Dependências: re-executa quando selectedPonto ou map mudam.
+
+
     const liberarToqueTemporariamente = () => {
         setTouchBloqueado(false);
 
@@ -54,6 +76,7 @@ const MapaInterativo = () => {
     const handleMarkerClick = (ponto: PontoTuristico) => {
         setSelectedPonto(ponto);
         if (map) {
+            console.log('Marcador clicado:', ponto);
             map.flyTo([ponto.latitude, ponto.longitude], 15);
         }
     };
@@ -75,8 +98,26 @@ const MapaInterativo = () => {
     const fetchPontos = async () => {
         try {
             const response = await api.get('/places/getPlaces');
-            console.log(response.data);
-            setPontos(response.data);
+            
+            const pontosProcessados = response.data.map((ponto: any) => {
+                
+                // Cria uma cópia para evitar modificar o objeto original diretamente
+                const pontoNormalizado = { ...ponto };
+
+                // 2. Adiciona a data de criação fictícia (se não existir)
+                pontoNormalizado.createdAt = ponto.createdAt || new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString();
+
+                // 3. Verifica se a propriedade 'address' existe e se dentro dela existe a chave 'update'
+                //    O operador 'in' é a forma mais segura de fazer essa verificação.
+                if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
+                    // Substitui o objeto 'address' pelo conteúdo de 'update'
+                    pontoNormalizado.address = pontoNormalizado.address.update;
+                }
+                
+                return pontoNormalizado;
+            });
+            console.log('Pontos processados:', pontosProcessados);
+            setPontos(pontosProcessados);
         } catch (error: any) {
             console.error('Erro ao buscar pontos:', error.message);
             // Aqui você pode exibir um toast ou setar um erro no estado
@@ -109,13 +150,14 @@ const MapaInterativo = () => {
         }
     };
 
-    const handleLocationSelect = (ponto: PontoTuristico) => {
-        console.log('clicado')
-        setSelectedPonto(ponto);
-        if (map) {
-            map.flyTo([ponto.latitude, ponto.longitude], 17);
-        }
-    };
+    // const handleLocationSelect = (ponto: PontoTuristico) => {
+        
+    //     setSelectedPonto(ponto);
+    //     if (map) {
+    //         console.log('clicado')
+    //         map.flyTo([ponto.latitude, ponto.longitude], 17);
+    //     }
+    // };
 
 
     return (
@@ -142,6 +184,15 @@ const MapaInterativo = () => {
                     scrollWheelZoom={false}
                     style={{
                         height: typeof window !== 'undefined' && window.innerWidth < 640 ? '80vh' : '100vh', width: '100%',
+                    }}
+                    whenReady={() => {
+                        // Use leaflet's global L to get the map instance if needed, or use a ref
+                        // If you want to keep the map instance, you can use a ref instead of whenReady
+                    }}
+                    ref={(mapInstance) => {
+                        if (mapInstance) {
+                            setMap(mapInstance);
+                        }
                     }}
                 >
                     <TileLayer

@@ -1,8 +1,16 @@
+export interface Address {
+  logradouro?: string;
+  numero?: string;
+  bairro?: string;
+  complemento?: string;
+}
+
+
 export interface PontoTuristico {
   id: number;
   name: string;
   description: string;
-  address?: object
+  address?: Address
   latitude: number;
   longitude: number;
   iconURL?: string;

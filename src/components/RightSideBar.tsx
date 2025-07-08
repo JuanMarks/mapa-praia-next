@@ -92,7 +92,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
                 // Posiciona o componente no canto superior direito sobre o mapa
                 className="absolute top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 md:right-12 lg:right-16 z-[5000] w-[90%] sm:w-[80%] md:w-[400px]"
             >
-                <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="relative shadow-lg overflow-hidden">
                     {/* Ícone de busca dentro do input */}
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <FaSearch className="text-gray-400" />

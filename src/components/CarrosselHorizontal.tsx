@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -10,34 +10,62 @@ import { PontoTuristico } from '@/types/ponto';
 import { motion } from 'framer-motion';
 import api from '@/axios/config';
 
+// 1. Mapeamento dos tipos para os botões.
+// Use os valores exatos do seu backend (ex: 'restaurante', 'hotel').
+const CATEGORIAS = {
+    'Todos': 'todos',
+    'Restaurantes': 'restaurante',
+    'Hotéis': 'hotel',
+    'Praias': 'praia',
+    'Sorveterias': 'sorveteria'
+    // Adicione outras categorias que você tenha
+};
+
 const CarrosselHorizontal: FC = () => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [mostrar, setMostrar] = useState(true);
-
-    const fetchPontos = async () => {
-        try {
-            setLoading(true);
-            const response = await api.get('/places/getPlaces');
-            console.log(response.data);
-            setPontos(response.data);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    
+    // 2. Novo estado para controlar o filtro ativo
+    const [filtroAtivo, setFiltroAtivo] = useState<string>('todos');
 
     useEffect(() => {
+        const fetchPontos = async () => {
+            try {
+                setLoading(true);
+                const response = await api.get('/places/getPlaces');
+                setPontos(response.data);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchPontos();
     }, []);
 
+    // 3. Lógica para filtrar e ordenar os pontos
+    const pontosFiltrados = useMemo(() => {
+        return pontos
+            .filter(ponto => {
+                // Se o filtro for 'todos', retorna todos os pontos
+                if (filtroAtivo === 'todos') {
+                    return true;
+                }
+                // Compara o tipo do ponto com o filtro ativo
+                return ponto.type?.toLowerCase() === filtroAtivo.toLowerCase();
+            })
+            .sort((a, b) => {
+                // Ordena pelos melhores avaliados (maior rating primeiro)
+                return (b.rating || 0) - (a.rating || 0);
+            });
+    }, [pontos, filtroAtivo]); // Recalcula apenas quando os pontos ou o filtro mudam
+
     const getImagemDoPonto = (ponto: PontoTuristico): string => {
         if (ponto.photos && ponto.photos.length > 0) {
-            const randomIndex = Math.floor(Math.random() * ponto.photos.length);
-            const caminhoDaFoto = ponto.photos[randomIndex];
-            return `${caminhoDaFoto}`;
+            // Pega a primeira imagem para consistência visual
+            return ponto.photos[0];
         }
         return '/images/img1.jpeg';
     };
@@ -76,12 +104,18 @@ const CarrosselHorizontal: FC = () => {
                                 <div className="max-w-screen-xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                     <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados ⭐</h2>
                                     <div className="flex flex-wrap gap-2">
-                                        {['Pontos Turísticos', 'Praças', 'Mercados', 'Restaurantes', 'Hotéis'].map((cat) => (
+                                        {/* 4. Botões de filtro agora são funcionais */}
+                                        {Object.entries(CATEGORIAS).map(([nome, tipo]) => (
                                             <button
-                                                key={cat}
-                                                className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-blue-100 transition-all"
+                                                key={tipo}
+                                                onClick={() => setFiltroAtivo(tipo)}
+                                                className={`px-4 py-1.5 border rounded-full text-sm font-semibold transition-all duration-200 ${
+                                                    filtroAtivo === tipo
+                                                        ? 'bg-blue-600 text-white border-blue-600' // Estilo ativo
+                                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' // Estilo padrão
+                                                }`}
                                             >
-                                                {cat}
+                                                {nome}
                                             </button>
                                         ))}
                                     </div>
@@ -98,7 +132,8 @@ const CarrosselHorizontal: FC = () => {
                                     navigation
                                     modules={[Navigation]}
                                 >
-                                    {pontos.map((ponto) => (
+                                    {/* 5. Mapeia sobre os pontos JÁ filtrados e ordenados */}
+                                    {pontosFiltrados.map((ponto) => (
                                         <SwiperSlide key={ponto.id}>
                                             <div className="bg-white rounded-2xl transition p-2 h-full">
                                                 <div className="w-full h-40 sm:h-48 relative">

@@ -101,7 +101,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-[5000] flex justify-center items-center" onClick={onClose}>
+        <div className="fixed inset-0 bg-black/50 z-[5010] flex justify-center items-center" onClick={onClose}>
             <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto m-4" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-4 border-b border-gray-200">
                     <h3 className="text-xl font-semibold text-gray-800">Adicionar novo ponto</h3>
