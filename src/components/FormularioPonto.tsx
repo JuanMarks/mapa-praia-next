@@ -39,6 +39,9 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
+    const [selectedType, setSelectedType] = useState(''); // Controla o <select>
+    const [customType, setCustomType] = useState(''); 
+
     const handleImagemChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             setImagens(Array.from(e.target.files));
@@ -145,22 +148,45 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             </div>
                         </div>
 
-                        <div>
+                       <div>
                             <label htmlFor="tipo" className="block mb-2 text-sm font-medium text-gray-700">Tipo</label>
                             <select
                                 id="tipo"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 required
                                 disabled={isLoading}
-                                value={type}
-                                onChange={(e) => setType(e.target.value)}
+                                value={selectedType}
+                                onChange={(e) => setSelectedType(e.target.value)}
                             >
                                 <option value="">Selecione o tipo</option>
                                 <option value="restaurante">Restaurante</option>
                                 <option value="sorveteria">Sorveteria</option>
                                 <option value="praia">Praia</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="petiscaria">Petiscaria</option>
+                                <option value="pizzaria">Pizzaria</option>
+                                <option value="bar">Bar</option>
+                                <option value="outro">Outro</option>
+                                <option value="personalizado">Personalizado</option>
                             </select>
                         </div>
+
+                        {/* O input só aparece se 'personalizado' for selecionado */}
+                        {selectedType === 'personalizado' && (
+                            <div>
+                                <label htmlFor="customType" className="block mb-2 text-sm font-medium text-gray-700">Digite o tipo personalizado</label>
+                                <input
+                                    id="customType"
+                                    type="text"
+                                    placeholder="Ex: Pousada, Ponto Histórico..."
+                                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    value={customType}
+                                    onChange={(e) => setCustomType(e.target.value)}
+                                    disabled={isLoading}
+                                    required
+                                />
+                            </div>
+                        )}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone do Marcador</label>
                             <div className="flex flex-wrap gap-3">

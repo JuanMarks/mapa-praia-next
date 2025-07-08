@@ -17,7 +17,12 @@ const CATEGORIAS = {
     'Restaurantes': 'restaurante',
     'Hotéis': 'hotel',
     'Praias': 'praia',
-    'Sorveterias': 'sorveteria'
+    'Sorveterias': 'sorveteria',
+    'Pizzarias': 'pizzaria',
+    'Bares': 'bar',
+    'Cafés': 'cafe',
+    'Lanchonetes': 'lanchonete',
+    'Mercados': 'mercado',
     // Adicione outras categorias que você tenha
 };
 
