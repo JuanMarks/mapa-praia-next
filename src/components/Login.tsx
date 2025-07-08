@@ -38,7 +38,7 @@ export default function Login() {
 
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center">
-            <div className="absolute inset-0 bg-blue-950 opacity-60"></div>
+            <div className="absolute inset-0 bg-blue-950/40"></div> {/*------>BG menos escuro*/}
             {/* Imagem de Fundo */}
             <Image
                 src="/images/icaraizinho2.jpeg"

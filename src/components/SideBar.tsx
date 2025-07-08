@@ -40,24 +40,30 @@ const Sidebar = ({ ponto, onClose, onCriado }: SidebarProps) => {
 
   return (
     <>
-      {/* Overlay escuro para o fundo */}
-      <div 
-        className={` bg-opacity-50 z-10 transition-opacity ${ponto ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={onClose}
-      ></div>
+      {/* Botão para reabrir a sidebar se ela estiver fechada */}
+      {/*----> botão de fechar arrumado */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="absolute top-1/2 left-2 z-[5001] bg-white p-2 rounded-r-full shadow-md focus:outline-none"
+          aria-label="Mostrar sidebar"
+        >
+          <IoChevronForward size={20} />
+        </button>
+      )}
 
       {/* Container Principal da Sidebar */}
       <div
-        className={`absolute top-0 left-15 h-170 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
-                   ${isOpen ? 'transform-none' : '-translate-x-full'}`}
+        className={`absolute top-0 left-0 h-[90vh] rounded-r-2xl mt-9 bg-white shadow-lg z-[5001] transition-all duration-300 ease-in-out w-[350px]
+        ${isOpen ? 'translate-x-0 opacity-100 pointer-events-auto' : '-translate-x-full opacity-0 pointer-events-none'}`}
       >
         {/* Botão para esconder/mostrar a sidebar */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(false)}
           className="absolute top-1/2 -right-6 bg-white p-2 rounded-r-full shadow-lg focus:outline-none z-10"
           aria-label={isOpen ? 'Esconder sidebar' : 'Mostrar sidebar'}
         >
-          {isOpen ? <IoChevronBack size={20} /> : <IoChevronForward size={20} />}
+          <IoChevronBack size={20} />
         </button>
 
         <div className="flex flex-col h-full">
