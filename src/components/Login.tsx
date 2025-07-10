@@ -25,7 +25,8 @@ export default function Login() {
             
             Cookies.set('token', res.data.access_token, { expires: 1, secure: true, sameSite: 'strict' });
             Cookies.set('role', res.data.user.role, { expires: 1, secure: true, sameSite: 'strict' });
-            
+            Cookies.set('user', res.data.user, { expires: 1, secure: true, sameSite: 'strict' });
+            console.log("Usuário logado:", res.data.user);
             router.push('/'); // Redireciona para a página principal
         } catch (err: any) {
             console.error("Erro no login:", err);

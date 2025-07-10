@@ -2,8 +2,13 @@ import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { PontoTuristico } from '@/types/ponto';
 import api from '@/axios/config';
 import Image from 'next/image';
-import { FaEllipsisH } from 'react-icons/fa';
-import { FaTimes } from 'react-icons/fa';
+import { FaEllipsisH, FaTimes } from 'react-icons/fa';
+
+// Interface para a Categoria
+interface Category {
+    id: string;
+    name: string;
+}
 
 // Ícone para o botão de excluir
 const TrashIcon = () => (
@@ -38,15 +43,15 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [iconURL, setIconURL] = useState('');
-    
-    // --- CAMPOS ADICIONADOS ---
-    const [type, setType] = useState('');
     const [rating, setRating] = useState<number>(1);
     const [bairro, setBairro] = useState('');
     const [numero, setNumero] = useState('');
     const [logradouro, setLogradouro] = useState('');
     const [complemento, setComplemento] = useState('');
-    // --- FIM DOS CAMPOS ADICIONADOS ---
+    
+    // Estados para Categoria
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [categoryId, setCategoryId] = useState('');
 
     // Estados para gerenciamento de fotos
     const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
@@ -56,30 +61,34 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
     // Estados de UI
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-    const [selectedType, setSelectedType] = useState(''); // Controla o <select>
-    const [customType, setCustomType] = useState(''); 
-
     const [isIconModalOpen, setIsIconModalOpen] = useState(false);
 
-    // Preenche o formulário quando o ponto é carregado
+    // Efeito para buscar as categorias e preencher o formulário
     useEffect(() => {
-        if (ponto) {
-            setName(ponto.name);
-            setDescription(ponto.description);
-            setIconURL(ponto.iconURL || '');
-            setExistingPhotos(ponto.photos || []);
+        const fetchCategoriesAndSetPonto = async () => {
+            try {
+                const response = await api.get('/categories');
+                setCategories(response.data);
+            } catch (err) {
+                console.error("Erro ao buscar categorias:", err);
+                setError("Não foi possível carregar as categorias.");
+            }
 
-            // --- PREENCHIMENTO DOS NOVOS CAMPOS ---
-            setType(ponto.type || '');
-            setRating(ponto.rating || 1);
-            setBairro(ponto.address?.bairro || '');
-            setNumero(ponto.address?.numero || '');
-            setLogradouro(ponto.address?.logradouro || '');
-            setComplemento(ponto.address?.complemento || '');
-            // --- FIM DO PREENCHIMENTO ---
-        }
-        
+            if (ponto) {
+                setName(ponto.name);
+                setDescription(ponto.description);
+                setIconURL(ponto.iconURL || '');
+                setExistingPhotos(ponto.photos || []);
+                setRating(ponto.rating || 1);
+                setBairro(ponto.address?.bairro || '');
+                setNumero(ponto.address?.numero || '');
+                setLogradouro(ponto.address?.logradouro || '');
+                setComplemento(ponto.address?.complemento || '');
+                setCategoryId(ponto.categoryId || ''); // Define a categoria atual
+            }
+        };
+
+        fetchCategoriesAndSetPonto();
     }, [ponto]);
 
     const handleNewPhotosChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -100,46 +109,27 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
 
         const formData = new FormData();
 
-        // Anexa dados de texto
         formData.append('name', name);
         formData.append('description', description);
         formData.append('iconURL', iconURL);
-        
-        // --- ADICIONANDO NOVOS CAMPOS AO FORMDATA ---
-        formData.append('type', type);
         formData.append('rating', String(rating));
+        formData.append('categoryId', categoryId); // Envia o ID da categoria
+        
         formData.append('address[logradouro]', logradouro);
         formData.append('address[numero]', String(numero));
         formData.append('address[bairro]', bairro);
         formData.append('address[complemento]', complemento);
-        // --- FIM DA ADIÇÃO ---
-
+        
         formData.append('photosToDelete', JSON.stringify(photosToDelete));
-
         newPhotos.forEach(file => {
             formData.append('newPhotos', file);
         });
-
-        // --- INÍCIO DO DEBUG ---
-        console.log("--- DADOS A SEREM ENVIADOS ---");
-        // FormData é difícil de inspecionar diretamente, então logamos suas chaves/valores
-        for (let pair of formData.entries()) {
-            // Não logamos o conteúdo do arquivo, apenas seu nome para confirmação
-            if (pair[1] instanceof File) {
-                console.log(`${pair[0]}: ${pair[1].name} (Arquivo)`);
-            } else {
-                console.log(`${pair[0]}: ${pair[1]}`);
-            }
-        }
-        console.log("-------------------------------");
-        // --- FIM DO DEBUG ---
         
         try {
             const response = await api.put(`/places/${ponto.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             onAtualizado(response.data);
-            console.log('Ponto atualizado com sucesso:', response.data);
             onClose();
         } catch (err: any) {
             const errorMessage = err.response?.data?.message || err.message || 'Ocorreu um erro desconhecido.';
@@ -154,7 +144,6 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         setIsIconModalOpen(false);
     };
     
-    // --- 3. SEPARA A LISTA DE ÍCONES ---
     const visibleIcons = ICONS.slice(0, 5);
     const hiddenIcons = ICONS.slice(5);
 
@@ -173,7 +162,6 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                     <div className="p-5 space-y-4">
                         {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert"><p>{error}</p></div>}
 
-                        {/* Campos de texto */}
                         <div>
                             <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">Nome</label>
                             <input type="text" id="nome" value={name} onChange={(e) => setName(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
@@ -183,47 +171,24 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                             <textarea id="descricao" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading}></textarea>
                         </div>
                         
-                        {/* --- INÍCIO DOS CAMPOS ADICIONADOS (JSX) --- */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <div>
-                                <label htmlFor="tipo" className="block mb-2 text-sm font-medium text-gray-700">Tipo</label>
+                            <div>
+                                <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-700">Categoria</label>
                                 <select
-                                    id="tipo"
+                                    id="category"
+                                    value={categoryId}
+                                    onChange={(e) => setCategoryId(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     required
                                     disabled={isLoading}
-                                    value={type}
-                                    onChange={(e) => setType(e.target.value)}
                                 >
-                                    <option value="">Selecione o tipo</option>
-                                    <option value="restaurante">Restaurante</option>
-                                    <option value="sorveteria">Sorveteria</option>
-                                    <option value="praia">Praia</option>
-                                    <option value="hotel">Hotel</option>
-                                    <option value="petiscaria">Petiscaria</option>
-                                    <option value="pizzaria">Pizzaria</option>
-                                    <option value="bar">Bar</option>
-                                    <option value="outro">Outro</option>
-                                    <option value="personalizado">Personalizado</option>
+                                    <option value="">Selecione uma categoria</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                    ))}
                                 </select>
                             </div>
-                            {/* O input só aparece se 'personalizado' for selecionado */}
-                            {type === 'personalizado' && (
-                                <div>
-                                    <label htmlFor="customType" className="block mb-2 text-sm font-medium text-gray-700">Digite o tipo personalizado</label>
-                                    <input
-                                        id="customType"
-                                        type="text"
-                                        placeholder="Ex: Pousada, Ponto Histórico..."
-                                        className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                        value={customType}
-                                        onChange={(e) => setCustomType(e.target.value)}
-                                        disabled={isLoading}
-                                        required
-                                    />
-                                </div>
-                            )}
-                             <div>
+                            <div>
                                 <label htmlFor="rating" className="block mb-2 text-sm font-medium text-gray-700">Avaliação (1 a 5)</label>
                                 <input 
                                     type="number" 
@@ -231,6 +196,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                                     value={rating} 
                                     onChange={(e) => setRating(Number(e.target.value))} 
                                     min="1" max="5" 
+                                    step="0.1"
                                     required 
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" 
                                     disabled={isLoading} 
@@ -256,7 +222,6 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                                 <input type="text" id="complemento" value={complemento} onChange={(e) => setComplemento(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
                             </div>
                         </div>
-                        {/* --- FIM DOS CAMPOS ADICIONADOS (JSX) --- */}
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone</label>
@@ -272,7 +237,6 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                                         </label>
                                     );
                                 })}
-                                {/* Botão para abrir o modal com o resto dos ícones */}
                                 <button 
                                     type="button"
                                     onClick={() => setIsIconModalOpen(true)}
@@ -318,7 +282,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                 >
                     <div 
                         className="bg-white p-5 rounded-lg shadow-xl max-w-md w-full"
-                        onClick={(e) => e.stopPropagation()} // Impede que o modal feche ao clicar dentro dele
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-4">
                             <h4 className="font-semibold text-lg">Selecione um Ícone</h4>
