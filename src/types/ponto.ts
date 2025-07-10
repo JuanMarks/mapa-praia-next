@@ -17,5 +17,7 @@ export interface PontoTuristico {
   type?: string;
   rating?: number;
   photos?: string[];
-  
+  createdAt?: string;
+  categoryId?: string;
+  averageRating?: number; 
 }

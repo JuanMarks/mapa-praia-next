@@ -5,22 +5,21 @@ import { PontoTuristico } from '@/types/ponto';
 import { FaMapMarkerAlt, FaShare, FaBookmark, FaRoute, FaTimes, FaInfoCircle, FaStar } from 'react-icons/fa';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import Image from 'next/image';
-import { useAuth } from '../hooks/useAuth'; // Importe o hook de autenticação
-import api from '@/axios/config'; // Importe sua instância do axios
+import { useAuth } from '../hooks/useAuth'; 
+import api from '@/axios/config'; 
 import '../pages/globals.css';
+import Cookies from 'js-cookie';
 
 interface SidebarProps {
   ponto: PontoTuristico | null;
   onClose: () => void;
-  // 1. Precisa receber a função onAtualizado para atualizar a lista principal
   onAtualizado: (pontoAtualizado: PontoTuristico) => void;
-  onCriado?: () => void; // Opcional, caso queira usar para criar novos pontos
 }
 
 const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [imagemCapa, setImagemCapa] = useState('/images/img1.jpeg');
-  const { role } = useAuth(); // Pega a role para verificar o login
+  const { role } = useAuth(); 
 
   useEffect(() => {
     if (ponto?.photos && ponto.photos.length > 0) {
@@ -72,7 +71,6 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
           <div className="p-4 flex-grow overflow-y-auto">
             <h2 className="text-2xl font-bold text-gray-800">{ponto.name}</h2>
             
-            {/* 2. Passa o objeto 'ponto' e a função 'onAtualizado' para o componente de estrelas */}
             <div className="my-3">
               <StarRating 
                 ponto={ponto} 
@@ -115,7 +113,6 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
   );
 };
 
-// --- 3. COMPONENTE DE ESTRELAS ATUALIZADO ---
 interface StarRatingProps {
     ponto: PontoTuristico;
     isUserLoggedIn: boolean;
@@ -123,52 +120,61 @@ interface StarRatingProps {
 }
 
 const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) => {
-  const [currentRating, setCurrentRating] = useState(ponto.rating || 0);
+  const [currentRating, setCurrentRating] = useState(ponto.averageRating || 0);
   const [hover, setHover] = useState(0);
 
   useEffect(() => {
-    setCurrentRating(ponto.rating || 0);
-  }, [ponto.rating]);
+    setCurrentRating(ponto.averageRating || 0);
+  }, [ponto.averageRating]);
 
-  const handleRatingSubmit = async (newRating: number) => {
+  const handleRatingSubmit = async (newRatingValue: number) => {
     if (!isUserLoggedIn) {
       alert("Você precisa estar logado para avaliar!");
       return;
     }
 
-    // Cria um FormData como no ModalEditarPonto
-    const formData = new FormData();
-
-    // Adiciona todos os dados existentes do ponto
-    formData.append('name', ponto.name);
-    formData.append('description', ponto.description);
-    formData.append('iconURL', ponto.iconURL || '');
-    formData.append('type', ponto.type || '');
-    formData.append('address[logradouro]', ponto.address?.logradouro || '');
-    formData.append('address[numero]', String(ponto.address?.numero || ''));
-    formData.append('address[bairro]', ponto.address?.bairro || '');
-    formData.append('address[complemento]', ponto.address?.complemento || '');
-
-    // Adiciona o NOVO RATING
-    formData.append('rating', String(newRating));
-
-    // Adiciona arrays vazios para os campos de fotos para evitar erros no backend
-    formData.append('photosToDelete', JSON.stringify([]));
+    // --- CORREÇÃO AQUI ---
+    // 1. Pega o token do localStorage (ou de onde você o armazena)
+    const token = Cookies.get('token');
+    const userString = Cookies.get('user');
+    console.log(token)
+    const userObj = userString ? JSON.parse(userString) : null;
     
+
+    if (!token) {
+        alert("Sessão expirada. Por favor, faça login novamente.");
+        return;
+    }
+
     try {
-      // Usa o mesmo endpoint PUT do modal de edição
-      const response = await api.put(`/places/${ponto.id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      // 2. Adiciona o cabeçalho de autorização na requisição
+      await api.post('/ratings', {
+        userId: userObj?.id, 
+        value: newRatingValue,
+        placeId: ponto.id,
+      }, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
       });
 
-      // Atualiza o estado local e o estado global da lista de pontos
-      setCurrentRating(newRating);
-      onAtualizado(response.data); 
+      const response = await api.get('/places/getPlaces');
+      const pontoAtualizado = response.data.find((p: PontoTuristico) => p.id === ponto.id);
+
+      if (pontoAtualizado) {
+        onAtualizado(pontoAtualizado);
+      }
+      
       alert("Obrigado pela sua avaliação!");
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao enviar avaliação:", error);
-      alert("Não foi possível registrar sua avaliação. Tente novamente.");
+      
+      if (error.response?.status === 409) {
+          alert("Você já avaliou este local.");
+      } else {
+          alert("Não foi possível registrar sua avaliação. Tente novamente.");
+      }
     }
   };
 
@@ -204,8 +210,6 @@ const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) =>
   );
 };
 
-
-// Componentes auxiliares (sem alterações)
 const ActionButton = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
   <div className="flex flex-col items-center cursor-pointer text-blue-600 hover:text-blue-800 transition">
     {icon}

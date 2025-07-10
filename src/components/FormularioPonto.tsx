@@ -1,8 +1,13 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import api from '@/axios/config';
 import Image from 'next/image';
-import { FaEllipsisH } from 'react-icons/fa';
-import { FaTimes } from 'react-icons/fa';
+import { FaEllipsisH, FaTimes } from 'react-icons/fa';
+
+// Interface para tipar os objetos de categoria que virão da API
+interface Category {
+    id: string;
+    name: string;
+}
 
 interface Props {
     coordenadas: [number, number];
@@ -10,11 +15,12 @@ interface Props {
     onCriado: () => void;
 }
 
-const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
-    'https://cdn-icons-png.flaticon.com/512/3448/3448609.png', // Exemplo: Restaurante
-    'https://cdn-icons-png.flaticon.com/512/2923/2923500.png', // Exemplo: Sorvete
-    'https://cdn-icons-png.flaticon.com/512/854/854878.png',   // Exemplo: Ponto no mapa
-    'https://cdn-icons-png.flaticon.com/512/1046/1046751.png', // Exemplo: Praia
+const ICONS = [
+    '🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448609.png',
+    'https://cdn-icons-png.flaticon.com/512/2923/2923500.png',
+    'https://cdn-icons-png.flaticon.com/512/854/854878.png',
+    'https://cdn-icons-png.flaticon.com/512/1046/1046751.png',
     'https://cdn-icons-png.flaticon.com/512/4901/4901802.png',
     'https://cdn-icons-png.flaticon.com/512/2271/2271030.png',
     'https://cdn-icons-png.flaticon.com/512/4287/4287284.png',
@@ -26,29 +32,41 @@ const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '�
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
     "https://cdn-icons-png.flaticon.com/512/1138/1138048.png",
     'https://cdn-icons-png.flaticon.com/512/1946/1946788.png',
-
-    //;
 ]
+
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [iconURL, setIconURL] = useState('');
-    const [type, setType] = useState('');
-    const [rating, setRating] = useState<number>(1); // Inicia com 1
+    const [rating, setRating] = useState<number>(1);
     const [bairro, setBairro] = useState('');
     const [numero, setNumero] = useState('');
     const [logradouro, setLogradouro] = useState('');
     const [complemento, setComplemento] = useState('');
     const [imagens, setImagens] = useState<File[]>([]);
-
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
-
-    const [selectedType, setSelectedType] = useState(''); // Controla o <select>
-    const [customType, setCustomType] = useState('');
-
+    
+    // Estados para Categoria
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [categoryId, setCategoryId] = useState('');
+    
     const [isIconModalOpen, setIsIconModalOpen] = useState(false);
+
+    // Efeito para buscar as categorias da API quando o componente é montado
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get('/categories');
+                setCategories(response.data);
+            } catch (err) {
+                console.error("Erro ao buscar categorias:", err);
+                setError("Não foi possível carregar as categorias.");
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleImagemChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -62,34 +80,26 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         setError(null);
         setSuccess(false);
 
-        // 1. Criar um objeto FormData para enviar dados de formulário e arquivos
         const formData = new FormData();
 
-        // 2. Anexar todos os campos de texto e outros dados
         formData.append('name', name);
         formData.append('description', description);
         formData.append('latitude', String(coordenadas[0]));
         formData.append('longitude', String(coordenadas[1]));
         formData.append('iconURL', iconURL || "https://cdn-icons-png.flaticon.com/512/854/854878.png");
-        formData.append('type', type || 'outro');
         formData.append('rating', String(rating));
+        formData.append('categoryId', categoryId); // Envia o ID da categoria selecionada
 
-        // Para objetos aninhados como 'address', anexe cada propriedade individualmente
-        // O NestJS irá reconstruir o objeto no DTO
         formData.append('address[logradouro]', logradouro);
         formData.append('address[numero]', String(numero));
         formData.append('address[bairro]', bairro);
         formData.append('address[complemento]', complemento);
 
-
-        // 3. Anexar cada arquivo de imagem
         imagens.forEach((imagem) => {
-            // O nome do campo 'photos' deve corresponder ao usado no FilesInterceptor do NestJS
             formData.append('photos', imagem);
         });
 
         try {
-            // 4. Enviar tudo em uma única requisição POST
             const res = await api.post('/places/createPlace', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -99,7 +109,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
             console.log(res.data);
             setSuccess(true);
             setTimeout(() => {
-                onCriado(); // Chama a função para fechar o modal e atualizar a lista
+                onCriado();
             }, 1500);
 
         } catch (err: any) {
@@ -116,7 +126,6 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         setIsIconModalOpen(false);
     };
 
-    // --- 3. SEPARA A LISTA DE ÍCONES ---
     const visibleIcons = ICONS.slice(0, 5);
     const hiddenIcons = ICONS.slice(5);
 
@@ -164,45 +173,24 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             </div>
                         </div>
 
+                        {/* Campo de Categoria */}
                         <div>
-                            <label htmlFor="tipo" className="block mb-2 text-sm font-medium text-gray-700">Tipo</label>
+                            <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-700">Categoria</label>
                             <select
-                                id="tipo"
+                                id="category"
+                                value={categoryId}
+                                onChange={(e) => setCategoryId(e.target.value)}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 required
                                 disabled={isLoading}
-                                value={selectedType}
-                                onChange={(e) => setSelectedType(e.target.value)}
                             >
-                                <option value="">Selecione o tipo</option>
-                                <option value="restaurante">Restaurante</option>
-                                <option value="sorveteria">Sorveteria</option>
-                                <option value="praia">Praia</option>
-                                <option value="hotel">Hotel</option>
-                                <option value="petiscaria">Petiscaria</option>
-                                <option value="pizzaria">Pizzaria</option>
-                                <option value="bar">Bar</option>
-                                <option value="outro">Outro</option>
-                                <option value="personalizado">Personalizado</option>
+                                <option value="">Selecione uma categoria</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                ))}
                             </select>
                         </div>
 
-                        {/* O input só aparece se 'personalizado' for selecionado */}
-                        {selectedType === 'personalizado' && (
-                            <div>
-                                <label htmlFor="customType" className="block mb-2 text-sm font-medium text-gray-700">Digite o tipo personalizado</label>
-                                <input
-                                    id="customType"
-                                    type="text"
-                                    placeholder="Ex: Pousada, Ponto Histórico..."
-                                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    value={customType}
-                                    onChange={(e) => setCustomType(e.target.value)}
-                                    disabled={isLoading}
-                                    required
-                                />
-                            </div>
-                        )}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone</label>
                             <div className="flex flex-wrap items-center gap-3">
@@ -217,7 +205,6 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                                         </label>
                                     );
                                 })}
-                                {/* Botão para abrir o modal com o resto dos ícones */}
                                 <button
                                     type="button"
                                     onClick={() => setIsIconModalOpen(true)}
@@ -260,7 +247,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                 >
                     <div
                         className="bg-white p-5 rounded-lg shadow-xl max-w-md w-full"
-                        onClick={(e) => e.stopPropagation()} // Impede que o modal feche ao clicar dentro dele
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-4">
                             <h4 className="font-semibold text-lg">Selecione um Ícone</h4>
