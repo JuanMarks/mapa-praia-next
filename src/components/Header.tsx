@@ -8,6 +8,7 @@ import { useAuth } from '../hooks/useAuth';
 export default function Header() {
   const { role, loading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   function logout() {
     if (typeof window !== 'undefined') {
@@ -67,9 +68,13 @@ export default function Header() {
     >
       {/* Logo */}
       <div className="flex items-center">
-        <Link href="/" className="w-[140px] h-[60px] relative">
+        <Link 
+        href="/"
+        className="w-[140px] h-[60px] relative"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}>
           <Image
-            src="/images/logoAmotur-branco.png"
+            src={hovered ? '/images/logo_amotur.png' : '/images/logoAmotur-branco.png'}
             alt="Logo AMOTUR"
             fill
             style={{ objectFit: 'contain' }}
@@ -93,7 +98,7 @@ export default function Header() {
 
         {/* Menu mobile */}
         {menuOpen && (
-          <ul className="absolute top-16 right-0 w-56 bg-white text-black shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
+          <ul className="absolute top-16 right-0 w-56 z:[5002] bg-white text-black shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
             <li className="mb-2 w-full"><Link href="/" className="block text-lg font-medium">Início</Link></li>
             <li className="mb-2 w-full"><Link href="/sobre" className="block text-lg font-medium">Sobre</Link></li>
             <li className="mb-4 w-full"><Link href="/contato" className="block text-lg font-medium">Contato</Link></li>

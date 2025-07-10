@@ -1,4 +1,4 @@
-'use client'; // Necessário para componentes interativos no App Router do Next.js 13+
+'use client';
 
 import React, { useState } from 'react';
 
@@ -11,7 +11,13 @@ export default function ContatoPage() {
     message: '',
   });
 
-  const handleChange = (e: any) => {
+  type FormField = keyof typeof formData;
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -19,8 +25,11 @@ export default function ContatoPage() {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSuccessMessage('');
+    setErrorMessage('');
 
     const { name, email, empresa, phone, message } = formData;
     const emailTarget = "josenilsonsousa366@gmail.com";
@@ -42,148 +51,89 @@ export default function ContatoPage() {
 
     const mailtoLink = `mailto:${emailTarget}?subject=${encodeURIComponent(`Contato de ${name} - ${empresa}`)}&body=${encodeURIComponent(body)}`;
 
-
-    window.location.href = mailtoLink;
-
-    // Opcional: Limpar o formulário após o envio
-    setFormData({
-      name: '',
-      email: '',
-      empresa: '',
-      phone: '',
-      message: '',
-    });
+    try {
+      window.location.href = mailtoLink;
+      setSuccessMessage('Mensagem enviada com sucesso!');
+      setFormData({ name: '', email: '', empresa: '', phone: '', message: '' });
+    } catch (error) {
+      setErrorMessage('Ocorreu um erro ao tentar enviar a mensagem.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    // Seção de Contato com um fundo cinza claro e espaçamento vertical
-    <section id="contato" className="py-16 bg-gray-100 flex items-center justify-center">
-      {/* Container principal para centralizar e limitar a largura do formulário */}
+    <section id="contato" className="py-16 bg-white flex items-center justify-center">
       <div className="container mx-auto px-4 md:max-w-3/5 max-w-full">
-        {/* Card do Formulário com gradiente e sombra aprimorada */}
-        <div className="w-full
-                       bg-gradient-to-r from-cyan-200 to-sky-500
-                      p-8 rounded-xl shadow-2xl transform transition-all duration-300 hover:shadow-3xl
-                      dark:from-blue-600 dark:to-blue-800
-                      ">
+        <div className="w-full bg-gradient-to-r from-cyan-200 to-sky-500 p-8 rounded-xl shadow-2xl transform transition-all duration-300 hover:shadow-3xl dark:from-blue-600 dark:to-blue-800">
           <h2 className="text-3xl font-extrabold text-white text-center mb-8 drop-shadow-md">
             Entre em Contato
           </h2>
+
+          {successMessage && (
+            <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md text-center">
+              {successMessage}
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="mb-4 p-4 bg-red-100 text-red-800 rounded-md text-center">
+              {errorMessage}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Campo Nome */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-semibold text-white mb-1">
-                Nome
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Seu Nome"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500
-                           rounded-lg shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300
-                           transition duration-200 ease-in-out
-                           "
-              />
-            </div>
-            {/* Campo Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-white mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Seu Email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500
-                           rounded-lg shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-blue-800
-                           transition duration-200 ease-in-out
-                           "
-              />
-            </div>
-            {/* Campo Assunto */}
-            <div>
-              <label htmlFor="empresa" className="block text-sm font-semibold text-white mb-1">
-                Empresa
-              </label>
-              <input
-                type="text"
-                id="empresa"
-                name="empresa"
-                placeholder="Nome da sua empresa"
-                value={formData.empresa}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500
-                           rounded-lg shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300
-                           transition duration-200 ease-in-out
-                           "
-              />
-            </div>
-            <div>
-              <label htmlFor="phone" className="block text-sm font-semibold text-white mb-1">
-                Número de Telefone
-              </label>
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                placeholder="Telefone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500
-                           rounded-lg shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300
-                           transition duration-200 ease-in-out
-                           "
-              />
-            </div>
-            {/* Campo Mensagem */}
-            <div>
-              <label htmlFor="message" className="block text-sm font-semibold text-white mb-1">
-                Mensagem
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={6} // Aumentado para 6 linhas para mais espaço
-                placeholder="Deixe Sua Mensagem"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                className="w-full max-h-20 px-4 py-2 bg-white text-gray-800 placeholder-gray-500
-                           rounded-lg shadow-sm resize-y
-                           focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300
-                           transition duration-200 ease-in-out
-                           "
-              ></textarea>
-            </div>
-            {/* Botão de Envio */}
+            {(Object.keys(formData) as FormField[]).map((field) => (
+              <div key={field}>
+                <label htmlFor={field} className="block text-sm font-semibold text-white mb-1">
+                  {field === 'empresa' ? 'Empresa *' :
+                   field === 'phone' ? 'Número de Telefone *' :
+                   field === 'message' ? 'Mensagem *' :
+                   `${field.charAt(0).toUpperCase() + field.slice(1)} *`}
+                </label>
+                {field !== 'message' ? (
+                  <input
+                    type={field === 'email' ? 'email' : 'text'}
+                    id={field}
+                    name={field}
+                    placeholder={
+                      field === 'name' ? 'Digite seu nome completo' :
+                      field === 'email' ? 'Digite seu email' :
+                      field === 'empresa' ? 'Nome da sua empresa' :
+                      field === 'phone' ? 'Telefone para contato' :
+                      ''
+                    }
+                    value={formData[field]}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 bg-white text-gray-800 placeholder-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out"
+                  />
+                ) : (
+                  <textarea
+                    id={field}
+                    
+                    name={field}
+                    rows={6}
+                    placeholder="Como podemos te ajudar?"
+                    value={formData[field]}
+                    onChange={handleChange}
+                    required
+                    className="w-full max-h-25 resize-none px-4 py-2 bg-white text-gray-800 placeholder-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out"
+                  ></textarea>
+                )}
+              </div>
+            ))}
+
             <button
               type="submit"
-              className="w-full
-                         bg-gradient-to-r from-blue-800 to-blue-700 hover:bg-blue-900
-                         text-white font-bold py-3 px-6 rounded-lg shadow-lg
-                         transition duration-300 ease-in-out transform hover:scale-103
-                         focus:outline-none focus:ring-3 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-blue-700
-                         "
+              disabled={isSubmitting}
+              className="w-full bg-gradient-to-r from-blue-800 to-blue-700 hover:bg-blue-900 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-103 focus:outline-none focus:ring-3 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-blue-700"
             >
-              Enviar Mensagem
+              {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
             </button>
           </form>
         </div>
       </div>
     </section>
   );
-};
+}

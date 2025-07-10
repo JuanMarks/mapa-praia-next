@@ -20,6 +20,7 @@ const PageAdmin = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [hovered, setHovered] = useState(false);
 
     // Estados e handlers para o modal de edição (já existentes)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -127,11 +128,21 @@ useEffect(() => {
         <div className="flex min-h-screen bg-gray-100 font-sans ">
 
             {/* Sidebar Esquerda */}
-            <aside className="w-64 bg-gray-800 text-white flex-shrink-0">
+            <aside className="w-64 h-screen fixed top-0 left-0 bg-gray-800 text-white z-40">
                 <div className="h-16 flex items-center justify-center bg-gray-900">
-                    <a href="/">
-                        <Image src="/images/logoAmotur-branco.png" alt="Logo AMOTUR" width={120} height={40} />
-                    </a>
+                    <Link 
+        href="/"
+        className="w-[140px] h-[60px] relative"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}>
+          <Image
+            src={hovered ? '/images/logo_amotur.png' : '/images/logoAmotur-branco.png'}
+            alt="Logo AMOTUR"
+            fill
+            style={{ objectFit: 'contain' }}
+            priority
+          />
+        </Link>
                 </div>
                 <nav className="mt-4">
                     <span className="px-4 text-xs text-gray-400 uppercase">Principal</span>
@@ -145,7 +156,7 @@ useEffect(() => {
             </aside>
 
             {/* Conteúdo Principal */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col ml-64">
                 <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
                     <div className="flex items-center">
                         <h1 className="text-2xl font-semibold text-gray-800">Dashboard</h1>
