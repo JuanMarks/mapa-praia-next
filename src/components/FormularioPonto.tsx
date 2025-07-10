@@ -1,13 +1,16 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import api from '@/axios/config';
 import Image from 'next/image';
+import { FaEllipsisH } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
+
 interface Props {
     coordenadas: [number, number];
     onClose: () => void;
     onCriado: () => void;
 }
 
-const ICONS = [ '🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
+const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
     'https://cdn-icons-png.flaticon.com/512/3448/3448609.png', // Exemplo: Restaurante
     'https://cdn-icons-png.flaticon.com/512/2923/2923500.png', // Exemplo: Sorvete
     'https://cdn-icons-png.flaticon.com/512/854/854878.png',   // Exemplo: Ponto no mapa
@@ -21,6 +24,8 @@ const ICONS = [ '🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '�
     'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
     'https://cdn-icons-png.flaticon.com/512/814/814405.png',
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
+    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png",
+
     //;
 ]
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
@@ -40,7 +45,9 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     const [success, setSuccess] = useState(false);
 
     const [selectedType, setSelectedType] = useState(''); // Controla o <select>
-    const [customType, setCustomType] = useState(''); 
+    const [customType, setCustomType] = useState('');
+
+    const [isIconModalOpen, setIsIconModalOpen] = useState(false);
 
     const handleImagemChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -103,8 +110,17 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         }
     };
 
+    const handleIconSelect = (selectedIcon: string) => {
+        setIconURL(selectedIcon);
+        setIsIconModalOpen(false);
+    };
+
+    // --- 3. SEPARA A LISTA DE ÍCONES ---
+    const visibleIcons = ICONS.slice(0, 5);
+    const hiddenIcons = ICONS.slice(5);
+
     return (
-        <div className="fixed inset-0 bg-black/50 z-[5010] flex justify-center items-center" onClick={onClose}>
+        <div className="fixed inset-0 bg-black/50 z-[5020] flex justify-center items-center" onClick={onClose}>
             <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto m-4" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-4 border-b border-gray-200">
                     <h3 className="text-xl font-semibold text-gray-800">Adicionar novo ponto</h3>
@@ -113,13 +129,12 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="" autoComplete="off">
                     <div className="p-4 space-y-3">
                         {success && <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert"><p>Ponto criado com sucesso!</p></div>}
                         {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert"><p>{error}</p></div>}
 
-                        {/* ... o restante do seu formulário permanece igual ... */}
-                         <div>
+                        <div>
                             <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">Nome</label>
                             <input type="text" id="nome" value={name} onChange={(e) => setName(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
                         </div>
@@ -129,7 +144,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             <textarea id="descricao" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading}></textarea>
                         </div>
 
-                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label htmlFor="bairro" className="block mb-2 text-sm font-medium text-gray-700">Bairro</label>
                                 <input type="text" id="bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
@@ -148,7 +163,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             </div>
                         </div>
 
-                       <div>
+                        <div>
                             <label htmlFor="tipo" className="block mb-2 text-sm font-medium text-gray-700">Tipo</label>
                             <select
                                 id="tipo"
@@ -188,28 +203,27 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             </div>
                         )}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Ícone do Marcador</label>
-                            <div className="flex flex-wrap gap-3">
-                                {ICONS.map((icon, index) => {
-                                    // Verifica se o item da lista é uma URL
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Ícone</label>
+                            <div className="flex flex-wrap items-center gap-3">
+                                {visibleIcons.map((icon, index) => {
                                     const isUrl = icon.startsWith('http');
-
                                     return (
                                         <label className="cursor-pointer" key={index}>
                                             <input type="radio" name="icon" value={icon} className="sr-only peer" checked={iconURL === icon} onChange={() => setIconURL(icon)} />
-                                            {/* Define um tamanho fixo para alinhar emojis e imagens */}
                                             <div className="h-12 w-12 flex items-center justify-center p-1 rounded-md transition-all duration-200 hover:bg-gray-200 peer-checked:bg-indigo-200 peer-checked:ring-2 peer-checked:ring-indigo-500">
-                                                {isUrl ? (
-                                                    // Se for URL, renderiza a imagem
-                                                    <Image src={icon} alt="Ícone" width={32} height={32} className="object-contain" />
-                                                ) : (
-                                                    // Se não for, renderiza o emoji
-                                                    <span className="text-3xl">{icon}</span>
-                                                )}
+                                                {isUrl ? <Image src={icon} alt="Ícone" width={32} height={32} className="object-contain" /> : <span className="text-3xl">{icon}</span>}
                                             </div>
                                         </label>
                                     );
                                 })}
+                                {/* Botão para abrir o modal com o resto dos ícones */}
+                                <button
+                                    type="button"
+                                    onClick={() => setIsIconModalOpen(true)}
+                                    className="h-12 w-12 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200"
+                                >
+                                    <FaEllipsisH className="text-gray-600" />
+                                </button>
                             </div>
                         </div>
                         <div className="mb-4">
@@ -238,6 +252,39 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                     </div>
                 </form>
             </div>
+            {isIconModalOpen && (
+                <div
+                    className="absolute inset-0 bg-black/30 z-20 flex justify-center items-center"
+                    onClick={() => setIsIconModalOpen(false)}
+                >
+                    <div
+                        className="bg-white p-5 rounded-lg shadow-xl max-w-md w-full"
+                        onClick={(e) => e.stopPropagation()} // Impede que o modal feche ao clicar dentro dele
+                    >
+                        <div className="flex justify-between items-center mb-4">
+                            <h4 className="font-semibold text-lg">Selecione um Ícone</h4>
+                            <button type="button" onClick={() => setIsIconModalOpen(false)} className="text-gray-500 hover:text-gray-800">
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <div className="grid grid-cols-6 gap-3 max-h-60 overflow-y-auto">
+                            {hiddenIcons.map((icon, index) => {
+                                const isUrl = icon.startsWith('http');
+                                return (
+                                    <button
+                                        type="button"
+                                        key={index}
+                                        onClick={() => handleIconSelect(icon)}
+                                        className="h-12 w-12 flex items-center justify-center p-1 rounded-md transition-all duration-200 hover:bg-gray-200"
+                                    >
+                                        {isUrl ? <Image src={icon} alt="Ícone" width={32} height={32} className="object-contain" /> : <span className="text-3xl">{icon}</span>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

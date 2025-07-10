@@ -3,17 +3,22 @@
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
 import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect, useRef } from 'react';
-import { PontoTuristico } from '@/types/ponto';
-import PopupContent from './PopupContent';
-import FormularioPonto from './FormularioPonto';
-import 'leaflet/dist/leaflet.css';
-import { useAuth } from '../hooks/useAuth';
-import Sidebar from './SideBar';
-import api from '@/axios/config';
-import { AxiosError } from 'axios';
-import RightSidebar from './RightSideBar';
+import { FaBars } from 'react-icons/fa';
 
-// Corrige ícones do Leaflet em Next.js
+import { PontoTuristico } from '@/types/ponto';
+import 'leaflet/dist/leaflet.css';
+import '../pages/globals.css';
+import { useAuth } from '../hooks/useAuth';
+import api from '@/axios/config';
+
+// Importando todos os seus componentes
+import Sidebar from './SideBar';
+import RightSidebar from './RightSideBar';
+import LocationListSidebar from './LocationListSideBar';
+import FormularioPonto from './FormularioPonto';
+import PopupContent from './PopupContent'; // Importando o PopupContent
+
+// Correção dos ícones (código mantido)
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: '/leaflet/images/marker-icon-2x.png',
@@ -21,8 +26,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: '/leaflet/images/marker-shadow.png',
 });
 
-const centro: [number, number] = [20.069693, -39.672200];
-
+const centro: [number, number] = [-2.900, -40.15];
 const bounds: [[number, number], [number, number]] = [
     [-3.128981, -39.833362],
     [-2.965702, -39.527987],
@@ -31,108 +35,45 @@ const bounds: [[number, number], [number, number]] = [
 const MapaInterativo = () => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
     const [novaPosicao, setNovaPosicao] = useState<[number, number] | null>(null);
-    const { role, loading } = useAuth();
+    const { role } = useAuth();
     const [selectedPonto, setSelectedPonto] = useState<PontoTuristico | null>(null);
     const [map, setMap] = useState<L.Map | null>(null);
+    const [isListSidebarOpen, setIsListSidebarOpen] = useState(false);
 
-    // Bloqueio de toque no mobile
-    const [touchBloqueado, setTouchBloqueado] = useState(true);
-    const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-    // --- CORREÇÃO APLICADA AQUI ---
-
-    // 1. A função handleLocationSelect agora SÓ atualiza o estado.
-    const handleLocationSelect = (ponto: PontoTuristico) => {
-        console.log("Ponto selecionado:", ponto.name);
-        setSelectedPonto(ponto);
-    };
-
-    // 2. Este useEffect reage à mudança de 'selectedPonto'.
-    useEffect(() => {
-        // Se não houver ponto selecionado ou o mapa não estiver pronto, não faz nada.
-        if (!selectedPonto || !map) {
-            return;
-        }
-
-        // Se ambos estiverem prontos, executa o flyTo.
-        console.log("Mapa está pronto. Voando para o local...");
-        map.flyTo([selectedPonto.latitude, selectedPonto.longitude], 17);
-
-    }, [selectedPonto, map]); // Dependências: re-executa quando selectedPonto ou map mudam.
-
-
-    const liberarToqueTemporariamente = () => {
-        setTouchBloqueado(false);
-
-        if (touchTimeoutRef.current) {
-            clearTimeout(touchTimeoutRef.current);
-        }
-
-        touchTimeoutRef.current = setTimeout(() => {
-            setTouchBloqueado(true);
-        }, 10000);
-    };
-
-    const handleMarkerClick = (ponto: PontoTuristico) => {
-        setSelectedPonto(ponto);
-        if (map) {
-            console.log('Marcador clicado:', ponto);
-            map.flyTo([ponto.latitude, ponto.longitude], 15);
-        }
-    };
-
-    const handleSidebarClose = () => {
-        setSelectedPonto(null);
-    };
-
-    const MapClickHandler = () => {
-        if (novaPosicao) return null;
-        useMapEvents({
-            click(e) {
-                setNovaPosicao([e.latlng.lat, e.latlng.lng]);
-            },
-        });
-        return null;
-    };
-
+    // ... (todas as suas funções como fetchPontos, handleLocationSelect, etc. continuam aqui)
     const fetchPontos = async () => {
         try {
             const response = await api.get('/places/getPlaces');
-
-            const pontosProcessados = response.data.map((ponto: any) => {
-
-                // Cria uma cópia para evitar modificar o objeto original diretamente
-                const pontoNormalizado = { ...ponto };
-
-                // 2. Adiciona a data de criação fictícia (se não existir)
-                pontoNormalizado.createdAt = ponto.createdAt || new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString();
-
-                // 3. Verifica se a propriedade 'address' existe e se dentro dela existe a chave 'update'
-                //    O operador 'in' é a forma mais segura de fazer essa verificação.
-                if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
-                    // Substitui o objeto 'address' pelo conteúdo de 'update'
-                    pontoNormalizado.address = pontoNormalizado.address.update;
-                }
-
-                return pontoNormalizado;
-            });
-            console.log('Pontos processados:', pontosProcessados);
-            setPontos(pontosProcessados);
+            setPontos(response.data);
         } catch (error: any) {
             console.error('Erro ao buscar pontos:', error.message);
-            // Aqui você pode exibir um toast ou setar um erro no estado
         }
     };
 
     useEffect(() => {
         fetchPontos();
     }, []);
+    
+    useEffect(() => {
+        if (selectedPonto && map) {
+            map.flyTo([selectedPonto.latitude, selectedPonto.longitude], 17);
+        }
+    }, [selectedPonto, map]);
+    
+    const MapClickHandler = () => {
+        useMapEvents({
+            click(e) {
+                if (role === 'admin') {
+                    setNovaPosicao([e.latlng.lat, e.latlng.lng]);
+                }
+            },
+        });
+        return null;
+    };
 
     const createCustomIcon = (iconURL: string) => {
         const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
-
         if (isUrl) {
-            // Se for uma URL, cria um ícone de imagem
             return icon({
                 iconUrl: iconURL,
                 iconSize: [32, 32],
@@ -140,143 +81,128 @@ const MapaInterativo = () => {
                 popupAnchor: [0, -32],
             });
         } else {
-            // Se não for uma URL, cria um ícone de div com o emoji
             return divIcon({
-                html: `<span style="font-size: 30px;">${iconURL}</span>`, // Emoji dentro de um span para controlar o tamanho
-                className: 'emoji-icon', // Classe para remover o fundo branco padrão
+                html: `<span style="font-size: 30px;">${iconURL}</span>`,
+                className: 'emoji-icon',
                 iconSize: [40, 40],
-                iconAnchor: [15, 30], // Ancoragem ajustada para o centro inferior do emoji
+                iconAnchor: [20, 30],
             });
         }
     };
+    
+    const handleLocationSelect = (ponto: PontoTuristico) => {
+        setSelectedPonto(ponto);
+        setIsListSidebarOpen(false);
+    };
 
-    // const handleLocationSelect = (ponto: PontoTuristico) => {
-
-    //     setSelectedPonto(ponto);
-    //     if (map) {
-    //         console.log('clicado')
-    //         map.flyTo([ponto.latitude, ponto.longitude], 17);
-    //     }
-    // };
+    const handleSidebarClose = () => {
+        setSelectedPonto(null);
+    };
 
     const handlePontoAtualizado = (pontoAtualizado: PontoTuristico) => {
-        // A lógica de normalização do endereço, se a API retornar { update: ... }
         const pontoNormalizado = { ...pontoAtualizado };
         if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
             // @ts-ignore
             pontoNormalizado.address = pontoNormalizado.address.update;
         }
-
-        // Atualiza a lista de pontos principal
-        setPontos(prevPontos =>
-            prevPontos.map(p =>
-                p.id === pontoNormalizado.id ? pontoNormalizado : p
-            )
-        );
-
-        // Também atualiza o ponto que está selecionado na sidebar, para refletir a nova avaliação
+        setPontos(prevPontos => prevPontos.map(p => p.id === pontoNormalizado.id ? pontoNormalizado : p));
         setSelectedPonto(pontoNormalizado);
     };
 
 
     return (
-        <div className="relative sm:m-0">
-            {/* Camada para bloquear o toque no mobile */}
-            {touchBloqueado && (
-                <div
-                    className="absolute inset-0 z-[30] sm:hidden bg-transparent"
-                    onClick={liberarToqueTemporariamente}
+    <div className="flex h-screen w-full bg-gray-200">
+        
+        {/* Container do Mapa (agora vem primeiro, ocupando a esquerda) */}
+        <div className="relative flex-grow h-full transition-all duration-300 ease-in-out">
+            <MapContainer
+                center={centro}
+                zoom={13}
+                minZoom={13}
+                maxBounds={bounds}
+                maxBoundsViscosity={1.0}
+                scrollWheelZoom={false}
+                style={{ height: '100%', width: '100%' }}
+                ref={setMap}
+            >
+                <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; OpenStreetMap'
+                />
+                
+                <MapClickHandler />
+
+                {pontos?.map((ponto) => (
+                    <Marker
+                        key={ponto.id}
+                        position={[ponto.latitude, ponto.longitude]}
+                        icon={createCustomIcon(ponto.iconURL ?? '📍')}
+                        eventHandlers={{
+                            click: () => handleLocationSelect(ponto),
+                            mouseover: (e) => e.target.openPopup(),
+                            mouseout: (e) => e.target.closePopup(),
+                        }}
+                    >
+                        <Popup closeButton={false} autoClose={false} closeOnClick={false} autoPan={false}>
+                            <PopupContent ponto={ponto} />
+                        </Popup>
+                        <Tooltip
+                            permanent
+                            direction="bottom"
+                            offset={[0, 10]}
+                            opacity={1}
+                            className="text-xs text-black"
+                        >
+                            {ponto.name}
+                        </Tooltip>
+                    </Marker>
+                ))}
+            </MapContainer>
+
+            {/* Componentes Flutuantes (continuam sobre o mapa) */}
+            <div className="absolute top-4 right-4 z-[1000] pointer-events-none">
+                <div className="flex items-start gap-4 mt-5">
+                    <button 
+                        onClick={() => setIsListSidebarOpen(!isListSidebarOpen)}
+                        className="bg-white p-3 rounded-md shadow-lg pointer-events-auto text-gray-700 hover:bg-gray-100"
+                        aria-label="Mostrar lista de locais"
+                    >
+                        <FaBars size={20} />
+                    </button>
+                    <div className="flex-grow pointer-events-auto">
+                        <RightSidebar onLocationSelect={handleLocationSelect} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Sidebar de Detalhes (continua flutuando na esquerda) */}
+            <Sidebar 
+                ponto={selectedPonto} 
+                onClose={handleSidebarClose} 
+                onAtualizado={handlePontoAtualizado}
+            />
+
+            {/* Formulário para criar novo ponto */}
+            {novaPosicao && (
+                <FormularioPonto
+                    coordenadas={novaPosicao}
+                    onClose={() => setNovaPosicao(null)}
+                    onCriado={() => {
+                        setNovaPosicao(null);
+                        fetchPontos();
+                    }}
                 />
             )}
-
-            <div
-                id="map"
-                className="overflow-hidden w-full z-[30]"
-            >
-                <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onCriado={() => setNovaPosicao(null)} onAtualizado={handlePontoAtualizado} />
-                <MapContainer
-                    center={centro}
-                    zoom={13}
-                    minZoom={13}
-                    maxBounds={bounds}
-                    maxBoundsViscosity={1.0}
-                    scrollWheelZoom={false}
-                    style={{
-                        height: typeof window !== 'undefined' && window.innerWidth < 640 ? '80vh' : '100vh', width: '100%',
-                    }}
-                    whenReady={() => {
-                        // Use leaflet's global L to get the map instance if needed, or use a ref
-                        // If you want to keep the map instance, you can use a ref instead of whenReady
-                    }}
-                    ref={(mapInstance) => {
-                        if (mapInstance) {
-                            setMap(mapInstance);
-                        }
-                    }}
-                >
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    />
-
-                    <MapClickHandler />
-
-
-                    {novaPosicao && (
-                        role === 'admin' && (
-                            <FormularioPonto
-                                coordenadas={novaPosicao}
-                                onClose={() => setNovaPosicao(null)}
-                                onCriado={() => {
-                                    setNovaPosicao(null);
-                                    fetchPontos();
-                                }}
-                            />
-                        ))}
-
-                    {/* {novaPosicao && (
-            <FormularioPonto
-              coordenadas={novaPosicao}
-              onClose={() => setNovaPosicao(null)}
-              onCriado={() => {
-                setNovaPosicao(null);
-                fetchPontos();
-              }}
-            />
-          )} */}
-
-
-
-                    {pontos?.map((ponto) => (
-                        <Marker
-                            key={ponto.id}
-                            position={[ponto.latitude, ponto.longitude]}
-                            icon={createCustomIcon(ponto.iconURL ?? '📍')}
-                            eventHandlers={{
-                                click: () => handleMarkerClick(ponto),
-                                mouseover: (e) => e.target.openPopup(),
-                                mouseout: (e) => e.target.closePopup(),
-                            }}
-                        >
-                            <Popup closeButton={false} autoClose={false} closeOnClick={false} autoPan={false}>
-                                <PopupContent ponto={ponto} />
-                            </Popup>
-                            <Tooltip
-                                permanent
-                                direction="bottom"
-                                offset={[0, 10]}
-                                opacity={1}
-                                className="text-xs text-black"
-                            >
-                                {ponto.name}
-                            </Tooltip>
-                        </Marker>
-                    ))}
-                </MapContainer>
-            </div>
-            <RightSidebar onLocationSelect={handleLocationSelect} />
         </div>
-    );
+
+        {/* Sidebar da Direita (agora vem por último, ocupando a direita) */}
+        <LocationListSidebar 
+            isOpen={isListSidebarOpen}
+            pontos={pontos}
+            onLocationClick={handleLocationSelect}
+        />
+    </div>
+);
 };
 
 export default MapaInterativo;

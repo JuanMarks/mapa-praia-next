@@ -90,7 +90,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
             <div 
                 ref={searchContainerRef}
                 // Posiciona o componente no canto superior direito sobre o mapa
-                className="absolute top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 md:right-12 lg:right-16 z-[5000] w-[90%] sm:w-[80%] md:w-[400px]"
+                className="  absolute top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 md:right-12 lg:right-16 z-[5000] w-[90%] sm:w-[80%] md:w-[400px]"
             >
                 <div className="relative shadow-lg overflow-hidden">
                     {/* Ícone de busca dentro do input */}
@@ -101,7 +101,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
                     <input
                         type="text"
                         placeholder="Pesquisar locais..."
-                        className="w-full p-3 pl-10 text-base focus:outline-none focus:border-none focus:ring-0 rounded shadow-lg   "
+                        className="bg-white rounded-full w-full p-3 pl-10 text-base focus:outline-none focus:border-none focus:ring-0 shadow-lg   "
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onFocus={() => { if(searchTerm) setIsDropdownOpen(true) }}

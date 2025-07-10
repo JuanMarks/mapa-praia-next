@@ -2,6 +2,8 @@ import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { PontoTuristico } from '@/types/ponto';
 import api from '@/axios/config';
 import Image from 'next/image';
+import { FaEllipsisH } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 
 // Ícone para o botão de excluir
 const TrashIcon = () => (
@@ -22,6 +24,7 @@ const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '�
     'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
     'https://cdn-icons-png.flaticon.com/512/814/814405.png',
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
+    'https://cdn-icons-png.flaticon.com/512/1138/1138048.png'
 ];
 
 interface Props {
@@ -53,6 +56,11 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
     // Estados de UI
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const [selectedType, setSelectedType] = useState(''); // Controla o <select>
+    const [customType, setCustomType] = useState(''); 
+
+    const [isIconModalOpen, setIsIconModalOpen] = useState(false);
 
     // Preenche o formulário quando o ponto é carregado
     useEffect(() => {
@@ -141,6 +149,15 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         }
     };
 
+    const handleIconSelect = (selectedIcon: string) => {
+        setIconURL(selectedIcon);
+        setIsIconModalOpen(false);
+    };
+    
+    // --- 3. SEPARA A LISTA DE ÍCONES ---
+    const visibleIcons = ICONS.slice(0, 5);
+    const hiddenIcons = ICONS.slice(5);
+
     if (!ponto) return null;
 
     return (
@@ -183,8 +200,29 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                                     <option value="sorveteria">Sorveteria</option>
                                     <option value="praia">Praia</option>
                                     <option value="hotel">Hotel</option>
+                                    <option value="petiscaria">Petiscaria</option>
+                                    <option value="pizzaria">Pizzaria</option>
+                                    <option value="bar">Bar</option>
+                                    <option value="outro">Outro</option>
+                                    <option value="personalizado">Personalizado</option>
                                 </select>
                             </div>
+                            {/* O input só aparece se 'personalizado' for selecionado */}
+                            {type === 'personalizado' && (
+                                <div>
+                                    <label htmlFor="customType" className="block mb-2 text-sm font-medium text-gray-700">Digite o tipo personalizado</label>
+                                    <input
+                                        id="customType"
+                                        type="text"
+                                        placeholder="Ex: Pousada, Ponto Histórico..."
+                                        className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                        value={customType}
+                                        onChange={(e) => setCustomType(e.target.value)}
+                                        disabled={isLoading}
+                                        required
+                                    />
+                                </div>
+                            )}
                              <div>
                                 <label htmlFor="rating" className="block mb-2 text-sm font-medium text-gray-700">Avaliação (1 a 5)</label>
                                 <input 
@@ -222,8 +260,8 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone</label>
-                            <div className="flex flex-wrap gap-3">
-                                {ICONS.map((icon, index) => {
+                            <div className="flex flex-wrap items-center gap-3">
+                                {visibleIcons.map((icon, index) => {
                                     const isUrl = icon.startsWith('http');
                                     return (
                                         <label className="cursor-pointer" key={index}>
@@ -234,6 +272,14 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                                         </label>
                                     );
                                 })}
+                                {/* Botão para abrir o modal com o resto dos ícones */}
+                                <button 
+                                    type="button"
+                                    onClick={() => setIsIconModalOpen(true)}
+                                    className="h-12 w-12 flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200"
+                                >
+                                    <FaEllipsisH className="text-gray-600"/>
+                                </button>
                             </div>
                         </div>
                         <div>
@@ -265,6 +311,39 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                     </div>
                 </form>
             </div>
+            {isIconModalOpen && (
+                <div 
+                    className="absolute inset-0 bg-black/30 z-20 flex justify-center items-center"
+                    onClick={() => setIsIconModalOpen(false)}
+                >
+                    <div 
+                        className="bg-white p-5 rounded-lg shadow-xl max-w-md w-full"
+                        onClick={(e) => e.stopPropagation()} // Impede que o modal feche ao clicar dentro dele
+                    >
+                        <div className="flex justify-between items-center mb-4">
+                            <h4 className="font-semibold text-lg">Selecione um Ícone</h4>
+                            <button type="button" onClick={() => setIsIconModalOpen(false)} className="text-gray-500 hover:text-gray-800">
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <div className="grid grid-cols-6 gap-3 max-h-60 overflow-y-auto">
+                            {hiddenIcons.map((icon, index) => {
+                                const isUrl = icon.startsWith('http');
+                                return (
+                                    <button 
+                                        type="button" 
+                                        key={index} 
+                                        onClick={() => handleIconSelect(icon)}
+                                        className="h-12 w-12 flex items-center justify-center p-1 rounded-md transition-all duration-200 hover:bg-gray-200"
+                                    >
+                                        {isUrl ? <Image src={icon} alt="Ícone" width={32} height={32} className="object-contain" /> : <span className="text-3xl">{icon}</span>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
