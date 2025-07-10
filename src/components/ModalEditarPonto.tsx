@@ -24,7 +24,8 @@ const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '�
     'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
     'https://cdn-icons-png.flaticon.com/512/814/814405.png',
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
-    'https://cdn-icons-png.flaticon.com/512/1138/1138048.png'
+    'https://cdn-icons-png.flaticon.com/512/1138/1138048.png',
+    'https://cdn-icons-png.flaticon.com/512/1946/1946788.png'
 ];
 
 interface Props {
