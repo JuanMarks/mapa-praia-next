@@ -73,7 +73,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
         if (window.confirm('Tem certeza que deseja apagar este ponto?')) {
             try {
                 await api.delete(`/places/${id}`);
-                setPontos(pontos.filter((p) => p.id !== id));
+                setPontos(pontos.filter((p) => String(p.id) !== String(id)));
             } catch (err: any) {
                 alert(err.message);
             }
@@ -135,7 +135,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
                                             <FaEdit />
                                         </button>
                                         <button
-                                            onClick={(e) => handleDelete(e, ponto.id)}
+                                            onClick={(e) => handleDelete(e, Number(ponto.id))}
                                             className="text-red-500 hover:text-red-700 p-1"
                                             aria-label="Apagar"
                                         >

@@ -43,7 +43,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
       ></div>
 
       <div
-        className={`absolute top-0 left-15 h-170 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
+        className={`absolute top-15 left-2 h-170 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
                  ${isOpen ? 'transform-none' : '-translate-x-full'}`}
       >
         <button
@@ -137,8 +137,7 @@ const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) =>
     // 1. Pega o token do localStorage (ou de onde você o armazena)
     const token = Cookies.get('token');
     const userString = Cookies.get('user');
-    console.log(token)
-    const userObj = userString ? JSON.parse(userString) : null;
+    
     
 
     if (!token) {
@@ -149,7 +148,6 @@ const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) =>
     try {
       // 2. Adiciona o cabeçalho de autorização na requisição
       await api.post('/ratings', {
-        userId: userObj?.id, 
         value: newRatingValue,
         placeId: ponto.id,
       }, {

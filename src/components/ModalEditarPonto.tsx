@@ -80,7 +80,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                 setDescription(ponto.description);
                 setIconURL(ponto.iconURL || '');
                 setExistingPhotos(ponto.photos || []);
-                setRating(ponto.rating || 1);
+                setRating(ponto.averageRating || 1);
                 setBairro(ponto.address?.bairro || '');
                 setNumero(ponto.address?.numero || '');
                 setLogradouro(ponto.address?.logradouro || '');
@@ -110,27 +110,32 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
 
         const formData = new FormData();
 
+        // Anexa os dados que podem ser atualizados
         formData.append('name', name);
         formData.append('description', description);
         formData.append('iconURL', iconURL);
-        formData.append('rating', String(rating));
-        formData.append('categoryId', categoryId); // Envia o ID da categoria
-        
+        formData.append('categoryId', categoryId); // Garante que a categoria seja enviada
+
+        // Endereço
         formData.append('address[logradouro]', logradouro);
         formData.append('address[numero]', String(numero));
         formData.append('address[bairro]', bairro);
         formData.append('address[complemento]', complemento);
-        
+
+        // Gerenciamento de fotos
         formData.append('photosToDelete', JSON.stringify(photosToDelete));
         newPhotos.forEach(file => {
             formData.append('newPhotos', file);
         });
         
+        // O campo 'rating' FOI REMOVIDO daqui.
+
         try {
             const response = await api.put(`/places/${ponto.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             onAtualizado(response.data);
+            console.log('Ponto atualizado com sucesso:', response.data);
             onClose();
         } catch (err: any) {
             const errorMessage = err.response?.data?.message || err.message || 'Ocorreu um erro desconhecido.';

@@ -3,7 +3,7 @@ import api from '@/axios/config';
 import Image from 'next/image';
 import { FaEllipsisH, FaTimes } from 'react-icons/fa';
 
-// Interface para tipar os objetos de categoria que virão da API
+// Interface para a Categoria
 interface Category {
     id: string;
     name: string;
@@ -30,15 +30,13 @@ const ICONS = [
     'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
     'https://cdn-icons-png.flaticon.com/512/814/814405.png',
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
-    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png",
-    'https://cdn-icons-png.flaticon.com/512/1946/1946788.png',
-]
+    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png"
+];
 
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [iconURL, setIconURL] = useState('');
-    const [rating, setRating] = useState<number>(1);
     const [bairro, setBairro] = useState('');
     const [numero, setNumero] = useState('');
     const [logradouro, setLogradouro] = useState('');
@@ -54,7 +52,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     
     const [isIconModalOpen, setIsIconModalOpen] = useState(false);
 
-    // Efeito para buscar as categorias da API quando o componente é montado
+    // Efeito para buscar as categorias da API
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -87,8 +85,10 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         formData.append('latitude', String(coordenadas[0]));
         formData.append('longitude', String(coordenadas[1]));
         formData.append('iconURL', iconURL || "https://cdn-icons-png.flaticon.com/512/854/854878.png");
-        formData.append('rating', String(rating));
-        formData.append('categoryId', categoryId); // Envia o ID da categoria selecionada
+        formData.append('categoryId', categoryId);
+
+        // O 'rating' não é mais enviado daqui
+        // formData.append('rating', String(rating)); 
 
         formData.append('address[logradouro]', logradouro);
         formData.append('address[numero]', String(numero));
@@ -190,7 +190,9 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                                 ))}
                             </select>
                         </div>
-
+                        
+                        {/* O campo de rating foi removido do formulário de criação */}
+                        
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Ícone</label>
                             <div className="flex flex-wrap items-center gap-3">

@@ -1,3 +1,5 @@
+// types/ponto.ts
+
 export interface Address {
   logradouro?: string;
   numero?: string;
@@ -5,19 +7,26 @@ export interface Address {
   complemento?: string;
 }
 
+// Interface para o objeto Categoria aninhado
+export interface Category {
+  id: string;
+  name: string;
+}
 
 export interface PontoTuristico {
-  id: number;
+  id: string; // ID deve ser string, como no Prisma
   name: string;
   description: string;
-  address?: Address
+  address?: Address;
   latitude: number;
   longitude: number;
   iconURL?: string;
-  type?: string;
-  rating?: number;
   photos?: string[];
   createdAt?: string;
   categoryId?: string;
   averageRating?: number; 
+  
+  // --- CORREÇÃO AQUI ---
+  // A categoria agora é um objeto que pode ser opcional
+  category?: Category;
 }
