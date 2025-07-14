@@ -14,7 +14,7 @@ import api from '@/axios/config';
 
 // Importando todos os seus componentes
 import Sidebar from './SideBar';
-import RightSidebar from './RightSideBar';
+
 import LocationListSidebar from './LocationListSideBar';
 import FormularioPonto from './FormularioPonto';
 import FormularioSugestao from './FormularioSugestao';
@@ -200,9 +200,7 @@ const MapaInterativo = () => {
                         >
                             <FaBars size={20} />
                         </button>
-                        <div className="flex-grow pointer-events-auto">
-                            <RightSidebar onLocationSelect={handleLocationSelect} />
-                        </div>
+                        
                     </div>
                 </div>
 

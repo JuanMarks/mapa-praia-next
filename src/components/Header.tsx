@@ -1,25 +1,33 @@
+// src/components/Header.tsx
 'use client';
 
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '../hooks/useAuth';
-// Importa os ícones de seta que usaremos no botão
-import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
+import { IoChevronUp, IoChevronDown, IoChevronBack, IoChevronForward } from 'react-icons/io5';
+import LocationSearch from './RightSideBar';
+import { PontoTuristico } from '@/types/ponto';
 
 export default function Header() {
   const { role, loading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  // Novo estado para controlar a visibilidade do Header como um todo
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState<PontoTuristico | null>(null);
 
   function logout() {
     if (typeof window !== 'undefined') {
       document.cookie = 'token=; Max-Age=0; path=/;';
       document.cookie = 'role=; Max-Age=0; path=/;';
-      window.location.href = '/'; 
+      window.location.href = '/';
     }
   }
+
+  const handleLocationSelect = (ponto: PontoTuristico) => {
+    setSelectedLocation(ponto);
+    console.log("Local selecionado no Header (via LocationSearch):", ponto);
+    setMenuOpen(false);
+  };
 
   const ActionButtons = ({ isMobile = false }) => {
     if (loading) return null;
@@ -53,69 +61,91 @@ export default function Header() {
   };
 
   return (
-    // Container principal que posiciona o Header e o botão de toggle
-    <div className="absolute top-4 left-20 z-[1001] flex items-center">
-        {/* O Header em si, com a lógica de transição */}
-        <header
-            className={`transition-transform duration-500 ease-in-out w-full max-w-10xl 
-            bg-black/20 backdrop-blur-md text-black px-6 py-2 rounded-2xl shadow-lg
-            flex flex-row items-center justify-between
-            ${isHeaderVisible ? 'translate-x-0' : '-translate-x-[110%]'}`}
-        >
-            {/* Logo */}
-            <div className="flex items-center">
-                <Link href="/" className="w-[140px] h-[60px] relative">
-                    <Image
-                        src="/images/logoAmotur-branco.png"
-                        alt="Logo AMOTUR"
-                        fill
-                        style={{ objectFit: 'contain' }}
-                        priority
-                    />
-                </Link>
-            </div>
+    // Esta div pai controla o posicionamento e o movimento de TODO o conjunto (navbar + botão de seta)
+    // No desktop, ela agora terá margens laterais e será centralizada.
+    // O `sm:w-full` foi removido daqui e a largura máxima e margens auto serão no header.
+    <div className={`
+      absolute top-4 left-4 z-[1001] w-[calc(100%-2rem)] flex flex-col items-center
+      sm:top-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-[calc(100%-4rem)] sm:flex-row sm:justify-between sm:items-center
+      transition-transform duration-500 ease-in-out
+      ${isHeaderVisible ? 'translate-y-0' : '-translate-y-[calc(100%-40px)]'}
+      sm:${isHeaderVisible ? 'translate-x-0' : '-translate-x-[110%]'}
+    `}>
+      {/* O header em si - agora com largura máxima, centralização e bordas arredondadas no desktop */}
+      <header
+        className={`w-full bg-black/20 backdrop-blur-md text-black px-6 py-2 shadow-lg
+        flex flex-col sm:flex-row items-start sm:items-center justify-between
+        rounded-2xl sm:max-w-7xl sm:rounded-2xl sm:mx-auto`}
+      >
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <Link href="/" className="w-[140px] h-[60px] relative">
+            <Image
+              src="/images/logoAmotur-branco.png"
+              alt="Logo AMOTUR"
+              fill
+              style={{ objectFit: 'contain' }}
+              priority
+            />
+          </Link>
+          <button
+            className="sm:hidden ml-auto p-2 text-white"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 6h16M4 12h16M4 18h16" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
 
-            {/* Navegação */}
-            <nav className="relative flex items-center ml-6">
-                <button
-                    className="sm:hidden flex items-center px-3 py-2 border rounded text-white border-white ml-auto"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-label="Abrir menu"
-                >
-                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M4 6h16M4 12h16M4 18h16" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                </button>
+        {menuOpen && (
+          <ul className="w-full bg-white text-black shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200 mt-2">
+            <li className="w-full mb-4">
+              <LocationSearch onLocationSelect={handleLocationSelect} />
+            </li>
+            <li className="mb-2 w-full"><Link href="/" className="block text-lg font-medium">Início</Link></li>
+            <li className="mb-2 w-full"><Link href="/sobre" className="block text-lg font-medium">Sobre</Link></li>
+            <li className="mb-4 w-full"><Link href="/contato" className="block text-lg font-medium">Contato</Link></li>
+            <hr className="w-full mb-4" />
+            <ActionButtons isMobile={true} />
+          </ul>
+        )}
 
-                {menuOpen && (
-                    <ul className="absolute top-16 right-0 w-56 bg-white text-black shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
-                        <li className="mb-2 w-full"><Link href="/" className="block text-lg font-medium">Início</Link></li>
-                        <li className="mb-2 w-full"><Link href="/sobre" className="block text-lg font-medium">Sobre</Link></li>
-                        <li className="mb-4 w-full"><Link href="/contato" className="block text-lg font-medium">Contato</Link></li>
-                        <hr className="w-full mb-4"/>
-                        <ActionButtons isMobile={true} />
-                    </ul>
-                )}
+        <ul className="hidden sm:flex space-x-6 items-center">
+          <li><Link href="/" className="text-white hover:text-blue-900 font-medium text-lg">Início</Link></li>
+          <li><Link href="/sobre" className="text-white hover:text-blue-900 font-medium text-lg">Sobre</Link></li>
+          <li><Link href="/contato" className="text-white hover:text-blue-900 font-medium text-lg">Contato</Link></li>
+          <div className="flex items-center space-x-4 pl-4">
+            <ActionButtons />
+          </div>
+          <li className="hidden sm:block">
+            <LocationSearch onLocationSelect={handleLocationSelect} />
+          </li>
+        </ul>
+      </header>
 
-                <ul className="hidden sm:flex space-x-6 items-center">
-                    <li><Link href="/" className="text-white hover:text-blue-900 font-medium text-lg">Início</Link></li>
-                    <li><Link href="/sobre" className="text-white hover:text-blue-900 font-medium text-lg">Sobre</Link></li>
-                    <li><Link href="/contato" className="text-white hover:text-blue-900 font-medium text-lg">Contato</Link></li>
-                    <div className="flex items-center space-x-4 pl-4">
-                        <ActionButtons />
-                    </div>
-                </ul>
-            </nav>
-        </header>
-
-        {/* Botão para mostrar/esconder o Header */}
-        <button
-            onClick={() => setIsHeaderVisible(!isHeaderVisible)}
-            className="bg-white p-2 rounded-full shadow-lg focus:outline-none z-10 text-gray-700 ml-2"
-            aria-label={isHeaderVisible ? 'Esconder menu' : 'Mostrar menu'}
-        >
-            {isHeaderVisible ? <IoChevronBack size={20} /> : <IoChevronForward size={20} />}
-        </button>
+      {/* Botão da seta - Posicionado abaixo no mobile, e no canto esquerdo redondo no desktop */}
+      <button
+        onClick={() => setIsHeaderVisible(!isHeaderVisible)}
+        className="
+          bg-white p-2 shadow-lg focus:outline-none text-gray-700
+          mt-0.5 rounded-b-2xl w-16 text-center
+          sm:ml-0 sm:mt-0 sm:rounded-full sm:w-auto sm:h-auto sm:px-3 sm:py-2
+          sm:absolute sm:-left-12 sm:top-1/2 sm:-translate-y-1/2
+        "
+        aria-label={isHeaderVisible ? 'Esconder menu' : 'Mostrar menu'}
+      >
+        {isHeaderVisible ? (
+          <>
+            <span className="hidden sm:inline-block"><IoChevronBack size={20} /></span>
+            <span className="sm:hidden"><IoChevronUp size={20} /></span>
+          </>
+        ) : (
+          <>
+            <span className="hidden sm:inline-block"><IoChevronForward size={20} /></span>
+            <span className="sm:hidden"><IoChevronDown size={20} /></span>
+          </>
+        )}
+      </button>
     </div>
   );
 }
