@@ -96,6 +96,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         if (e.target.files) {
             setNewPhotos(Array.from(e.target.files));
         }
+        console.log('Novas fotos selecionadas:', newPhotos);
     };
 
     const handleMarkForDeletion = (photoUrl: string) => {
@@ -125,7 +126,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         // Gerenciamento de fotos
         formData.append('photosToDelete', JSON.stringify(photosToDelete));
         newPhotos.forEach(file => {
-            formData.append('newPhotos', file);
+            formData.append('photos', file);
         });
         
         // O campo 'rating' FOI REMOVIDO daqui.
