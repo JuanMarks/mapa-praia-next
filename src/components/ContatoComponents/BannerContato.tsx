@@ -12,7 +12,7 @@ export default function BannerContato() {
                 <h1 className="sm:text-4xl text-[26px] px-8 font-bold pt-15">
                 <span className='bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent font-extrabold drop-shadow'>Vamos conversar!</span>
             </h1>
-            <p className="md:text-2xl text-[16px] md:px-9 px-4">Se você tem alguma dúvida, proposta de projeto ou quer adicionar algum ponto em nosso mapa, sinta-se à vontade para nos contatar através do <span className='bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent font-extrabold drop-shadow'>Formulário a baixo.</span></p>
+            <p className="md:text-2xl text-[16px] md:px-9 px-4">Se você tem alguma dúvida, proposta de projeto ou quer adicionar algum ponto em nosso mapa, sinta-se à vontade para nos contatar através do Formulário a baixo.</p>
       </div>
     </div>
     )
