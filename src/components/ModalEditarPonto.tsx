@@ -76,19 +76,22 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
             }
 
             if (ponto) {
+                const addressData = (ponto.address && 'update' in ponto.address)
+                ? ponto.address.update
+                : ponto.address;
                 setName(ponto.name);
                 setDescription(ponto.description);
                 setIconURL(ponto.iconURL || '');
                 setExistingPhotos(ponto.photos || []);
                 setRating(ponto.averageRating || 1);
-                setBairro(ponto.address?.bairro || '');
-                setNumero(ponto.address?.numero || '');
-                setLogradouro(ponto.address?.logradouro || '');
-                setComplemento(ponto.address?.complemento || '');
+                setBairro(addressData?.bairro || '');
+                setNumero(String(addressData?.numero || '')); // Use String() para garantir que é texto
+                setLogradouro(addressData?.logradouro || '');
+                setComplemento(addressData?.complemento || '');
                 setCategoryId(ponto.categoryId || ''); // Define a categoria atual
             }
         };
-
+        
         fetchCategoriesAndSetPonto();
     }, [ponto]);
 
@@ -96,7 +99,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         if (e.target.files) {
             setNewPhotos(Array.from(e.target.files));
         }
-        console.log('Novas fotos selecionadas:', newPhotos);
+        
     };
 
     const handleMarkForDeletion = (photoUrl: string) => {
@@ -108,7 +111,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
-
+        
         const formData = new FormData();
 
         // Anexa os dados que podem ser atualizados
@@ -126,10 +129,18 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         // Gerenciamento de fotos
         formData.append('photosToDelete', JSON.stringify(photosToDelete));
         newPhotos.forEach(file => {
+            console.log('Adicionando nova foto:', file);
             formData.append('photos', file);
         });
         
-        // O campo 'rating' FOI REMOVIDO daqui.
+        // debug do formData
+        for (const [key, value] of formData.entries()) {
+            if (value instanceof File) {
+                console.log(`FormData - ${key}: ${value.name}`);
+            } else {
+                console.log(`FormData - ${key}: ${value}`);
+            }
+        }
 
         try {
             const response = await api.put(`/places/${ponto.id}`, formData, {
