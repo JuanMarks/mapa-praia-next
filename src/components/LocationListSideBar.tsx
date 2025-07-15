@@ -39,7 +39,7 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
                         </div>
                         <div className="ml-3">
                             <h3 className="font-semibold text-gray-700">{ponto.name}</h3>
-                            <p className="text-sm text-gray-500">{ponto.type}</p>
+                            <p className="text-sm text-gray-500">{ponto.category?.name}</p>
                         </div>
                     </li>
                 ))}
