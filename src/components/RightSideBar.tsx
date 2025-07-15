@@ -105,7 +105,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
         </div>
 
         {isDropdownOpen && filteredPontos.length > 0 && (
-          <ul className="absolute mt-2 w-full bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in-down z-50">
+          <ul className="absolute mt-2 pr-10 bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in-down z-50">
             {filteredPontos.map(ponto => (
               <li
                 key={ponto.id}

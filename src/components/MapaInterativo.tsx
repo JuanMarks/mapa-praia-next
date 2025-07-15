@@ -191,7 +191,7 @@ const MapaInterativo = () => {
                     )}
                 </div>
 
-                <div className="absolute top-4 right-4 z-[1000] pointer-events-none">
+                <div className="absolute top-20 sm:top-4 sm:right-14 right-5 z-[1002] pointer-events-none">
                     <div className="flex items-start gap-4 mt-5">
                         <button 
                             onClick={() => setIsListSidebarOpen(!isListSidebarOpen)}
