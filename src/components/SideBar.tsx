@@ -56,10 +56,8 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
       )}
 
       <div
-        className={`absolute rounded-2xl top-0 left-0 h-full bg-white shadow-lg z-[5000]
-                    transition-transform duration-300 ease-in-out w-[280px]
-                    ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ marginTop: 'calc(40px + 1rem)' }}
+        className={`absolute top-15 left-2 h-140 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
+                 ${isOpen ? 'transform-none' : '-translate-x-full'}`}
       >
         <button
           onClick={onClose}
