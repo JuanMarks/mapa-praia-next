@@ -90,7 +90,7 @@ ${name}
         </div>
 
         {/* Coluna da Direita */}
-        <div id="formulario" className="bg-white md:rounded-tl-2xl md:rounded-bl-2xl md:h-screen p-10 shadow-2xl m-4 md:m-0">
+        <div id="formulario" className="bg-white rounded-2xl sm:rounded-tr-none sm:rounded-br-none rounded-tl-2xl md:rounded-bl-2xl md:h-screen p-10 shadow-2xl m-4 md:m-0">
           <div className="text-center mb-6">
             <Image
               src="/images/logo_amoturOFC.png"
@@ -102,7 +102,7 @@ ${name}
           </div>
 
           {successMessage && (
-            <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md text-center font-semibold">
+            <div className="mb-2 p-3 bg-green-100 text-green-800 rounded-md text-center font-semibold">
               {successMessage}
             </div>
           )}
@@ -144,7 +144,7 @@ ${name}
                   <textarea
                     id={field}
                     name={field}
-                    rows={5}
+                    rows={3}
                     placeholder="Como podemos ajudar?"
                     value={formData[field]}
                     onChange={handleChange}

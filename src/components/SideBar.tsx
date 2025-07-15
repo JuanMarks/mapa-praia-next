@@ -5,8 +5,8 @@ import { PontoTuristico } from '@/types/ponto';
 import { FaMapMarkerAlt, FaShare, FaBookmark, FaRoute, FaTimes, FaInfoCircle, FaStar } from 'react-icons/fa';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import Image from 'next/image';
-import { useAuth } from '../hooks/useAuth'; 
-import api from '@/axios/config'; 
+import { useAuth } from '../hooks/useAuth';
+import api from '@/axios/config';
 import '../pages/globals.css';
 import Cookies from 'js-cookie';
 
@@ -17,75 +17,81 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [imagemCapa, setImagemCapa] = useState('/images/img1.jpeg');
-  const { role } = useAuth(); 
+  const { role } = useAuth();
 
   useEffect(() => {
-    if (ponto?.photos && ponto.photos.length > 0) {
-      setImagemCapa(ponto.photos[0]);
+    if (ponto) {
+      setIsOpen(true);
+      if (ponto.photos && ponto.photos.length > 0) {
+        setImagemCapa(ponto.photos[0]);
+      } else {
+        setImagemCapa('/images/img1.jpeg');
+      }
     } else {
-      setImagemCapa('/images/img1.jpeg');
+      setIsOpen(false);
     }
   }, [ponto]);
 
-  if (!ponto) {
-    return null;
-  }
+  if (!ponto && !isOpen) return null;
 
-  const temFotos = ponto.photos && ponto.photos.length > 0;
+  const temFotos = ponto?.photos && ponto.photos.length > 0;
 
   return (
     <>
-      {/* Botão para reabrir a sidebar se ela estiver fechada */}
-      {/*----> botão de fechar arrumado */}
-      {!isOpen && (
+      {ponto && (
         <button
-          onClick={() => setIsOpen(true)}
-          className="absolute top-1/2 left-2 z-[5001] bg-white p-2 rounded-r-full shadow-md focus:outline-none"
-          aria-label="Mostrar sidebar"
+          onClick={() => setIsOpen(!isOpen)}
+          className={`
+            absolute top-1/2
+            bg-white p-2 shadow-md focus:outline-none z-[5001]
+            transition-all duration-300 ease-in-out
+            ${isOpen ? 'left-[276px] rounded-tr-2xl rounded-br-2xl' : 'left-2 rounded-r-full'}
+          `}
+          aria-label={isOpen ? "Esconder sidebar" : "Mostrar sidebar"}
         >
-          <IoChevronForward size={20} />
+          {isOpen ? <IoChevronBack size={20} /> : <IoChevronForward size={20} />}
         </button>
       )}
 
       <div
-        className={`absolute top-15 left-2 h-170 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
-                 ${isOpen ? 'transform-none' : '-translate-x-full'}`}
+        className={`absolute rounded-2xl top-0 left-0 h-full bg-white shadow-lg z-[5000]
+                    transition-transform duration-300 ease-in-out w-[280px]
+                    ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{ marginTop: 'calc(40px + 1rem)' }}
       >
         <button
-          onClick={() => setIsOpen(false)}
-          className="absolute top-1/2 -right-6 bg-white p-2 rounded-r-full shadow-lg focus:outline-none z-10"
+          onClick={onClose}
+          className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-1.5 hover:bg-opacity-75 transition z-20"
+          aria-label="Fechar informações do local"
         >
-          <IoChevronBack size={20} />
+          <FaTimes />
         </button>
 
         <div className="flex flex-col h-full">
-          <div className="relative w-full h-48">
-            <Image 
-              src={imagemCapa} 
-              alt={`Foto de ${ponto.name}`} 
+          <div className="relative w-full h-40">
+            <Image
+              src={imagemCapa}
+              alt={`Foto de ${ponto?.name}`}
               fill
               style={{ objectFit: 'cover' }}
               className="rounded-t-2xl"
             />
           </div>
 
-          <button onClick={onClose} className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-1.5 hover:bg-opacity-75 transition">
-            <FaTimes />
-          </button>
-          
           <div className="p-4 flex-grow overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-800">{ponto.name}</h2>
-            
-            <div className="my-3">
-              <StarRating 
-                ponto={ponto} 
+            <h2 className="text-2xl font-bold text-gray-800">{ponto?.name}</h2>
+
+            {/* Só renderiza se o ponto existir */}
+            {ponto && (
+              <StarRating
+                ponto={ponto}
                 isUserLoggedIn={!!role}
-                onAtualizado={onAtualizado} 
+                onAtualizado={onAtualizado}
               />
-            </div>
-            
+            )}
+
             <div className="grid grid-cols-4 gap-2 my-4 text-center">
               <ActionButton icon={<FaRoute />} label="Rotas" />
               <ActionButton icon={<FaBookmark />} label="Salvar" />
@@ -93,17 +99,17 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
               <ActionButton icon={<FaMapMarkerAlt />} label="Mapa" />
             </div>
 
-            <InfoItem icon={<FaInfoCircle />} text={ponto.description} />
+            <InfoItem icon={<FaInfoCircle />} text={ponto?.description || ''} />
 
             {temFotos && (
               <div className="mt-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Galeria</h3>
                 <div className="grid grid-cols-3 gap-2">
-                  {ponto.photos?.map((fotoUrl, index) => (
-                    <div key={index} className="relative w-full h-24 rounded-lg overflow-hidden">
+                  {ponto?.photos?.map((fotoUrl, index) => (
+                    <div key={index} className="relative w-full h-20 rounded-lg overflow-hidden">
                       <Image
                         src={fotoUrl}
-                        alt={`Galeria de ${ponto.name} ${index + 1}`}
+                        alt={`Galeria de ${ponto?.name} ${index + 1}`}
                         fill
                         style={{ objectFit: 'cover' }}
                         className="hover:scale-110 transition-transform duration-200"
@@ -121,18 +127,20 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
 };
 
 interface StarRatingProps {
-    ponto: PontoTuristico;
-    isUserLoggedIn: boolean;
-    onAtualizado: (pontoAtualizado: PontoTuristico) => void;
+  ponto: PontoTuristico;
+  isUserLoggedIn: boolean;
+  onAtualizado: (pontoAtualizado: PontoTuristico) => void;
 }
 
 const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) => {
-  const [currentRating, setCurrentRating] = useState(ponto.averageRating || 0);
+  const [currentRating, setCurrentRating] = useState(ponto?.averageRating || 0);
   const [hover, setHover] = useState(0);
 
   useEffect(() => {
-    setCurrentRating(ponto.averageRating || 0);
-  }, [ponto.averageRating]);
+    setCurrentRating(ponto?.averageRating || 0);
+  }, [ponto?.averageRating]);
+
+  if (!ponto) return null;
 
   const handleRatingSubmit = async (newRatingValue: number) => {
     if (!isUserLoggedIn) {
@@ -140,26 +148,19 @@ const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) =>
       return;
     }
 
-    // --- CORREÇÃO AQUI ---
-    // 1. Pega o token do localStorage (ou de onde você o armazena)
     const token = Cookies.get('token');
-    const userString = Cookies.get('user');
-    
-    
-
     if (!token) {
-        alert("Sessão expirada. Por favor, faça login novamente.");
-        return;
+      alert("Sessão expirada. Por favor, faça login novamente.");
+      return;
     }
 
     try {
-      // 2. Adiciona o cabeçalho de autorização na requisição
       await api.post('/ratings', {
         value: newRatingValue,
         placeId: ponto.id,
       }, {
         headers: {
-            'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -169,16 +170,14 @@ const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) =>
       if (pontoAtualizado) {
         onAtualizado(pontoAtualizado);
       }
-      
-      alert("Obrigado pela sua avaliação!");
 
+      alert("Obrigado pela sua avaliação!");
     } catch (error: any) {
       console.error("Erro ao enviar avaliação:", error);
-      
       if (error.response?.status === 409) {
-          alert("Você já avaliou este local.");
+        alert("Você já avaliou este local.");
       } else {
-          alert("Não foi possível registrar sua avaliação. Tente novamente.");
+        alert("Não foi possível registrar sua avaliação. Tente novamente.");
       }
     }
   };
@@ -207,7 +206,7 @@ const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) =>
   });
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 my-3">
       <div className="flex">{stars}</div>
       <span className="text-gray-600 font-semibold">{currentRating.toFixed(1)}</span>
       {!isUserLoggedIn && <span className="text-xs text-gray-500">(Faça login para avaliar)</span>}
@@ -218,7 +217,7 @@ const StarRating = ({ ponto, isUserLoggedIn, onAtualizado }: StarRatingProps) =>
 const ActionButton = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
   <div className="flex flex-col items-center cursor-pointer text-blue-600 hover:text-blue-800 transition">
     {icon}
-    <span className="text-xs mt-1">{label}</span>
+    <span className="text-[10px] mt-1">{label}</span>
   </div>
 );
 
