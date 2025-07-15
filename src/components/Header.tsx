@@ -61,21 +61,25 @@ export default function Header() {
   };
 
   return (
-    // Esta div pai controla o posicionamento e o movimento de TODO o conjunto (navbar + botão de seta)
-    // No desktop, ela agora terá margens laterais e será centralizada.
-    // O `sm:w-full` foi removido daqui e a largura máxima e margens auto serão no header.
+    // Esta div pai agora terá w-full no mobile e manterá o layout desktop.
     <div className={`
-      absolute top-4 left-4 z-[1001] w-[calc(100%-2rem)] flex flex-col items-center
-      sm:top-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-[calc(100%-4rem)] sm:flex-row sm:justify-between sm:items-center
-      transition-transform duration-500 ease-in-out
-      ${isHeaderVisible ? 'translate-y-0' : '-translate-y-[calc(100%-40px)]'}
-      sm:${isHeaderVisible ? 'translate-x-0' : '-translate-x-[110%]'}
+      absolute top-4 z-[1001] w-full flex flex-col items-center 
+      
+      // === DESKTOP (sm:) ===
+      sm:top-4 // Posição do topo no desktop
+      sm:left-1/2 sm:-translate-x-1/2 // Centraliza horizontalmente a div pai no desktop
+      sm:w-[calc(100%-10rem)] // Ajuste aqui para controlar o espaçamento lateral total (5rem de cada lado)
+      sm:flex-row sm:justify-center sm:items-center // Centraliza o header e o botão no desktop
+      
+      transition-transform duration-500 // Transição para o movimento
+      ${isHeaderVisible ? 'translate-y-0' : '-translate-y-[calc(100%-40px)]'} // Movimento vertical no mobile
+      sm:${isHeaderVisible ? 'translate-x-0' : '-translate-x-[110%]'} // Movimento horizontal no desktop
     `}>
-      {/* O header em si - agora com largura máxima, centralização e bordas arredondadas no desktop */}
+      {/* O header em si - largura máxima para o conteúdo, sem mx-auto */}
       <header
         className={`w-full bg-black/20 backdrop-blur-md text-black px-6 py-2 shadow-lg
         flex flex-col sm:flex-row items-start sm:items-center justify-between
-        rounded-2xl sm:max-w-7xl sm:rounded-2xl sm:mx-auto`}
+        rounded-2xl sm:max-w-4xl sm:rounded-2xl`}
       >
         <div className="flex items-center justify-between w-full sm:w-auto">
           <Link href="/" className="w-[140px] h-[60px] relative">
@@ -123,21 +127,20 @@ export default function Header() {
         </ul>
       </header>
 
-      {/* Botão da seta - Posicionado abaixo no mobile, e no canto esquerdo redondo no desktop */}
+      {/* Botão da seta - Posicionado abaixo no mobile, e ao lado do header no desktop */}
       <button
         onClick={() => setIsHeaderVisible(!isHeaderVisible)}
         className="
           bg-white p-2 shadow-lg focus:outline-none text-gray-700
-          mt-0.5 rounded-b-2xl w-16 text-center
-          sm:ml-0 sm:mt-0 sm:rounded-full sm:w-auto sm:h-auto sm:px-3 sm:py-2
-          sm:absolute sm:-left-12 sm:top-1/2 sm:-translate-y-1/2
+          mt-0.5 rounded-b-2xl w-9 text-center
+          sm:ml-4 sm:order-last sm:rounded-full sm:w-auto sm:h-auto sm:px-3 sm:py-2
         "
         aria-label={isHeaderVisible ? 'Esconder menu' : 'Mostrar menu'}
       >
         {isHeaderVisible ? (
           <>
-            <span className="hidden sm:inline-block"><IoChevronBack size={20} /></span>
-            <span className="sm:hidden"><IoChevronUp size={20} /></span>
+            <span className="hidden sm:inline-block "><IoChevronBack size={20} /></span>
+            <span className="sm:hidden "><IoChevronUp size={20} /></span>
           </>
         ) : (
           <>
