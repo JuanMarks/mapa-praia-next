@@ -11,10 +11,7 @@ import BannerContato from "@/components/ContatoComponents/BannerContato"
 export default function Contato() {
     return (
         <section>
-            <Header/>
-            <BannerContato/>
             <ContatoPage/>
-            <Footer/>
         </section>
     )
 }
