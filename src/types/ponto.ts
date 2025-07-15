@@ -13,11 +13,15 @@ export interface Category {
   name: string;
 }
 
+interface AddressUpdatePayload {
+  update: Address;
+}
+
 export interface PontoTuristico {
   id: string; // ID deve ser string, como no Prisma
   name: string;
   description: string;
-  address?: Address;
+  address?: Address | AddressUpdatePayload; 
   latitude: number;
   longitude: number;
   iconURL?: string;
