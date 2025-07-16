@@ -3,7 +3,7 @@ import { PontoTuristico } from '@/types/ponto';
 import api from '@/axios/config';
 import Image from 'next/image';
 import { FaEllipsisH, FaTimes } from 'react-icons/fa';
-
+import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 // Interface para a Categoria
 interface Category {
     id: string;
@@ -113,45 +113,42 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         setError(null);
         
         const formData = new FormData();
-
-        // Anexa os dados que podem ser atualizados
         formData.append('name', name);
         formData.append('description', description);
         formData.append('iconURL', iconURL);
-        formData.append('categoryId', categoryId); // Garante que a categoria seja enviada
-
-        // Endereço
+        formData.append('categoryId', categoryId);
         formData.append('address[logradouro]', logradouro);
         formData.append('address[numero]', String(numero));
         formData.append('address[bairro]', bairro);
         formData.append('address[complemento]', complemento);
-
-        // Gerenciamento de fotos
         formData.append('photosToDelete', JSON.stringify(photosToDelete));
         newPhotos.forEach(file => {
-            console.log('Adicionando nova foto:', file);
             formData.append('photos', file);
         });
-        
-        // debug do formData
-        for (const [key, value] of formData.entries()) {
-            if (value instanceof File) {
-                console.log(`FormData - ${key}: ${value.name}`);
-            } else {
-                console.log(`FormData - ${key}: ${value}`);
-            }
-        }
 
         try {
             const response = await api.put(`/places/${ponto.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             onAtualizado(response.data);
-            console.log('Ponto atualizado com sucesso:', response.data);
             onClose();
-        } catch (err: any) {
-            const errorMessage = err.response?.data?.message || err.message || 'Ocorreu um erro desconhecido.';
-            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+        } catch (err: unknown) { // CORRIGIDO: Tratamento de erro aprimorado
+            console.error("Erro detalhado ao atualizar ponto:", err);
+            
+            let errorMessage = 'Não foi possível conectar ao servidor. Tente novamente.';
+
+            if (isAxiosError(err)) {
+                if (err.response) {
+                    const serverMessage = err.response.data?.message;
+                    errorMessage = Array.isArray(serverMessage) 
+                        ? serverMessage.join('. ') 
+                        : serverMessage || `Ocorreu um erro no servidor (código: ${err.response.status}).`;
+                }
+            } else if (err instanceof Error) {
+                errorMessage = err.message;
+            }
+            
+            setError(errorMessage);
         } finally {
             setIsLoading(false);
         }

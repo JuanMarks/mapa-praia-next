@@ -1,11 +1,7 @@
-import PageAdmin from '@/components/PageAdmin';
-import withAuth from '@/hooks/withAuth';
-import "./globals.css";
+import PageAdmin from '@/components/PageAdmin'; // O componente da sua página
+import withAuth from '../hooks/withAuth';   // Nosso HOC
+import './globals.css'; // Importando estilos globais
+// Envolvemos o componente da página com o HOC
+const ProtectedAdminPage = withAuth(PageAdmin);
 
-// Envolvemos o PageAdmin com o withAuth.
-// Agora, esta página só será renderizada se o usuário for um admin.
-const AdminPage = () => {
-  return <PageAdmin />;
-};
-
-export default withAuth(AdminPage);
+export default ProtectedAdminPage;
