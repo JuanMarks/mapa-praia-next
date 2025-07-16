@@ -47,7 +47,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
             absolute top-1/2
             bg-white p-2 shadow-md focus:outline-none z-[5001]
             transition-all duration-300 ease-in-out
-            ${isOpen ? 'left-[276px] rounded-tr-2xl rounded-br-2xl' : 'left-2 rounded-r-full'}
+            ${isOpen ? 'left-[397px] rounded-tr-2xl rounded-br-2xl' : 'left-0 rounded-r-full'}
           `}
           aria-label={isOpen ? "Esconder sidebar" : "Mostrar sidebar"}
         >
@@ -57,7 +57,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
 
       <div
         className={`absolute top-15 left-2 h-140 rounded-2xl mt-9 ml-10 bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px]
-                 ${isOpen ? 'transform-none' : '-translate-x-full'}`}
+                 ${isOpen ? 'translate-x-0' : '-translate-x-[400px]'}`}
       >
         <button
           onClick={onClose}
