@@ -87,7 +87,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
     <>
       <div
         ref={searchContainerRef}
-        className="w-full" // Permanece w-full para se ajustar ao pai
+        className="w-full " // Permanece w-full para se ajustar ao pai
       >
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">

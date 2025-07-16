@@ -14,7 +14,7 @@ import api from '@/axios/config';
 
 // Importando todos os seus componentes
 import Sidebar from './SideBar';
-
+import LocationSearch from './RightSideBar';
 import LocationListSidebar from './LocationListSideBar';
 import FormularioPonto from './FormularioPonto';
 import FormularioSugestao from './FormularioSugestao';
@@ -121,7 +121,16 @@ const MapaInterativo = () => {
         <div className="flex h-screen w-full bg-gray-200">
             
             <div className={`relative flex-grow h-full transition-all duration-300 ease-in-out ${isSuggesting ? 'cursor-crosshair' : ''}`}>
-                <Header />
+                <div className='flex'>
+                    
+                        <Header />
+                    
+                    
+                    <div className="absolute top-24 left-60 sm:top-8 sm:left-310 -translate-x-1/2 w-80 max-w-md sm:max-w-lg z-[1002]">
+                        <LocationSearch onLocationSelect={handleLocationSelect} />
+                    </div>
+                </div>
+                
                 <MapContainer
                     center={centro}
                     zoom={13}
