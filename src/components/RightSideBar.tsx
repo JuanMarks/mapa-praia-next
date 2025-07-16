@@ -22,7 +22,6 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
   const [pontoParaEditar, setPontoParaEditar] = useState<PontoTuristico | null>(null);
   const { role } = useAuth();
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const [error, setError] = useState<string | null>(null); // Estado para gerenciar erros
 
   // Função para buscar os pontos, agora com tratamento de erro
   const fetchPontos = async () => {

@@ -1,7 +1,7 @@
 // src/components/MapaInterativo.tsx
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
 import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa';
@@ -107,7 +107,6 @@ const MapaInterativo = () => {
     const handlePontoAtualizado = (pontoAtualizado: PontoTuristico) => {
         const pontoNormalizado = { ...pontoAtualizado };
         if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
-            // @ts-ignore
             pontoNormalizado.address = pontoNormalizado.address.update;
         }
         setPontos(prevPontos => prevPontos.map(p => p.id === pontoNormalizado.id ? pontoNormalizado : p));

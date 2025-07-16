@@ -141,6 +141,13 @@ const PageAdmin = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100 font-sans ">
+            {error && (
+                <div className="fixed top-0 left-0 w-full bg-red-500 text-white p-4 z-50">
+                    <div className="max-w-4xl mx-auto">
+                        <p className="text-center">{error}</p>
+                </div>
+                </div>
+            )}
             <aside className="w-64 bg-gray-800 text-white flex-shrink-0">
                 <div className="h-16 flex items-center justify-center bg-gray-900">
                     <Link href="/"><Image src="/images/logoAmotur-branco.png" alt="Logo AMOTUR" width={120} height={40} /></Link>

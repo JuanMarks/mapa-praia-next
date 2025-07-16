@@ -57,7 +57,7 @@ ${name}
       setSuccessMessage('Mensagem enviada com sucesso!');
       setFormData({ name: '', email: '', empresa: '', phone: '', message: '' });
     } catch (error) {
-      setErrorMessage('Ocorreu um erro ao tentar enviar a mensagem.');
+      setErrorMessage('Ocorreu um erro ao tentar enviar a mensagem.'+ error);
     } finally {
       setIsSubmitting(false);
     }
