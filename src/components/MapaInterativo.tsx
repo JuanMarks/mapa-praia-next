@@ -117,7 +117,7 @@ const MapaInterativo = () => {
             <div className={`relative flex-grow h-full transition-all duration-300 ease-in-out ${isSuggesting ? 'cursor-crosshair' : ''}`}>
                 <div className='flex'>
                     <Header />
-                    <div className="absolute top-24 left-60 sm:top-8 sm:left-310 -translate-x-1/2 w-80 max-w-md sm:max-w-lg z-[1002]">
+                    <div className="absolute top-24.5 left-47 sm:top-8 sm:left-310 -translate-x-1/2 w-80 max-w-md sm:max-w-lg z-[1002]">
                         <LocationSearch onLocationSelect={handleLocationSelect} />
                     </div>
                 </div>
