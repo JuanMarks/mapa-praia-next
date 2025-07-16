@@ -53,7 +53,7 @@ export default function Header() {
 
   return (
     // 1. Contêiner Principal - Agora responsivo
-    <div className="absolute left-5 top-[-10px] sm:top-0 sm:left-90 w-[calc(100%-2rem)] sm:w-auto pointer-events-none z-[5000]">
+    <div className="absolute left-5 top-[-10px] sm:top-0 sm:left-0 w-[calc(100%-2rem)] sm:w-auto pointer-events-none z-[5000]">
       <div className="relative w-full max-w-6xl sm:p-4 pointer-events-auto">
         
         {/* 2. Painel Deslizante - A animação é a mesma */}
