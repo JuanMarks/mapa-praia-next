@@ -8,7 +8,6 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import Image from 'next/image';
 import { useAuth } from '../hooks/useAuth';
 import api from '@/axios/config';
-import '../pages/globals.css';
 import Cookies from 'js-cookie';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 
