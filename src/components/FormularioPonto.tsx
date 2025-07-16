@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import api from '@/axios/config';
 import Image from 'next/image';
 import { FaEllipsisH, FaTimes } from 'react-icons/fa';
-
+import { isAxiosError } from 'axios';
 // Interface para a Categoria
 interface Category {
     id: string;
@@ -79,31 +79,23 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         setSuccess(false);
 
         const formData = new FormData();
-
         formData.append('name', name);
         formData.append('description', description);
         formData.append('latitude', String(coordenadas[0]));
         formData.append('longitude', String(coordenadas[1]));
         formData.append('iconURL', iconURL || "https://cdn-icons-png.flaticon.com/512/854/854878.png");
         formData.append('categoryId', categoryId);
-
-        // O 'rating' não é mais enviado daqui
-        // formData.append('rating', String(rating)); 
-
         formData.append('address[logradouro]', logradouro);
         formData.append('address[numero]', String(numero));
         formData.append('address[bairro]', bairro);
         formData.append('address[complemento]', complemento);
-
         imagens.forEach((imagem) => {
             formData.append('photos', imagem);
         });
 
-        try {
+       try {
             const res = await api.post('/places/createPlace', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
 
             console.log(res.data);
@@ -112,10 +104,24 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                 onCriado();
             }, 1500);
 
-        } catch (err: any) {
-            console.error("Erro ao criar ponto:", err);
-            const errorMessage = err.response?.data?.message || err.message || 'Ocorreu um erro desconhecido.';
-            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+        } catch (err: unknown) { // CORRIGIDO: de 'any' para 'unknown'
+            console.error("Erro detalhado ao criar ponto:", err);
+            
+            // Lógica de tratamento de erro aprimorada
+            let errorMessage = 'Não foi possível conectar ao servidor. Tente novamente mais tarde.';
+
+            if (isAxiosError(err)) {
+                if (err.response) {
+                    const serverMessage = err.response.data?.message;
+                    // Lida com mensagens que podem ser um array (comum em erros de validação do class-validator)
+                    errorMessage = Array.isArray(serverMessage) ? serverMessage.join('. ') : serverMessage || `Erro ${err.response.status}: Falha ao processar a solicitação.`;
+                }
+            } else if (err instanceof Error) {
+                errorMessage = err.message;
+            }
+            
+            setError(errorMessage);
+
         } finally {
             setIsLoading(false);
         }

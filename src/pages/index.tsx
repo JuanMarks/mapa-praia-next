@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic';
-import './globals.css';
 import Footer from '@/components/Footer';
 import TideOverlay from '@/components/TideOverlay';
 const MapaInterativo = dynamic(() => import('@/components/MapaInterativo'), { ssr: false });

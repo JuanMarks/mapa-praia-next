@@ -10,6 +10,8 @@ import ModalCategorias from './ModalCategorias';
 import { FaTachometerAlt, FaPen, FaTrash, FaSearch, FaRegChartBar, FaTags, FaCheck, FaTimes } from 'react-icons/fa';
 import Cookies from 'js-cookie';
 import ModalAprovarSugestao from './ModalAprovarSugestao';
+import Link from 'next/link';
+import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 
 // Importações e registros do Chart.js
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
@@ -31,40 +33,44 @@ const PageAdmin = () => {
     const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
     const [suggestionToApprove, setSuggestionToApprove] = useState<Suggestion | null>(null);
 
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        const token = Cookies.get('token');
+        if (!token) {
+            setError("Acesso negado. Você precisa estar logado como administrador.");
+            setLoading(false);
+            return;
+        }
+        
+        try {
+            const placesPromise = api.get('/places/getPlaces');
+            const suggestionsPromise = api.get('/suggestions', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            const [placesResponse, suggestionsResponse] = await Promise.all([placesPromise, suggestionsPromise]);
+
+            const pontosProcessados = placesResponse.data.map((ponto: PontoTuristico) => ({
+                ...ponto,
+                createdAt: ponto.createdAt || new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+            }));
+            setPontos(pontosProcessados);
+            setSuggestions(suggestionsResponse.data);
+
+        } catch (err: unknown) {
+            console.error("Erro ao buscar dados do dashboard:", err);
+            let errorMessage = 'Não foi possível carregar os dados do painel.';
+            if (isAxiosError(err) && err.response?.status === 403) {
+                errorMessage = "Você não tem permissão para acessar estes dados.";
+            }
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const token = Cookies.get('token');
-            if (!token) {
-                setError("Acesso negado. Faça login como administrador.");
-                setLoading(false);
-                return;
-            }
-            
-            try {
-                const placesResponse = await api.get('/places/getPlaces');
-                const pontosProcessados = placesResponse.data.map((ponto: any) => {
-                    const pontoNormalizado = { ...ponto };
-                    pontoNormalizado.createdAt = ponto.createdAt || new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString();
-                    if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
-                        pontoNormalizado.address = pontoNormalizado.address.update;
-                    }
-                    return pontoNormalizado;
-                });
-                setPontos(pontosProcessados);
-
-                const suggestionsResponse = await api.get('/suggestions', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                setSuggestions(suggestionsResponse.data);
-
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
     }, []);
 
@@ -99,9 +105,13 @@ const PageAdmin = () => {
             try {
                 await api.delete(`/places/${id}`);
                 setPontos(pontos.filter((ponto) => ponto.id !== id));
-                alert('Ponto apagado com sucesso!');
-            } catch (err: any) {
-                alert(err.message);
+            } catch (err: unknown) {
+                console.error("Erro ao apagar ponto:", err);
+                let errorMessage = 'Não foi possível apagar o ponto.';
+                if(isAxiosError(err) && err.response?.data?.message) {
+                    errorMessage = err.response.data.message;
+                }
+                setError(errorMessage);
             }
         }
     };
@@ -121,9 +131,9 @@ const PageAdmin = () => {
             try {
                 await api.patch(`/suggestions/${suggestionId}/reject`);
                 setSuggestions(prev => prev.filter(s => s.id !== suggestionId));
-                alert("Sugestão rejeitada.");
-            } catch (err) {
-                alert("Erro ao rejeitar a sugestão.");
+            } catch (err: unknown) {
+                console.error("Erro ao rejeitar sugestão:", err);
+                setError("Erro ao rejeitar a sugestão. Tente novamente.");
             }
         }
     };
@@ -131,14 +141,21 @@ const PageAdmin = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100 font-sans ">
+            {error && (
+                <div className="fixed top-0 left-0 w-full bg-red-500 text-white p-4 z-50">
+                    <div className="max-w-4xl mx-auto">
+                        <p className="text-center">{error}</p>
+                </div>
+                </div>
+            )}
             <aside className="w-64 bg-gray-800 text-white flex-shrink-0">
                 <div className="h-16 flex items-center justify-center bg-gray-900">
-                    <a href="/"><Image src="/images/logoAmotur-branco.png" alt="Logo AMOTUR" width={120} height={40} /></a>
+                    <Link href="/"><Image src="/images/logoAmotur-branco.png" alt="Logo AMOTUR" width={120} height={40} /></Link>
                 </div>
                 <nav className="mt-4">
                     <span className="px-4 text-xs text-gray-400 uppercase">Principal</span>
-                    <a href="#" className="flex items-center mt-2 py-2 px-4 bg-gray-700 text-white"><FaTachometerAlt className="mr-3" /> Dashboard</a>
-                     <a href="/" className="flex items-center mt-2 py-2 px-4 text-gray-400 hover:bg-gray-700 hover:text-white"><FaRegChartBar className="mr-3" /> Voltar ao mapa</a>
+                    <Link href="#" className="flex items-center mt-2 py-2 px-4 bg-gray-700 text-white"><FaTachometerAlt className="mr-3" /> Dashboard</Link>
+                     <Link href="/" className="flex items-center mt-2 py-2 px-4 text-gray-400 hover:bg-gray-700 hover:text-white"><FaRegChartBar className="mr-3" /> Voltar ao mapa</Link>
                 </nav>
             </aside>
 

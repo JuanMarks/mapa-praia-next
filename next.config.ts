@@ -1,18 +1,24 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Adicione ou modifique a seção 'images' aqui
   images: {
     remotePatterns: [
       {
-        protocol: 'https', // Você pode usar 'http' se precisar, mas 'https' é mais seguro
-        hostname: '**',   // O curinga para permitir qualquer hostname
+        protocol: 'https',
+        hostname: 'cdn-icons-png.flaticon.com',
+        port: '',
+        pathname: '/**',
       },
       {
-        protocol: 'http', // Adicione este bloco se também precisar de http
-        hostname: '**',
+        // Adicione também o domínio do Cloudinary, já que você o usa
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
+  // ...outras configurações que você possa ter...
 };
 
 export default nextConfig;

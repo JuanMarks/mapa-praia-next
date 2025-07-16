@@ -7,11 +7,14 @@ import { useState, useEffect } from 'react';
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa';
 import { PontoTuristico } from '@/types/ponto';
 import 'leaflet/dist/leaflet.css';
-import '../pages/globals.css';
 import { useAuth } from '../hooks/useAuth';
 import api from '@/axios/config';
+import { isAxiosError } from 'axios'; // Importa o type guard do Axios
+
+// Importando componentes
 import Sidebar from './SideBar';
-import LocationListSidebar from './LocationListSideBar'; // Importe seu componente
+import LocationSearch from './RightSideBar';
+import LocationListSidebar from './LocationListSideBar';
 import FormularioPonto from './FormularioPonto';
 import FormularioSugestao from './FormularioSugestao';
 import PopupContent from './PopupContent';

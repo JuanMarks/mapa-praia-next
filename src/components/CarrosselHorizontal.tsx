@@ -9,9 +9,8 @@ import Image from 'next/image';
 import { PontoTuristico } from '@/types/ponto';
 import { motion } from 'framer-motion';
 import api from '@/axios/config';
+import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 
-// Mapeamento dos nomes de exibição para os valores de filtro
-// Os valores (ex: 'restaurante') devem corresponder exatamente ao 'name' da sua Categoria no banco de dados
 const CATEGORIAS = {
     'Todos': 'todos',
     'Restaurantes': 'restaurante',
@@ -29,7 +28,6 @@ const CarrosselHorizontal: FC = () => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [mostrar, setMostrar] = useState(true);
     const [filtroAtivo, setFiltroAtivo] = useState<string>('todos');
 
     useEffect(() => {
@@ -38,8 +36,23 @@ const CarrosselHorizontal: FC = () => {
                 setLoading(true);
                 const response = await api.get('/places/getPlaces');
                 setPontos(response.data);
-            } catch (err: any) {
-                setError(err.message);
+            } catch (err: unknown) { // 1. Mude 'any' para 'unknown'
+                console.error("Erro ao buscar pontos para o carrossel:", err);
+
+                // 2. Lógica de tratamento de erro aprimorada
+                let errorMessage = 'Não foi possível carregar os destaques. Verifique sua conexão.';
+
+                if (isAxiosError(err)) {
+                    if (err.response) {
+                        // Se o servidor respondeu com um erro (ex: 404, 500)
+                        errorMessage = 'Ocorreu um erro no servidor ao buscar os locais.';
+                    }
+                    // Se não houver 'err.response', a mensagem padrão de erro de rede será usada.
+                } else if (err instanceof Error) {
+                    errorMessage = err.message;
+                }
+                
+                setError(errorMessage);
             } finally {
                 setLoading(false);
             }
@@ -47,37 +60,73 @@ const CarrosselHorizontal: FC = () => {
         fetchPontos();
     }, []);
 
-    // Lógica para filtrar e ordenar os pontos
+    // Lógica para filtrar e ordenar os pontos (continua a mesma)
     const pontosFiltrados = useMemo(() => {
         return pontos
             .filter(ponto => {
-                // Se o filtro for 'todos', retorna todos os pontos
                 if (filtroAtivo === 'todos') {
                     return true;
                 }
-                // CORREÇÃO: Compara o nome da categoria do ponto com o filtro ativo
                 return ponto.category?.name?.toLowerCase() === filtroAtivo.toLowerCase();
             })
             .sort((a, b) => {
-                // Ordena pelos melhores avaliados (maior rating primeiro)
                 return (b.averageRating || 0) - (a.averageRating || 0);
             });
-    }, [pontos, filtroAtivo]); // Recalcula apenas quando os pontos ou o filtro mudam
+    }, [pontos, filtroAtivo]);
 
     const getImagemDoPonto = (ponto: PontoTuristico): string => {
         if (ponto.photos && ponto.photos.length > 0) {
             return ponto.photos[0];
         }
-        return '/images/placeholder.jpeg'; // Use uma imagem placeholder
+        return '/images/placeholder.jpeg';
     };
 
     if (loading) {
-        return <div className="text-center p-10">Carregando destaques...</div>;
+        return <div className="text-center p-10 text-gray-500">Carregando destaques...</div>;
     }
 
+    // 3. Componente para exibir a mensagem de erro de forma mais elegante
     if (error) {
-        return <div className="text-center p-10 text-red-500">Erro: {error}</div>;
+        return (
+            <div className="text-center p-10 bg-red-50 rounded-lg mx-4">
+                <p className="font-semibold text-red-600">Ops! Algo deu errado.</p>
+                <p className="text-red-500 mt-1">{error}</p>
+            </div>
+        );
     }
+    
+    // Se não houver pontos para exibir após a filtragem, mostre uma mensagem amigável
+    if (pontosFiltrados.length === 0 && !loading) {
+        return (
+             <div className="w-full bg-white py-8">
+                <div className="max-w-screen-xl mx-auto px-4">
+                     <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados ⭐</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {Object.entries(CATEGORIAS).map(([nome, tipo]) => (
+                                <button
+                                    key={tipo}
+                                    onClick={() => setFiltroAtivo(tipo)}
+                                    className={`px-4 py-1.5 border rounded-full text-sm font-semibold transition-all duration-200 ${
+                                        filtroAtivo === tipo
+                                            ? 'bg-blue-600 text-white border-blue-600'
+                                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                                    }`}
+                                >
+                                    {nome}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="text-center p-10 bg-gray-50 rounded-lg">
+                        <p className="font-semibold text-gray-600">Nenhum local encontrado</p>
+                        <p className="text-gray-500 mt-1">Não há locais com essa categoria no momento.</p>
+                    </div>
+                </div>
+             </div>
+        )
+    }
+
 
     return (
         <div className="w-full bg-white py-8">
