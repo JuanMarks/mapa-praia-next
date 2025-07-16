@@ -15,7 +15,7 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
         // A largura e a transição são controladas pela prop 'isOpen'
         <div className={`
             flex-shrink-0 bg-white shadow-lg transition-all duration-300 ease-in-out
-            ${isOpen ? 'w-80 p-4' : 'w-0 p-0'} 
+            ${isOpen ? 'w-58 p-4' : 'w-0 p-0'} 
             overflow-hidden z-[1003]
         `}>
             <h2 className="text-2xl font-bold text-gray-800 mb-4 whitespace-nowrap">
