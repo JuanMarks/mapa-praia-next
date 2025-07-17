@@ -1,3 +1,4 @@
+// src/components/LocationListSidebar.tsx
 'use client';
 
 import { useEffect, useState } from "react";
@@ -12,11 +13,14 @@ interface Props {
 
 const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
   const [showOverlay, setShowOverlay] = useState(false);
+  // Adiciona estado para verificar se é mobile para decidir o posicionamento
+  const [isMobile, setIsMobile] = useState(false); 
 
   useEffect(() => {
     const handleResize = () => {
-      const isMobile = window.innerWidth < 640;
-      setShowOverlay(isOpen && isMobile);
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile); // Atualiza o estado mobile
+      setShowOverlay(isOpen && mobile);
     };
 
     handleResize();
@@ -29,17 +33,20 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
       {/* Overlay ESCURO acima do mapa, ativado apenas no mobile */}
       {showOverlay && (
         <div
-          className="fixed inset-0 bg-black/20 bg-opacity-40 z-[9998]"
+          className="fixed inset-0 bg-black/20  z-[9998]"
           onClick={() => onLocationClick(null)} // Fecha ao clicar no fundo
         />
       )}
 
-      {/* Sidebar original - sem mudança de posição */}
+      {/* Sidebar original */}
       <div className={`
-        flex-shrink-0 bg-white top-[100px] shadow-lg transition-all duration-300 ease-in-out
-        ${isOpen ? 'w-60 p-2 ' : 'w-0 p-0'} 
+        absolute right-0 h-screen bg-white shadow-lg 
+        transition-all duration-300 ease-in-out top-30
+        ${isOpen ? 'translate-x-0 w-60 p-2' : '-translate-x-full w-0 p-0'} 
         overflow-hidden
-        z-[9999] relative sm:relative
+        z-[9999] 
+        // Adicione um top diferente para desktop se houver um header fixo, por exemplo
+        // md:top-[algum_valor]
       `}>
         <h2 className="text-2xl font-bold text-gray-800 mb-4 whitespace-nowrap">
           Todos os Locais
