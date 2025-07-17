@@ -95,9 +95,9 @@ export default function Header() {
             )}
 
             <ul className="hidden sm:flex space-x-6 items-center ml-auto">
-              <li><Link href="/" className="text-white hover:text-blue-200 font-medium ml-4 text-lg">Início</Link></li>
-              <li><Link href="/sobre" className="text-white hover:text-blue-200 font-medium text-lg">Sobre</Link></li>
-              <li><Link href="/contato" className="text-white hover:text-blue-200 font-medium text-lg">Contato</Link></li>
+              <li><Link href="/" className="text-white hover:text-blue-700 font-medium ml-4 text-lg">Início</Link></li>
+              <li><Link href="/sobre" className="text-white hover:text-blue-700 font-medium text-lg">Sobre</Link></li>
+              <li><Link href="/contato" className="text-white hover:text-blue-700 font-medium text-lg">Contato</Link></li>
               <div className="flex items-center space-x-4 pl-4">
                 <ActionButtons />
               </div>
@@ -107,15 +107,16 @@ export default function Header() {
 
         {/* 3. Botão Chevron - Posicionado de forma independente e correta */}
         <button
-          onClick={() => setIsHeaderVisible(!isHeaderVisible)}
-          className="
-            absolute left-1/2 -translate-x-1/2 bg-white p-2 w-12 h-6
-            shadow-lg focus:outline-none text-gray-700
-            flex items-center justify-center rounded-b-xl z-[4999]
-          "
-          style={{ top: isHeaderVisible ? '80px' : '10px', transition: 'top 0.5s ease-in-out' }}
-          aria-label={isHeaderVisible ? 'Esconder menu' : 'Mostrar menu'}
-        >
+            onClick={() => setIsHeaderVisible(!isHeaderVisible)}
+            className={`
+              absolute left-1/2 -translate-x-1/2 bg-white p-2 w-12 h-6
+              shadow-lg focus:outline-none text-gray-700
+              flex items-center justify-center rounded-b-xl z-[4999]
+              transition-all duration-500 ease-in-out
+              ${isHeaderVisible ? 'top-[77px] sm:top-[90px]' : 'top-[10px] sm:top-[0px]'}
+            `}
+            aria-label={isHeaderVisible ? 'Esconder menu' : 'Mostrar menu'}
+          >
           {isHeaderVisible ? <IoChevronUp size={20} /> : <IoChevronDown size={20} />}
         </button>
       </div>

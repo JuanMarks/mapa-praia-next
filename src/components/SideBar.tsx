@@ -43,7 +43,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
               {ponto && (
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className={`absolute top-1/2 bg-white p-2 shadow-md focus:outline-none z-[5001] transition-all duration-300 ease-in-out ${isOpen ? 'left-[358px] rounded-r-full' : 'left-2 rounded-r-full'}`}
+                  className={`absolute top-1/2 bg-white p-2 shadow-md focus:outline-none z-[5001] transition-all duration-300 ease-in-out ${isOpen ? 'left-[350px] rounded-r-full' : 'left-0 rounded-r-full'}`}
                   aria-label={isOpen ? "Esconder sidebar" : "Mostrar sidebar"}
                 >
                   {isOpen ? <IoChevronBack size={20} /> : <IoChevronForward size={20} />}
@@ -51,7 +51,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
               )}
 
               <div
-                className={`absolute top-0 left-0 h-full bg-white shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px] ${isOpen ? 'transform-none' : '-translate-x-full'}`}
+                className={`absolute top-0 left-0 h-full bg-white rounded-2xl shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[350px] ${isOpen ? 'transform-none' : '-translate-x-full'}`}
               >
                 <button
                   onClick={onClose}
