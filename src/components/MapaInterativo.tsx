@@ -1,7 +1,7 @@
 // src/components/MapaInterativo.tsx
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
 import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa';
