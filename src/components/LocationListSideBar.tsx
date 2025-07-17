@@ -29,7 +29,7 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
       {/* Overlay ESCURO acima do mapa, ativado apenas no mobile */}
       {showOverlay && (
         <div
-          className="fixed inset-0 bg-black/20 bg-opacity-40 z-[9998]"
+          className="fixed inset-0 bg-black/20 bg-opacity-40"
           onClick={() => onLocationClick(null)} // Fecha ao clicar no fundo
         />
       )}
@@ -39,7 +39,7 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
         flex-shrink-0 bg-white top-[100px] shadow-lg transition-all duration-300 ease-in-out
         ${isOpen ? 'w-60 p-2 ' : 'w-0 p-0'} 
         overflow-hidden
-        z-[9999] relative sm:relative
+         relative sm:relative
       `}>
         <h2 className="text-2xl font-bold text-gray-800 mb-4 whitespace-nowrap">
           Todos os Locais
