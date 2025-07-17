@@ -14,12 +14,11 @@ interface Props {
 const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
   const [showOverlay, setShowOverlay] = useState(false);
   // Adiciona estado para verificar se é mobile para decidir o posicionamento
-  const [isMobile, setIsMobile] = useState(false); 
 
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 640;
-      setIsMobile(mobile); // Atualiza o estado mobile
+      
       setShowOverlay(isOpen && mobile);
     };
 
