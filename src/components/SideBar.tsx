@@ -36,6 +36,23 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
 
   if (!ponto && !isOpen) return null;
 
+      const handleRouteClick = () => {
+        if (ponto) {
+            // A URL base para direções no Google Maps
+            const baseUrl = "https://www.google.com/maps/dir/?api=1";
+            
+            // Adiciona o destino usando as coordenadas do ponto
+            const destination = `${ponto.latitude},${ponto.longitude}`;
+            
+            // O parâmetro 'destination' define o ponto final. 
+            // O Google Maps usará a localização atual do dispositivo como origem por padrão.
+            const mapsUrl = `${baseUrl}&destination=${destination}`;
+            
+            // Abre o Google Maps em uma nova aba
+            window.open(mapsUrl, '_blank');
+        }
+    };
+
   const temFotos = ponto?.photos && ponto.photos.length > 0;
 
     return (
@@ -77,7 +94,8 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
                     )}
 
                     <div className="grid grid-cols-4 gap-2 my-4 text-center">
-                      <ActionButton icon={<FaRoute />} label="Rotas" />
+
+                      <button onClick={handleRouteClick}><ActionButton icon={<FaRoute />} label="Rotas" /></button>
                       <ActionButton icon={<FaBookmark />} label="Salvar" />
                       <ActionButton icon={<FaShare />} label="Partilhar" />
                       <ActionButton icon={<FaMapMarkerAlt />} label="Mapa" />
