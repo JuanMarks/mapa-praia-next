@@ -3,13 +3,13 @@
 import InicioSobre from "@/components/SobreComponents/inicioSobre"
 import NossoCompromisso from "@/components/SobreComponents/nossoCompromisso"
 import QuemSomos from "@/components/SobreComponents/quemSomos"
-import Header from "@/components/Header"
+import Header2 from "@/components/SobreComponents/Header2"
 import Footer from "@/components/Footer"
 
 export default function Sobre() {
     return (
         <section>
-            <Header/>
+            <Header2/>
             <InicioSobre/>
             <QuemSomos/>
             <NossoCompromisso/>
