@@ -1,7 +1,6 @@
 // src/components/TideDayModal.tsx
 'use client';
 
-import { FaTimes } from 'react-icons/fa';
 
 interface Mare {
   hora: string;
