@@ -6,11 +6,11 @@ import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { FaBars, FaPlus, FaTimes } from 'react-icons/fa';
 import { PontoTuristico } from '@/types/ponto';
-import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
 import api from '@/axios/config';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
-
+import { useTideData } from '../hooks/useTideData';
+import mareData from '../data/tabua-mares-2025.json';
 // Importando componentes
 import Sidebar from './SideBar';
 import LocationSearch from './RightSideBar';
@@ -19,6 +19,8 @@ import FormularioPonto from './FormularioPonto';
 import FormularioSugestao from './FormularioSugestao';
 import PopupContent from './PopupContent';
 import Header from './Header';
+import TideStatusIcon from './TideStatusIcon';
+import TideDayModal from './TideDayModal';
 
 const centro: [number, number] = [-2.900, -40.15];
 const bounds: [[number, number], [number, number]] = [
@@ -37,6 +39,9 @@ const MapaInterativo = () => {
     const [isListSidebarOpen, setIsListSidebarOpen] = useState(true); 
     const [isSuggesting, setIsSuggesting] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null); // Estado para erros do mapa
+    const { maresDoDia } = useTideData();
+    const [isTideModalOpen, setIsTideModalOpen] = useState(false);
+    const [isPaneReady, setIsPaneReady] = useState(false);
 
     const fetchPontos = async () => {
         try {
@@ -82,6 +87,20 @@ const MapaInterativo = () => {
         return () => {
             map.off('zoomend', updateZoom);
         };
+    }, [map]);
+
+    useEffect(() => {
+        if (map) {
+            // Cria um novo 'pane' para o nosso ícone da maré
+            // O zIndex de 499 garante que ele fique abaixo dos modais (z-5000+),
+            // mas acima dos painéis do mapa (que vão até ~400).
+            map.createPane('tideIconPane');
+            const pane = map.getPane('tideIconPane');
+            if (pane) {
+                pane.style.zIndex = '5000';
+                setIsPaneReady(true);
+            }
+        }
     }, [map]);
 
     const MapClickHandler = () => {
@@ -131,6 +150,8 @@ const MapaInterativo = () => {
         setSelectedPonto(pontoNormalizado);
     };
 
+    
+
     return (
         <div className="flex h-screen w-full bg-gray-200">
             <div className={`relative flex-grow h-full transition-all duration-300 ease-in-out ${isSuggesting ? 'cursor-crosshair' : ''}`}>
@@ -148,8 +169,34 @@ const MapaInterativo = () => {
                             <p className="text-sm text-red-600 mt-1">{mapError}</p>
                         </div>
                     )}
+                    
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap" />
+                    
                     <MapClickHandler />
+                    {isPaneReady && (
+                        <>
+                            <TideStatusIcon 
+                                position={[-3.00818, -39.66286]} // Posição fixa no "mar" do mapa
+                                onClick={() => setIsTideModalOpen(true)}
+                                pane="tideIconPane" // Usando o pane customizado
+                            />
+
+                            <TideStatusIcon 
+                                position={[-2.99550, -39.72106]} // Posição fixa no "mar" do mapa
+                                onClick={() => setIsTideModalOpen(true)}
+                                pane="tideIconPane" // Usando o pane customizado
+                            />
+
+                            <TideStatusIcon 
+                                position={[-3.07161, -39.57788]} // Posição fixa no "mar" do mapa
+                                onClick={() => setIsTideModalOpen(true)}
+                                pane="tideIconPane" // Usando o pane customizado
+                            />
+                        </>
+                    )}
+                    
+
+                    
                     {pontos.map((ponto) => (
                         <Marker
                             key={ponto.id}
@@ -199,6 +246,13 @@ const MapaInterativo = () => {
                 <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onAtualizado={handlePontoAtualizado} />
                 {novaPosicao && <FormularioPonto coordenadas={novaPosicao} onClose={() => setNovaPosicao(null)} onCriado={fetchPontos} />}
                 {suggestionCoords && <FormularioSugestao coordenadas={suggestionCoords} onClose={() => setSuggestionCoords(null)} onSuccess={() => { setSuggestionCoords(null); alert('Obrigado! Sua sugestão foi enviada para análise.'); }} />}
+                
+                <TideDayModal 
+                    isOpen={isTideModalOpen}
+                    onClose={() => setIsTideModalOpen(false)}
+                    maresDoDia={maresDoDia}
+                    local={mareData.local}
+                />
             </div>
             <LocationListSidebar isOpen={isListSidebarOpen} pontos={pontos} onLocationClick={handleLocationSelect} />
         </div>

@@ -40,7 +40,7 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
       {/* Sidebar original */}
       <div className={`
         absolute right-0 h-screen bg-white shadow-lg 
-        transition-all duration-300 ease-in-out top-30
+        transition-all duration-300 ease-in-out top-30 rounded
         ${isOpen ? 'translate-x-0 w-60 p-2' : '-translate-x-full w-0 p-0'} 
         overflow-hidden
         z-[9999] 
