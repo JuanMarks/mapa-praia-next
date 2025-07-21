@@ -36,13 +36,18 @@ const MapaInterativo = () => {
     const [selectedPonto, setSelectedPonto] = useState<PontoTuristico | null>(null);
     const [map, setMap] = useState<L.Map | null>(null);
     const [currentZoom, setCurrentZoom] = useState<number>(13);
-    const [isListSidebarOpen, setIsListSidebarOpen] = useState(true); 
     const [isSuggesting, setIsSuggesting] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null); // Estado para erros do mapa
     const { maresDoDia } = useTideData();
     const [isTideModalOpen, setIsTideModalOpen] = useState(false);
     const [isPaneReady, setIsPaneReady] = useState(false);
-
+    const [isListSidebarOpen, setIsListSidebarOpen] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.innerWidth >= 640; // true no desktop, false no mobile
+        }
+        return true; // fallback para SSR
+        });
+    
     const fetchPontos = async () => {
         try {
             setMapError(null);
@@ -120,16 +125,22 @@ const MapaInterativo = () => {
     };
 
     const createCustomIcon = (iconURL: string) => {
-        const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
-        if (isUrl) {
-            return icon({ iconUrl: iconURL, iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32] });
-        }
-        return divIcon({
-            html: `<span style="font-size: 30px;">${iconURL}</span>`,
-            className: 'emoji-icon',
-            iconSize: [40, 40],
-            iconAnchor: [20, 30],
+    const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
+    if (isUrl) {
+        return icon({
+        iconUrl: iconURL,
+        iconSize: [40, 40],         // aumente se necessário
+        iconAnchor: [20, 40],       // base central do ícone
+        popupAnchor: [0, -35],      // ajusta posição do popup
         });
+    }
+    return divIcon({
+        html: `<span style="font-size: 32px;">${iconURL}</span>`,
+        className: 'emoji-icon',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -35],
+    });
     };
 
     const handleLocationSelect = (ponto: PontoTuristico | null) => {
