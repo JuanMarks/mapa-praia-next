@@ -21,3 +21,73 @@
     top: 6rem !important; /* ou ajuste o valor para empurrar os botões para baixo */
   }
 }
+
+/* Estilos para o Ícone de Maré Customizado */
+.leaflet-custom-icon-container {
+  background: transparent !important;
+  border: none !important;
+}
+
+.tide-icon-container {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tide-icon-container img {
+  width: 100%;
+  height: 100%;
+}
+
+.tide-arrow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(25%, -25%);
+  background-color: white;
+  padding: 4px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tide-arrow svg {
+  width: 12px;
+  height: 12px;
+}
+
+.tide-arrow-up {
+  color: #3b82f6; /* Azul */
+}
+
+.tide-arrow-down {
+  color: #ef4444; /* Vermelho */
+}
+
+/* CSS de Depuração para o Ícone da Maré */
+
+/* Remove qualquer estilo padrão do Leaflet no nosso contêiner */
+.debug-icon-container {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Estiliza nosso ícone de teste para ser impossível de não ver */
+.debug-icon {
+  width: 60px !important;
+  height: 60px !important;
+  background-color: red !important; /* Fundo vermelho forte */
+  color: white !important; /* Texto branco */
+  font-size: 16px !important;
+  font-weight: bold !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50%; /* Deixa redondo */
+  border: 2px solid yellow !important; /* Borda amarela */
+}
