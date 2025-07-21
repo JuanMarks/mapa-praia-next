@@ -72,7 +72,7 @@ export default function Header() {
                 />
               </Link>
               <button
-                className="sm:hidden ml-auto p-2 text-white"
+                className="sm:hidden ml-auto p-2 text-blue-900"
                 onClick={() => setMenuOpen(!menuOpen)}
               >
                 <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
