@@ -13,11 +13,14 @@ import ModalAprovarSugestao from './ModalAprovarSugestao';
 import Link from 'next/link';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 import { FaBars } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 // Importações e registros do Chart.js
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { Bar, Line } from 'react-chartjs-2';
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, Filler);
+
+const ITEMS_PER_PAGE = 5;
 
 
 const PageAdmin = () => {
@@ -34,6 +37,8 @@ const PageAdmin = () => {
     const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
     const [suggestionToApprove, setSuggestionToApprove] = useState<Suggestion | null>(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+
 
     const fetchData = async () => {
         setLoading(true);
@@ -139,6 +144,26 @@ const PageAdmin = () => {
             }
         }
     };
+
+        // --- NOVA LÓGICA PARA PAGINAÇÃO ---
+    const paginatedPontos = useMemo(() => {
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        return filteredPontos.slice(startIndex, endIndex);
+    }, [filteredPontos, currentPage]);
+
+    const totalPages = Math.ceil(filteredPontos.length / ITEMS_PER_PAGE);
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage > 0 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+    
+    // Reinicia para a primeira página sempre que a busca mudar
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
     
 
     return (
@@ -300,7 +325,7 @@ const PageAdmin = () => {
                                  </thead>
                                  <tbody>
                                      {loading && <tr><td colSpan={4} className="text-center py-4">Carregando...</td></tr>}
-                                     {!loading && filteredPontos.map((ponto) => (
+                                     {!loading && paginatedPontos.map((ponto) => (
                                          <tr key={ponto.id}>
                                              <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm">{ponto.name}</td>
                                              <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm">{ponto.category?.name || 'Sem Categoria'}</td>
@@ -314,6 +339,33 @@ const PageAdmin = () => {
                                  </tbody>
                              </table>
                          </div>
+                         {/* --- COMPONENTE DE PAGINAÇÃO ADICIONADO AQUI --- */}
+                        {!loading && totalPages > 1 && (
+                            <div className="px-5 py-3 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                                <span className="text-xs xs:text-sm text-gray-900">
+                                    Mostrando {paginatedPontos.length} de {filteredPontos.length} Locais
+                                </span>
+                                <div className="inline-flex mt-2 xs:mt-0">
+                                    <button
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l disabled:opacity-50"
+                                    >
+                                        <FaChevronLeft/>
+                                    </button>
+                                    <span className="text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-4">
+                                      Pág {currentPage} de {totalPages}
+                                    </span>
+                                    <button
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r disabled:opacity-50"
+                                    >
+                                        <FaChevronRight/>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </main>
             </div>

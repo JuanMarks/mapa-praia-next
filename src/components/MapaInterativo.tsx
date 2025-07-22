@@ -1,7 +1,7 @@
 // src/components/MapaInterativo.tsx
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { FaEye, FaPlus, FaTimes } from 'react-icons/fa';
@@ -152,6 +152,17 @@ const MapaInterativo = () => {
         setSelectedPonto(pontoNormalizado);
     };
 
+    const createLabelIcon = (nome : string) => {
+        return  divIcon({
+                    className: 'custom-label-icon tracking-wider', // Classe para remover estilos padrão
+                    html: `<span class="map-label-text">${nome}</span>`,
+                    iconSize: [100, 20], // Ajuste o tamanho conforme necessário
+                    iconAnchor: [-20, 20]  // Posição relativa ao marcador principal
+                });
+    }
+
+    
+
     
 
     return (
@@ -203,22 +214,34 @@ const MapaInterativo = () => {
                     
 
                     
+                    
+
                     {pontos.map((ponto) => (
-                        <Marker
-                            key={ponto.id}
-                            position={[ponto.latitude, ponto.longitude]}
-                            icon={createCustomIcon(ponto.iconURL ?? '📍')}
-                            eventHandlers={{
-                                click: () => handleLocationSelect(ponto),
-                                mouseover: (e) => e.target.openPopup(),
-                                mouseout: (e) => e.target.closePopup(),
-                            }}
-                        >
-                            <Popup closeButton={false} autoClose={false} closeOnClick={false} autoPan={false}>
-                                <PopupContent ponto={ponto} />
-                            </Popup>
-                            <Tooltip permanent direction="bottom" offset={[0, 10]} opacity={1} className="text-xs text-black">{ponto.name}</Tooltip>
-                        </Marker>
+                        <>
+                            <Marker
+                                key={ponto.id}
+                                position={[ponto.latitude, ponto.longitude]}
+                                icon={createCustomIcon(ponto.iconURL ?? '📍')}
+                                eventHandlers={{
+                                    click: () => handleLocationSelect(ponto),
+                                    mouseover: (e) => e.target.openPopup(),
+                                    mouseout: (e) => e.target.closePopup(),
+                                }}
+                            >
+                                <Popup closeButton={false} autoClose={false} closeOnClick={false} autoPan={false} className="map-popup">
+                                    <PopupContent ponto={ponto} />
+                                </Popup>
+                                
+                            </Marker>
+
+                            <Marker
+                                key={`${ponto.id}-label`}
+                                position={[ponto.latitude, ponto.longitude]}
+                                icon={createLabelIcon(ponto.name)}
+                                interactive={false} // Faz com que o rótulo não seja clicável
+                                
+                            />
+                        </>
                     ))}
                 </MapContainer>
 
