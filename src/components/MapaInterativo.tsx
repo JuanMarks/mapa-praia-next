@@ -174,7 +174,32 @@ const MapaInterativo = () => {
                 });
     }
 
-    
+    const adjustZoomForMobile = () => {
+        if (map) {
+            const isMobile = window.innerWidth < 768; // Exemplo: 768px como breakpoint para mobile
+            if (isMobile) {
+                map.setMinZoom(11); 
+                map.setMaxZoom(18);
+                if (map.getZoom() > 18) { // Se o zoom atual for muito alto para mobile, ajusta
+                    map.setZoom(18);
+                }
+            } else {
+                map.setMinZoom(13);
+                map.setMaxZoom(18);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (map) {
+            adjustZoomForMobile();
+            window.addEventListener('resize', adjustZoomForMobile);
+            return () => {
+                window.removeEventListener('resize', adjustZoomForMobile);
+            };
+        }
+    }, [map]);
+
 
     
 
