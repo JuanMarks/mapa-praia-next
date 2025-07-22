@@ -99,7 +99,7 @@ const MapaInterativo = () => {
             map.createPane('tideIconPane');
             const pane = map.getPane('tideIconPane');
             if (pane) {
-                pane.style.zIndex = '5000';
+                pane.style.zIndex = '500';
                 setIsPaneReady(true);
             }
         }

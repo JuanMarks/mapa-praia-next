@@ -25,7 +25,7 @@ const PopupContent = ({ ponto }: Props) => {
 
   return (
     // Card principal: largura reduzida de 320px para 192px (60%)
-    <div className="w-[192px] bg-white rounded-lg overflow-hidden shadow-lg font-sans">
+    <div className="w-[192px] bg-white rounded-lg overflow-hidden shadow-lg font-sans z-[5000]">
       
       {/* Seção do Carrossel: altura reduzida de h-48 para h-28 (aprox. 60%) */}
       <div className="relative h-28">
