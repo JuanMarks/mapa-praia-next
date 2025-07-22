@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import ModalAprovarSugestao from './ModalAprovarSugestao';
 import Link from 'next/link';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
+import { FaBars } from 'react-icons/fa';
 
 // Importações e registros do Chart.js
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
@@ -32,6 +33,7 @@ const PageAdmin = () => {
 
     const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
     const [suggestionToApprove, setSuggestionToApprove] = useState<Suggestion | null>(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
@@ -148,44 +150,62 @@ const PageAdmin = () => {
                 </div>
                 </div>
             )}
-            <aside className="w-64 bg-gray-800 text-white flex-shrink-0">
+
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/50 z-30 md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                ></div>
+            )}
+            {/* Sidebar */}
+            <aside className={`
+                bg-gray-800 text-white w-64 flex-shrink-0
+                fixed top-0 left-0 h-screen z-40 
+                transition-transform duration-300 ease-in-out
+                md:translate-x-0 
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
                 <div className="h-16 flex items-center justify-center bg-gray-900">
                     <Link href="/"><Image src="/images/logoAmotur-branco.png" alt="Logo AMOTUR" width={120} height={40} /></Link>
                 </div>
                 <nav className="mt-4">
                     <span className="px-4 text-xs text-gray-400 uppercase">Principal</span>
                     <Link href="#" className="flex items-center mt-2 py-2 px-4 bg-gray-700 text-white"><FaTachometerAlt className="mr-3" /> Dashboard</Link>
-                     <Link href="/" className="flex items-center mt-2 py-2 px-4 text-gray-400 hover:bg-gray-700 hover:text-white"><FaRegChartBar className="mr-3" /> Voltar ao mapa</Link>
+                    <Link href="/" className="flex items-center mt-2 py-2 px-4 text-gray-400 hover:bg-gray-700 hover:text-white"><FaRegChartBar className="mr-3" /> Voltar ao mapa</Link>
                 </nav>
             </aside>
 
-            <div className="flex-1 flex flex-col">
-                <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-                    <h1 className="text-2xl font-semibold text-gray-800">Dashboard</h1>
+            <div className="flex-1 flex flex-col md:ml-64">
+                {/* Header com botão hamburger para mobile */}
+                <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6">
+                    <button 
+                        className="md:hidden text-gray-600"
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                        <FaBars size={24} />
+                    </button>
+                    <h1 className="text-xl md:text-2xl font-semibold text-gray-800">Dashboard</h1>
+                    <div className="w-6"></div> {/* Espaçador para centralizar o título */}
                 </header>
 
-                <main className="flex-1 p-6 space-y-6">
+                <main className="flex-1 p-4 md:p-6 space-y-6">
+                    {error && (
+                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+                            <p className="font-bold">Ocorreu um Erro</p>
+                            <p>{error}</p>
+                        </div>
+                    )}
+
                     {/* Cards de Informações */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                         <div className="bg-blue-500 text-white p-5 rounded-lg shadow">
-                             <h3 className="text-lg">Locais Criados</h3>
-                             <p className="text-3xl font-bold">{cardData.total}</p>
-                         </div>
-                         <div className="bg-yellow-500 text-white p-5 rounded-lg shadow">
-                             <h3 className="text-lg">Média Geral de Avaliação</h3>
-                             <p className="text-3xl font-bold">{cardData.mediaRating}</p>
-                         </div>
-                         <div className="bg-green-500 text-white p-5 rounded-lg shadow">
-                             <h3 className="text-lg">Categorias Únicas</h3>
-                             <p className="text-3xl font-bold">{cardData.tipos}</p>
-                         </div>
-                         <div className="bg-purple-500 text-white p-5 rounded-lg shadow">
-                              <h3 className="text-lg">Sugestões Pendentes</h3>
-                             <p className="text-3xl font-bold">{cardData.sugestoes}</p>
-                         </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                        {/* Seus 4 cards aqui, eles vão se ajustar automaticamente */}
+                        <div className="bg-blue-500 text-white p-5 rounded-lg shadow"><h3 className="text-lg">Locais Criados</h3><p className="text-3xl font-bold">{cardData.total}</p></div>
+                        <div className="bg-yellow-500 text-white p-5 rounded-lg shadow"><h3 className="text-lg">Média de Avaliação</h3><p className="text-3xl font-bold">{cardData.mediaRating}</p></div>
+                        <div className="bg-green-500 text-white p-5 rounded-lg shadow"><h3 className="text-lg">Categorias Únicas</h3><p className="text-3xl font-bold">{cardData.tipos}</p></div>
+                        <div className="bg-purple-500 text-white p-5 rounded-lg shadow"><h3 className="text-lg">Sugestões Pendentes</h3><p className="text-3xl font-bold">{cardData.sugestoes}</p></div>
                     </div>
 
-                    {/* --- SEÇÃO DE GRÁFICOS RESTAURADA --- */}
+                    {/* Gráficos */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div className="bg-white p-4 rounded-lg shadow">
                             <h3 className="font-semibold mb-2">Locais por Mês (Gráfico de Linha)</h3>
@@ -256,20 +276,20 @@ const PageAdmin = () => {
 
                     {/* Tabela de Locais */}
                     <div className="bg-white p-4 rounded-lg shadow">
-                         <div className="flex justify-between items-center mb-4">
+                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                             <h3 className="text-xl font-semibold">Lista de Locais</h3>
-                            <div className="flex items-center gap-4">
-                                <button onClick={() => setIsCategoryModalOpen(true)} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md flex items-center">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                                <button onClick={() => setIsCategoryModalOpen(true)} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md flex items-center justify-center">
                                     <FaTags className="mr-2" /> Categorias
                                 </button>
-                                <div className="relative">
+                                <div className="relative flex-grow">
                                      <span className="absolute inset-y-0 left-0 flex items-center pl-2"><FaSearch className="text-gray-400" /></span>
-                                     <input type="text" placeholder="Filtrar por nome..." className="border border-gray-300 rounded-md py-2 px-4 pl-8" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                                     <input type="text" placeholder="Filtrar por nome..." className="border border-gray-300 rounded-md py-2 px-4 pl-8 w-full" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                                  </div>
                             </div>
                          </div>
                          <div className="overflow-x-auto">
-                             <table className="min-w-full leading-normal">
+                            <table className="min-w-full leading-normal">
                                  <thead>
                                      <tr>
                                          <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">Nome</th>
@@ -297,6 +317,7 @@ const PageAdmin = () => {
                     </div>
                 </main>
             </div>
+
 
             {isEditModalOpen && pontoParaEditar && (
                 <ModalEditarPonto

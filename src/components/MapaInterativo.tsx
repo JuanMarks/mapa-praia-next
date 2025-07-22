@@ -4,7 +4,7 @@
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
 import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect } from 'react';
-import { FaBars, FaEye, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaEye, FaPlus, FaTimes } from 'react-icons/fa';
 import { PontoTuristico } from '@/types/ponto';
 import { useAuth } from '../hooks/useAuth';
 import api from '@/axios/config';
@@ -106,7 +106,7 @@ const MapaInterativo = () => {
             map.createPane('tideIconPane');
             const pane = map.getPane('tideIconPane');
             if (pane) {
-                pane.style.zIndex = '5000';
+                pane.style.zIndex = '500';
                 setIsPaneReady(true);
             }
         }

@@ -1,12 +1,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import Cookies from 'js-cookie';
 import api from '@/axios/config'; // Seu cliente Axios
 import Image from 'next/image';
 import Link from 'next/link';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
+import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 
 export default function Login() {
     const router = useRouter();
@@ -15,7 +16,7 @@ export default function Login() {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
@@ -69,6 +70,31 @@ export default function Login() {
 
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
+        // credentialResponse.credential é o ID Token que você envia para o backend
+        if (credentialResponse.credential) {
+            setIsLoading(true);
+            setError(null);
+            try {
+                // Envia o token para o seu backend NestJS
+                const res = await api.post('/auth/google', { token: credentialResponse.credential });
+                
+                // Salva o token e os dados do usuário, assim como no login normal
+                console.log("Login com Google bem-sucedido:", res.data);
+                Cookies.set('token', res.data.access_token, { expires: 1, secure: true, sameSite: 'strict' });
+                Cookies.set('role', res.data.user.role, { expires: 1, secure: true, sameSite: 'strict' });
+                Cookies.set('username', res.data.user.name, { expires: 1, secure: true, sameSite: 'strict' });
+                
+                router.push('/');
+            } catch (err) {
+                console.error("Erro no login com Google:", err);
+                setError("Falha ao autenticar com o Google. Tente novamente.");
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -137,7 +163,14 @@ export default function Login() {
                                 className="mt-1 block w-full bg-gray-300 text-blue-900 placeholder-blue-900/70 border-none rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
                             />
                         </div>
-                        
+
+                        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+                            <GoogleLogin
+                                onSuccess={handleGoogleLogin}
+                                onError={() => setError("Falha ao autenticar com o Google.")}
+                            />
+                        </GoogleOAuthProvider>
+
                         <div className="text-right text-sm">
                             <Link href="#" className="font-medium text-blue-900 hover:text-blue-600">
                                 Esqueceu sua senha?
