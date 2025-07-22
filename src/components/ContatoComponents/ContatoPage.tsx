@@ -64,7 +64,7 @@ ${name}
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center">
+    <div className="relative min-h-screen pb-17 sm:pb-0 flex items-center justify-center">
       <div className="absolute inset-0 bg-blue-900/30"></div>
 
       <Image
