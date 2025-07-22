@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useAuth } from '../hooks/useAuth';
-import { FaMapMarkerAlt, FaBookmark, FaPlusCircle, FaSignInAlt, FaSignOutAlt, FaPhone, FaInfoCircle } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaSignInAlt, FaSignOutAlt, FaPhone, FaInfoCircle } from 'react-icons/fa';
 
 export default function MobileBottomBar() {
   const { role, loading } = useAuth();
