@@ -23,6 +23,8 @@ import PopupContent from './PopupContent';
 import Header from './Header';
 import TideStatusIcon from './TideStatusIcon';
 import TideDayModal from './TideDayModal';
+import MobileBottomBar from './MobileBottomBar';
+import BottomLeftLogo from './BottomLeftLogo';
 
 const centro: [number, number] = [-2.900, -40.15];
 const bounds: [[number, number], [number, number]] = [
@@ -38,13 +40,18 @@ const MapaInterativo = () => {
     const [selectedPonto, setSelectedPonto] = useState<PontoTuristico | null>(null);
     const [map, setMap] = useState<L.Map | null>(null);
     const [currentZoom, setCurrentZoom] = useState<number>(13);
-    const [isListSidebarOpen, setIsListSidebarOpen] = useState(true); 
     const [isSuggesting, setIsSuggesting] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null); // Estado para erros do mapa
     const { maresDoDia } = useTideData();
     const [isTideModalOpen, setIsTideModalOpen] = useState(false);
     const [isPaneReady, setIsPaneReady] = useState(false);
-
+    const [isListSidebarOpen, setIsListSidebarOpen] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.innerWidth >= 640; // true no desktop, false no mobile
+        }
+        return true; // fallback para SSR
+        });
+    
     const fetchPontos = async () => {
         try {
             setMapError(null);
@@ -122,16 +129,22 @@ const MapaInterativo = () => {
     };
 
     const createCustomIcon = (iconURL: string) => {
-        const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
-        if (isUrl) {
-            return icon({ iconUrl: iconURL, iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32] });
-        }
-        return divIcon({
-            html: `<span style="font-size: 30px;">${iconURL}</span>`,
-            className: 'emoji-icon',
-            iconSize: [40, 40],
-            iconAnchor: [20, 30],
+    const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
+    if (isUrl) {
+        return icon({
+        iconUrl: iconURL,
+        iconSize: [40, 40],         // aumente se necessário
+        iconAnchor: [20, 40],       // base central do ícone
+        popupAnchor: [0, -35],      // ajusta posição do popup
         });
+    }
+    return divIcon({
+        html: `<span style="font-size: 32px;">${iconURL}</span>`,
+        className: 'emoji-icon',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -35],
+    });
     };
 
     const handleLocationSelect = (ponto: PontoTuristico | null) => {
@@ -170,11 +183,11 @@ const MapaInterativo = () => {
             <div className={`relative flex-grow h-full transition-all duration-300 ease-in-out ${isSuggesting ? 'cursor-crosshair' : ''}`}>
                 
                 <div className='flex'>
-                    <div className='hidden md:block'>
+                    <div className='hidden sm:block'>
                         <Header />
                     </div>
                     
-                    <div className="absolute top-10 left-47 sm:top-8 sm:left-320 -translate-x-1/2 w-80 max-w-md sm:max-w-lg z-[1002]">
+                    <div className="absolute top-5 left-40 sm:top-8 sm:left-320 -translate-x-1/2 w-80 max-w-md sm:max-w-lg z-[1002]">
                         <LocationSearch onLocationSelect={handleLocationSelect} />
                     </div>
                 </div>
@@ -264,10 +277,10 @@ const MapaInterativo = () => {
                     )}
                 </div>
 
-                <div className="absolute top-5.5 sm:top-3.5 sm:right-5 right-2 z-[9999] pointer-events-none">
+                <div className="absolute top-1 sm:top-3.5 sm:right-5 right-5 z-[9999] pointer-events-none">
                     <div className="flex items-start gap-4 mt-5">
                         <button onClick={() => setIsListSidebarOpen(!isListSidebarOpen)} className="bg-white p-3 rounded-md shadow-lg pointer-events-auto text-gray-700 hover:bg-gray-100" aria-label="Mostrar lista de locais">
-                            <FaEye size={20} />
+                            <FaBars size={20} />
                         </button>
                     </div>
                 </div>
@@ -284,6 +297,8 @@ const MapaInterativo = () => {
                 />
             </div>
             <LocationListSidebar isOpen={isListSidebarOpen} pontos={pontos} onLocationClick={handleLocationSelect} />
+            <MobileBottomBar/>
+            <BottomLeftLogo/>
         </div>
     );
 };
