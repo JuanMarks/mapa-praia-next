@@ -60,9 +60,9 @@ export default function Header2() {
 
   return (
     <header //-------> Z diminuido
-      className={`z-[999] absolute top-2 left-1/2 -translate-x-1/2 w-full max-w-7xl
-        bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-2xl shadow-lg
-        flex flex-row items-center justify-between
+      className={`z-[999] hidden absolute top-2 left-1/2 -translate-x-1/2 w-full max-w-7xl
+        bg-white px-6 py-2 rounded-2xl shadow-lg
+        md:flex flex-row items-center justify-between
         sm:flex-row sm:items-center sm:justify-between
         ${menuOpen ? 'sm:flex-row flex-col  ' : ''}`}
     >
@@ -74,7 +74,7 @@ export default function Header2() {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>
           <Image
-            src={hovered ? '/images/logo_amotur.png' : '/images/logoAmotur-branco.png'}
+            src={'/images/logo_amoturOFC.png'}
             alt="Logo AMOTUR"
             fill
             style={{ objectFit: 'contain' }}
@@ -87,7 +87,7 @@ export default function Header2() {
       <nav className="relative flex items-center">
         {/* Botão de menu mobile */}
         <button
-          className="sm:hidden flex items-center px-3 py-2 border rounded text-white border-white ml-auto"
+          className="sm:hidden flex items-center px-3 py-2 border rounded text-blue-900 border-white ml-auto"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Abrir menu"
         >
@@ -98,7 +98,7 @@ export default function Header2() {
 
         {/* Menu mobile */}
         {menuOpen && (
-          <ul className="absolute top-16 right-0 w-56 z:[5002] bg-white text-black shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
+          <ul className="absolute top-16 right-0 w-56 z:[5002] bg-white text-blue-900 shadow-lg flex flex-col items-start p-4 sm:hidden rounded-2xl border border-gray-200">
             <li className="mb-2 w-full"><Link href="/" className="block text-lg font-medium">Início</Link></li>
             <li className="mb-2 w-full"><Link href="/sobre" className="block text-lg font-medium">Sobre</Link></li>
             <li className="mb-4 w-full"><Link href="/contato" className="block text-lg font-medium">Contato</Link></li>
@@ -109,9 +109,9 @@ export default function Header2() {
 
         {/* Menu desktop */}
         <ul className="hidden sm:flex space-x-6 items-center">
-          <li><Link href="/" className="text-white hover:text-blue-900 font-medium text-lg">Início</Link></li>
-          <li><Link href="/sobre" className="text-white hover:text-blue-900 font-medium text-lg">Sobre</Link></li>
-          <li><Link href="/contato" className="text-white hover:text-blue-900 font-medium text-lg">Contato</Link></li>
+          <li><Link href="/" className="text-blue-900 font-medium text-lg">Início</Link></li>
+          <li><Link href="/sobre" className="text-blue-900 font-medium text-lg">Sobre</Link></li>
+          <li><Link href="/contato" className="text-blue-900 font-medium text-lg">Contato</Link></li>
           <div className="flex items-center space-x-4 pl-4">
              <ActionButtons />
           </div>
