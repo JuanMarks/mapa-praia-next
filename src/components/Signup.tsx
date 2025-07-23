@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 
+
 export default function Register() {
     const router = useRouter();
     const [name, setName] = useState('');

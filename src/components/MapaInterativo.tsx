@@ -1,10 +1,10 @@
 // src/components/MapaInterativo.tsx
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect } from 'react';
-import { FaBars, FaEye, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaBars, FaPlus, FaTimes } from 'react-icons/fa';
 import { PontoTuristico } from '@/types/ponto';
 import { useAuth } from '../hooks/useAuth';
 import api from '@/axios/config';
@@ -165,6 +165,42 @@ const MapaInterativo = () => {
         setSelectedPonto(pontoNormalizado);
     };
 
+    const createLabelIcon = (nome : string) => {
+        return  divIcon({
+                    className: 'custom-label-icon tracking-wider', // Classe para remover estilos padrão
+                    html: `<span class="map-label-text">${nome}</span>`,
+                    iconSize: [100, 20], // Ajuste o tamanho conforme necessário
+                    iconAnchor: [-20, 20]  // Posição relativa ao marcador principal
+                });
+    }
+
+    const adjustZoomForMobile = () => {
+        if (map) {
+            const isMobile = window.innerWidth < 768; // Exemplo: 768px como breakpoint para mobile
+            if (isMobile) {
+                map.setMinZoom(11); 
+                map.setMaxZoom(18);
+                if (map.getZoom() > 18) { // Se o zoom atual for muito alto para mobile, ajusta
+                    map.setZoom(18);
+                }
+            } else {
+                map.setMinZoom(13);
+                map.setMaxZoom(18);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (map) {
+            adjustZoomForMobile();
+            window.addEventListener('resize', adjustZoomForMobile);
+            return () => {
+                window.removeEventListener('resize', adjustZoomForMobile);
+            };
+        }
+    }, [map]);
+
+
     
 
     return (
@@ -216,22 +252,34 @@ const MapaInterativo = () => {
                     
 
                     
+                    
+
                     {pontos.map((ponto) => (
-                        <Marker
-                            key={ponto.id}
-                            position={[ponto.latitude, ponto.longitude]}
-                            icon={createCustomIcon(ponto.iconURL ?? '📍')}
-                            eventHandlers={{
-                                click: () => handleLocationSelect(ponto),
-                                mouseover: (e) => e.target.openPopup(),
-                                mouseout: (e) => e.target.closePopup(),
-                            }}
-                        >
-                            <Popup closeButton={false} autoClose={false} closeOnClick={false} autoPan={false}>
-                                <PopupContent ponto={ponto} />
-                            </Popup>
-                            <Tooltip permanent direction="bottom" offset={[0, 10]} opacity={1} className="text-xs text-black">{ponto.name}</Tooltip>
-                        </Marker>
+                        <>
+                            <Marker
+                                key={ponto.id}
+                                position={[ponto.latitude, ponto.longitude]}
+                                icon={createCustomIcon(ponto.iconURL ?? '📍')}
+                                eventHandlers={{
+                                    click: () => handleLocationSelect(ponto),
+                                    mouseover: (e) => e.target.openPopup(),
+                                    mouseout: (e) => e.target.closePopup(),
+                                }}
+                            >
+                                <Popup closeButton={false} autoClose={false} closeOnClick={false} autoPan={false} className="map-popup">
+                                    <PopupContent ponto={ponto} />
+                                </Popup>
+                                
+                            </Marker>
+
+                            <Marker
+                                key={`${ponto.id}-label`}
+                                position={[ponto.latitude, ponto.longitude]}
+                                icon={createLabelIcon(ponto.name)}
+                                interactive={false} // Faz com que o rótulo não seja clicável
+                                
+                            />
+                        </>
                     ))}
                 </MapContainer>
 
