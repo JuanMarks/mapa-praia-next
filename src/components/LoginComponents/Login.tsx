@@ -8,7 +8,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import { HiArrowLeft } from "react-icons/hi";
 
 export default function Login() {
     const router = useRouter();
@@ -102,7 +101,6 @@ export default function Login() {
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center">
             <div className="absolute inset-0 bg-blue-950/40"></div>
-            <a href="/" className='absolute p-1.5 md:hidden bg-blue-900 rounded top-2.5 left-2.5 text-white'><HiArrowLeft size={20}/></a>
             <Image
                 src="/images/icaraizinho2.jpeg"
                 alt="Praia de Icaraizinho de Amontada"

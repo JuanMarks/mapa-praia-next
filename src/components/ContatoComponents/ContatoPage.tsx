@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { HiArrowLeft } from "react-icons/hi";
+
 
 export default function ContatoPage() {
   const [formData, setFormData] = useState({
@@ -67,7 +67,6 @@ ${name}
   return (
     <div className="relative min-h-screen pb-17 sm:pb-0 flex items-center justify-center">
       <div className="absolute inset-0 bg-blue-900/30"></div>
-      <a href="/" className='absolute p-1.5 md:hidden bg-blue-900 rounded top-2.5 left-2.5 text-white'><HiArrowLeft size={20}/></a>
 
       <Image
         src="/images/icaraizinho2.jpeg"

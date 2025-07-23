@@ -7,7 +7,7 @@ import api from '@/axios/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
-import { HiArrowLeft } from "react-icons/hi";
+
 
 export default function Register() {
     const router = useRouter();
@@ -69,7 +69,6 @@ export default function Register() {
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center">
             <div className="absolute inset-0 bg-blue-950 opacity-60"></div>
-            <a href="/login" className='absolute p-1.5 md:hidden bg-blue-900 rounded top-2.5 left-2.5 text-white'><HiArrowLeft size={20}/></a>
             <Image
                 src="/images/icaraizinho2.jpeg"
                 alt="Praia de Icaraizinho de Amontada"
