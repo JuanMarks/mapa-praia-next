@@ -5,6 +5,7 @@ import { useState, useEffect, FormEvent } from 'react';
 import api from '@/axios/config';
 import { FaTrash, FaPlus } from 'react-icons/fa';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
+import Cookies from 'js-cookie';
 
 interface Category {
   id: string;
@@ -44,9 +45,14 @@ const ModalCategorias: React.FC<ModalCategoriasProps> = ({ onClose }) => {
         return;
     }
     setError(null);
-
+    const token = Cookies.get('token');
     try {
-      await api.post('/categories', { name: newCategoryName });
+      await api.post('/categories', { name: newCategoryName }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setError(null);
       setNewCategoryName('');
       fetchCategories(); // Re-fetch para atualizar a lista
     } catch (err: unknown) { // CORRIGIDO
