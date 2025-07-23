@@ -8,7 +8,7 @@ export default function Home() {
     <div className="min-h-screen">
       <MapaInterativo/>
       
-      <main className="p-4 bg-white">
+      <main id='favoritos' className="p-4 bg-white">
         <CarrosselHorizontal />
       </main>
         <Footer/>
