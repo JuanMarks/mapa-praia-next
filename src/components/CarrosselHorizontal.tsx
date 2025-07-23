@@ -9,19 +9,16 @@ import Image from 'next/image';
 import { PontoTuristico } from '@/types/ponto';
 import { motion } from 'framer-motion';
 import api from '@/axios/config';
-import { isAxiosError } from 'axios'; // Importa o type guard do Axios
+import { isAxiosError } from 'axios';
+import { FaImage } from 'react-icons/fa'; // Import an icon for the placeholder
 
 const CATEGORIAS = {
     'Todos': 'todos',
     'Restaurantes': 'restaurante',
     'Hotéis': 'hotel',
     'Praias': 'praia',
-    'Sorveterias': 'sorveteria',
-    'Pizzarias': 'pizzaria',
     'Bares': 'bar',
-    'Cafés': 'cafe',
-    'Lanchonetes': 'lanchonete',
-    'Mercados': 'mercado',
+    
 };
 
 const CarrosselHorizontal: FC = () => {
@@ -36,22 +33,14 @@ const CarrosselHorizontal: FC = () => {
                 setLoading(true);
                 const response = await api.get('/places/getPlaces');
                 setPontos(response.data);
-            } catch (err: unknown) { // 1. Mude 'any' para 'unknown'
+            } catch (err: unknown) {
                 console.error("Erro ao buscar pontos para o carrossel:", err);
-
-                // 2. Lógica de tratamento de erro aprimorada
-                let errorMessage = 'Não foi possível carregar os destaques. Verifique sua conexão.';
-
+                let errorMessage = 'Não foi possível carregar os destaques.';
                 if (isAxiosError(err)) {
-                    if (err.response) {
-                        // Se o servidor respondeu com um erro (ex: 404, 500)
-                        errorMessage = 'Ocorreu um erro no servidor ao buscar os locais.';
-                    }
-                    // Se não houver 'err.response', a mensagem padrão de erro de rede será usada.
+                    errorMessage = 'Ocorreu um erro no servidor ao buscar os locais.';
                 } else if (err instanceof Error) {
                     errorMessage = err.message;
                 }
-                
                 setError(errorMessage);
             } finally {
                 setLoading(false);
@@ -60,32 +49,19 @@ const CarrosselHorizontal: FC = () => {
         fetchPontos();
     }, []);
 
-    // Lógica para filtrar e ordenar os pontos (continua a mesma)
     const pontosFiltrados = useMemo(() => {
         return pontos
             .filter(ponto => {
-                if (filtroAtivo === 'todos') {
-                    return true;
-                }
+                if (filtroAtivo === 'todos') return true;
                 return ponto.category?.name?.toLowerCase() === filtroAtivo.toLowerCase();
             })
-            .sort((a, b) => {
-                return (b.averageRating || 0) - (a.averageRating || 0);
-            });
+            .sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
     }, [pontos, filtroAtivo]);
-
-    const getImagemDoPonto = (ponto: PontoTuristico): string => {
-        if (ponto.photos && ponto.photos.length > 0) {
-            return ponto.photos[0];
-        }
-        return '/images/placeholder.jpeg';
-    };
 
     if (loading) {
         return <div className="text-center p-10 text-gray-500">Carregando destaques...</div>;
     }
 
-    // 3. Componente para exibir a mensagem de erro de forma mais elegante
     if (error) {
         return (
             <div className="text-center p-10 bg-red-50 rounded-lg mx-4">
@@ -138,9 +114,8 @@ const CarrosselHorizontal: FC = () => {
                 viewport={{ once: true }}
             >
                 <div className="max-w-screen-xl mx-auto px-4">
-                    {/* Título e filtros */}
                     <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados ⭐</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 tracking-wide">Melhores Avaliados ⭐</h2>
                         <div className="flex flex-wrap gap-2">
                             {Object.entries(CATEGORIAS).map(([nome, tipo]) => (
                                 <button
@@ -157,38 +132,57 @@ const CarrosselHorizontal: FC = () => {
                             ))}
                         </div>
                     </div>
+                    
+                    {pontosFiltrados.length === 0 ? (
+                        <div className="text-center p-10 bg-gray-50 rounded-lg">
+                            <p className="font-semibold text-gray-600">Nenhum local encontrado</p>
+                            <p className="text-gray-500 mt-1">Não há locais com essa categoria no momento.</p>
+                        </div>
+                    ) : (
+                        <Swiper
+                            slidesPerView={1.2}
+                            breakpoints={{
+                                640: { slidesPerView: 2.2 },
+                                1024: { slidesPerView: 3.5 },
+                            }}
+                            spaceBetween={20}
+                            navigation
+                            modules={[Navigation]}
+                        >
+                            {pontosFiltrados.map((ponto) => {
+                                // **Verifica se o ponto tem fotos**
+                                const hasPhotos = ponto.photos && ponto.photos.length > 0;
 
-                    {/* Carrossel */}
-                    <Swiper
-                        slidesPerView={1.2}
-                        breakpoints={{
-                            640: { slidesPerView: 2.2 },
-                            1024: { slidesPerView: 3.5 },
-                        }}
-                        spaceBetween={20}
-                        navigation
-                        modules={[Navigation]}
-                    >
-                        {pontosFiltrados.map((ponto) => (
-                            <SwiperSlide key={ponto.id}>
-                                <div className="bg-white rounded-2xl transition p-2 h-full">
-                                    <div className="w-full h-40 sm:h-48 relative">
-                                        <Image
-                                            src={getImagemDoPonto(ponto)}
-                                            alt={ponto.name}
-                                            fill
-                                            style={{ objectFit: 'cover' }}
-                                            className="rounded-xl"
-                                            sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 28vw"
-                                        />
-                                    </div>
-                                    <p className="mt-2 text-center text-sm font-bold text-gray-700">
-                                        {ponto.name}
-                                    </p>
-                                </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
+                                return (
+                                    <SwiperSlide key={ponto.id}>
+                                        <div className="bg-white rounded-2xl transition p-2 h-full shadow-md hover:shadow-xl">
+                                            <div className="w-full h-40 sm:h-48 relative rounded-xl overflow-hidden">
+                                                {hasPhotos ? (
+                                                    // Se tiver fotos, renderiza a imagem
+                                                    <Image
+                                                        src={ponto.photos![0]}
+                                                        alt={ponto.name}
+                                                        fill
+                                                        style={{ objectFit: 'cover' }}
+                                                        sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 28vw"
+                                                    />
+                                                ) : (
+                                                    // Se não tiver, renderiza a mensagem
+                                                    <div className="w-full h-full bg-gray-200 flex flex-col items-center justify-center text-center p-4">
+                                                        <FaImage className="text-gray-400 text-3xl mb-2" />
+                                                        <span className="text-xs font-semibold text-gray-500">Imagem não disponível</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <p className="mt-2 text-center text-sm font-bold text-gray-700 tracking-wide">
+                                                {ponto.name}
+                                            </p>
+                                        </div>
+                                    </SwiperSlide>
+                                );
+                            })}
+                        </Swiper>
+                    )}
                 </div>
             </motion.div>
         </div>

@@ -4,6 +4,7 @@ import api from '@/axios/config';
 import Image from 'next/image';
 import { FaEllipsisH, FaTimes } from 'react-icons/fa';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
+import Cookies from 'js-cookie';
 // Interface para a Categoria
 interface Category {
     id: string;
@@ -125,10 +126,13 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         newPhotos.forEach(file => {
             formData.append('photos', file);
         });
-
+        const token = Cookies.get('token');
         try {
             const response = await api.put(`/places/${ponto.id}`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                },
             });
             onAtualizado(response.data);
             onClose();

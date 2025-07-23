@@ -25,7 +25,8 @@ export default function Register() {
         setError(null);
         setSuccess(null);
         
-        const dados = { name, email, phone, password };
+        const profileImage = "/images/profile_placeholder.png";
+        const dados = { name, email, phone, password, profileImage };
 
         try {
             await api.post('/auth/register', dados); 

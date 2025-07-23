@@ -3,6 +3,7 @@ import api from '@/axios/config';
 import Image from 'next/image';
 import { FaEllipsisH, FaTimes } from 'react-icons/fa';
 import { isAxiosError } from 'axios';
+import Cookies from 'js-cookie';
 // Interface para a Categoria
 interface Category {
     id: string;
@@ -93,9 +94,14 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
             formData.append('photos', imagem);
         });
 
+        const token = Cookies.get('token');
        try {
             const res = await api.post('/places/createPlace', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data', 
+                    'Authorization': `Bearer ${token}`
+                },
+                
             });
 
             console.log(res.data);
