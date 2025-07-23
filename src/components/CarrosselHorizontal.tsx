@@ -98,7 +98,7 @@ const CarrosselHorizontal: FC = () => {
     // Se não houver pontos para exibir após a filtragem, mostre uma mensagem amigável
     if (pontosFiltrados.length === 0 && !loading) {
         return (
-             <div className="w-full bg-white py-8">
+             <div id='favoritos' className="w-full bg-white py-8">
                 <div className="max-w-screen-xl mx-auto px-4">
                      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados ⭐</h2>
