@@ -1,0 +1,15 @@
+{
+  "name": "Amontada Turismo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom",
+  "build": {
+    "builder": "next",
+    "options": {
+      "command": "next build",
+      "outputDirectory": "out"
+    }
+  },
+  "npmClient": "npm"
+}

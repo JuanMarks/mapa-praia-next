@@ -1,6 +1,10 @@
+import { output } from "framer-motion/client";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Adicione ou modifique a seção 'images' aqui
+  output: 'export',
+  trailingSlash: false,
   images: {
     remotePatterns: [
       {
