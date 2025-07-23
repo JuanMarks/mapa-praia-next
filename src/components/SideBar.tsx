@@ -145,6 +145,11 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
               setError("Você precisa estar logado para avaliar!");
             return;
         }
+
+        if(role === 'admin'){
+          alert("Você precisa ser turista para avaliar")
+          return
+        }
             setError(null); // Limpa erros anteriores
 
             const token = Cookies.get('token');

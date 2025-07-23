@@ -243,7 +243,7 @@ const MapaInterativo = () => {
                             />
 
                             <TideStatusIcon 
-                                position={[-3.07161, -39.57788]} // Posição fixa no "mar" do mapa
+                                position={[-3.04912, -39.57949]} // Posição fixa no "mar" do mapa
                                 onClick={() => setIsTideModalOpen(true)}
                                 pane="tideIconPane" // Usando o pane customizado
                             />
@@ -288,7 +288,7 @@ const MapaInterativo = () => {
                     <button onClick={() => map?.zoomOut()} disabled={currentZoom === map?.getMinZoom()} className="w-10 h-10 flex items-center justify-center text-xl bg-white hover:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed" aria-label="Reduzir zoom">-</button>
                 </div>
 
-                <div className="absolute bottom-4 right-4 z-[1000]">
+                <div className="absolute bottom-20 right-4 z-[1000]">
                     {role === 'user' && !isSuggesting && (
                         <button onClick={() => setIsSuggesting(true)} className="bg-blue-600 text-white p-3 rounded-md shadow-lg pointer-events-auto hover:bg-blue-700 flex items-center gap-2" aria-label="Sugerir novo local">
                             <FaPlus /> <span>Sugerir Local</span>
