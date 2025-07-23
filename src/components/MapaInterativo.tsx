@@ -4,7 +4,7 @@
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
 import L, { divIcon, icon } from 'leaflet';
 import { useState, useEffect } from 'react';
-import { FaEye, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaBars, FaEye, FaPlus, FaTimes } from 'react-icons/fa';
 import { PontoTuristico } from '@/types/ponto';
 import { useAuth } from '../hooks/useAuth';
 import api from '@/axios/config';
@@ -274,8 +274,8 @@ const MapaInterativo = () => {
                 />
             </div>
             <LocationListSidebar isOpen={isListSidebarOpen} pontos={pontos} onLocationClick={handleLocationSelect} />
-            <MobileBottomBar/>
             <BottomLeftLogo/>
+            <MobileBottomBar/>
         </div>
     );
 };
