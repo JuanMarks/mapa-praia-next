@@ -303,12 +303,14 @@ const MapaInterativo = () => {
                     </button>
                     </div>
 
-                <div className="absolute bottom-20 right-4 z-[1000]">
-                    {role === 'user' && !isSuggesting && (
-                        <button onClick={() => setIsSuggesting(true)} className="bg-blue-600 text-white p-3 rounded-md shadow-lg pointer-events-auto hover:bg-blue-700 flex items-center gap-2" aria-label="Sugerir novo local">
-                            <FaPlus /> <span>Sugerir Local</span>
-                        </button>
-                    )}
+                <div className="absolute bottom-4 right-4 z-[1000]">
+                    <div className='sm:flex fixed bottom-20 right-4 z-[1002]'>
+                        {role === 'user' && !isSuggesting && (
+                            <button onClick={() => setIsSuggesting(true)} className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:bg-gray-100" aria-label="Sugerir novo local">
+                                <FaPlus />
+                            </button>
+                        )}
+                    </div>
                     {isSuggesting && (
                         <div className="bg-white p-3 rounded-md shadow-lg pointer-events-auto animate-pulse flex items-center gap-3">
                            <span className="text-gray-700 font-semibold">Clique no mapa para adicionar sua sugestão</span>
