@@ -37,10 +37,10 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
 
       {/* Sidebar */}
       <div className={`
-        fixed rounded-2xl top-30 w-60 h-[500px] bg-white shadow-lg
-        transition-all duration-300 ease-in-out z-[9999]
+        fixed rounded-2xl sm:top-25 top-20 w-60 h-[500px] bg-white shadow-lg
+        transition-all duration-300 ease-in-out z-[9998]
         flex flex-col
-        ${isOpen ? 'right-10 translate-x-0 opacity-100 visible p-2' : 'right-0 translate-x-full opacity-0 invisible p-0'}
+        ${isOpen ? 'right-5 translate-x-0 opacity-100 visible p-2' : 'right-0 translate-x-full opacity-0 invisible p-0'}
       `}>
         <h2 className="text-2xl font-bold text-blue-800 mb-2 text-center flex-shrink-0">
           Todos os Locais

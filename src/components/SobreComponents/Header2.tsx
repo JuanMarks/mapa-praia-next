@@ -17,6 +17,7 @@ export default function Header2() {
       document.cookie = 'role=; Max-Age=0; path=/;';
       // Redireciona para a página inicial, que irá recarregar o estado
       window.location.href = '/'; 
+      
     }
   }
 
@@ -79,6 +80,7 @@ export default function Header2() {
             fill
             style={{ objectFit: 'contain' }}
             priority
+            className={`transition-opacity duration-300 ${hovered ? 'opacity-80' : 'opacity-100'}`}
           />
         </Link>
       </div>

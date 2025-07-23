@@ -5,7 +5,7 @@ import { FaGithub, FaEnvelope, FaInfoCircle } from 'react-icons/fa';
 import Link from 'next/link';
 export default function Footer() {
   return (
-    <footer className="bg-white py-5 px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-700">
+    <footer className="bg-white pb-20 sm:pb-3 py-5 px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-700">
       
       {/* Logo à esquerda */}
       <div className="flex items-center gap-2">
