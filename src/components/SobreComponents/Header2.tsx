@@ -52,7 +52,7 @@ export default function Header2() {
     // Se não está logado, mostra o botão de Login
     return (
       <li>
-        <Link href="/login" className="bg-blue-900 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-lg font-semibold">
+        <Link href="/login" className="bg-blue-700 hover:bg-blue-900 text-white px-5 py-2 rounded-lg text-lg font-semibold">
           Login
         </Link>
       </li>
