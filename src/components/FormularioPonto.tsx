@@ -243,8 +243,8 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                     </div>
 
                     <div className="flex items-center justify-end p-4 space-x-2 border-t border-gray-200 rounded-b">
-                        <button type="button" onClick={onClose} disabled={isLoading} className="text-white bg-blue-700 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 disabled:opacity-50">Cancelar</button>
-                        <button type="submit" disabled={isLoading} className="text-white bg-blue-700 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:bg-blue-400 disabled:cursor-not-allowed">{isLoading ? 'Salvando...' : 'Salvar'}</button>
+                        <button type="button" onClick={onClose} disabled={isLoading} className="text-white bg-blue-600 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 disabled:opacity-50">Cancelar</button>
+                        <button type="submit" disabled={isLoading} className="text-white bg-blue-600 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:bg-blue-400 disabled:cursor-not-allowed">{isLoading ? 'Salvando...' : 'Salvar'}</button>
                     </div>
                 </form>
             </div>

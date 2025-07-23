@@ -304,7 +304,7 @@ const PageAdmin = () => {
                          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                             <h3 className="text-xl font-semibold">Lista de Locais</h3>
                             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                                <button onClick={() => setIsCategoryModalOpen(true)} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md flex items-center justify-center">
+                                <button onClick={() => setIsCategoryModalOpen(true)} className="bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-md flex items-center justify-center">
                                     <FaTags className="mr-2" /> Categorias
                                 </button>
                                 <div className="relative flex-grow">
