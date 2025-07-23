@@ -42,7 +42,7 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
         flex flex-col
         ${isOpen ? 'right-5 translate-x-0 opacity-100 visible p-2' : 'right-0 translate-x-full opacity-0 invisible p-0'}
       `}>
-        <h2 className="text-2xl font-bold text-blue-800 mb-2 text-center flex-shrink-0">
+        <h2 className="text-2xl font-bold text-blue-900 mb-2 text-center flex-shrink-0">
           Todos os Locais
         </h2>
 

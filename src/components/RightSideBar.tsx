@@ -112,18 +112,18 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
         className="relative flex justify-end sm:justify-start w-full"
       >
         <button 
-  onClick={() => setIsSearchExpanded(true)}
-  className={`
-    sm:hidden bg-white rounded-full h-12 w-12
-    flex items-center justify-center shadow-lg
-    transition-opacity duration-300
-    ${isSearchExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-    absolute left-0 top-0 z-10
-  `}
-  aria-label="Abrir busca"
->
-  <FaSearch className="text-gray-600" />
-</button>
+            onClick={() => setIsSearchExpanded(true)}
+            className={`
+              sm:hidden bg-white rounded-full h-12 w-12
+              flex items-center justify-center shadow-lg
+              transition-opacity duration-300
+              ${isSearchExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}
+              absolute left-0 top-0 z-10
+            `}
+            aria-label="Abrir busca"
+          >
+            <FaSearch className="text-gray-600" />
+          </button>
 
         <div className={`absolute sm:relative w-full transition-all duration-300 ${isSearchExpanded ? 'opacity-100' : 'opacity-0 sm:opacity-100 pointer-events-none sm:pointer-events-auto'}`}>
             <div className="relative">
