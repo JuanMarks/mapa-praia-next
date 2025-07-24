@@ -88,17 +88,51 @@ const PageAdmin = () => {
         return { total, mediaRating: mediaRating.toFixed(1), tipos, sugestoes: suggestions.length };
     }, [pontos, suggestions]);
 
+    // const chartData = useMemo(() => {
+    //     const countsByMonth: { [key: string]: number } = { "Jan": 0, "Fev": 0, "Mar": 0, "Abr": 0, "Mai": 0, "Jun": 0 };
+    //     const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
+    //     pontos.forEach(ponto => {
+    //         if (ponto.createdAt) {
+    //             const month = new Date(ponto.createdAt).getMonth();
+    //             if(month <= 5) {
+    //                 countsByMonth[monthNames[month]]++;
+    //             }
+    //         }
+    //     });
+    //     return { labels: monthNames, data: Object.values(countsByMonth) };
+    // }, [pontos]);
+
+    // Em PageAdmin.tsx
+
     const chartData = useMemo(() => {
-        const countsByMonth: { [key: string]: number } = { "Jan": 0, "Fev": 0, "Mar": 0, "Abr": 0, "Mai": 0, "Jun": 0 };
-        const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
+        // Define os nomes dos últimos 6 meses, incluindo o atual
+        const monthNames: string[] = [];
+        const countsByMonth: { [key: string]: number } = {};
+        const today = new Date(); // Usa a data atual para ser dinâmico
+
+        for (let i = 5; i >= 0; i--) {
+            const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            const monthName = d.toLocaleString('pt-BR', { month: 'short' }).replace('.', ''); // Ex: "Jul", "Ago"
+            const formattedName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+            monthNames.push(formattedName);
+            countsByMonth[formattedName] = 0;
+        }
+
         pontos.forEach(ponto => {
             if (ponto.createdAt) {
-                const month = new Date(ponto.createdAt).getMonth();
-                if(month <= 5) {
-                    countsByMonth[monthNames[month]]++;
+                const d = new Date(ponto.createdAt);
+                // Verifica se o ponto foi criado nos últimos 6 meses
+                const sixMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 5, 1);
+                if (d >= sixMonthsAgo) {
+                    const monthName = d.toLocaleString('pt-BR', { month: 'short' }).replace('.', '');
+                    const formattedName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+                    if (countsByMonth.hasOwnProperty(formattedName)) {
+                        countsByMonth[formattedName]++;
+                    }
                 }
             }
         });
+
         return { labels: monthNames, data: Object.values(countsByMonth) };
     }, [pontos]);
 

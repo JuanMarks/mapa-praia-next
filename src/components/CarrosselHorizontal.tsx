@@ -71,6 +71,39 @@ const CarrosselHorizontal: FC = () => {
         );
     }
     
+    // Se não houver pontos para exibir após a filtragem, mostre uma mensagem amigável
+    if (pontosFiltrados.length === 0 && !loading) {
+        return (
+             <div id='favoritos' className="w-full bg-white py-8">
+                <div className="max-w-screen-xl mx-auto px-4">
+                     <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados ⭐</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {Object.entries(CATEGORIAS).map(([nome, tipo]) => (
+                                <button
+                                    key={tipo}
+                                    onClick={() => setFiltroAtivo(tipo)}
+                                    className={`px-4 py-1.5 border rounded-full text-sm font-semibold transition-all duration-200 ${
+                                        filtroAtivo === tipo
+                                            ? 'bg-blue-600 text-white border-blue-600'
+                                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                                    }`}
+                                >
+                                    {nome}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="text-center p-10 bg-gray-50 rounded-lg">
+                        <p className="font-semibold text-gray-600">Nenhum local encontrado</p>
+                        <p className="text-gray-500 mt-1">Não há locais com essa categoria no momento.</p>
+                    </div>
+                </div>
+             </div>
+        )
+    }
+
+
     return (
         <div className="w-full bg-white py-8">
             <motion.div

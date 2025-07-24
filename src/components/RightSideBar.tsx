@@ -133,7 +133,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
                 <input
                     type="text"
                     placeholder="Pesquisar locais..."
-                    className="bg-white rounded-full w-full p-3 pl-10 text-base focus:outline-none focus:border-none focus:ring-0 shadow-lg"
+                    className="bg-white rounded-full w-80 p-3 pl-10 text-base focus:outline-none focus:border-none focus:ring-0 shadow-lg"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onFocus={() => { if(searchTerm) setIsDropdownOpen(true) }}

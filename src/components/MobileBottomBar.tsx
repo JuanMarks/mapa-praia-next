@@ -3,13 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';
-import {
-  FaMapMarkerAlt,
-  FaSignInAlt,
-  FaSignOutAlt,
-  FaPhone,
-  FaInfoCircle
-} from 'react-icons/fa';
+import { FaMapMarkerAlt, FaSignInAlt, FaSignOutAlt, FaPhone, FaInfoCircle} from 'react-icons/fa';
+import { FaPencil } from 'react-icons/fa6';
 
 export default function MobileBottomBar() {
   const pathname = usePathname();
@@ -91,11 +86,9 @@ export default function MobileBottomBar() {
       {/* Dashboard (apenas para admin) */}
       {role === 'admin' && (
         <div className="fixed bottom-20 right-4 sm:hidden z-[1002]">
-          <Link
-            href="/pageadmin"
-            className="bg-blue-900 text-white px-4 py-2 rounded-full shadow-lg text-sm font-semibold"
-          >
-            Dashboard
+          <Link href="/pageadmin" className="sm:hidden bg-white rounded-full h-12 w-12
+    flex items-center justify-center shadow-lg">
+            <FaPencil size={20}/>
           </Link>
         </div>
       )}

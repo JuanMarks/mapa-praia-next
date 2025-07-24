@@ -25,6 +25,7 @@ import TideStatusIcon from './TideStatusIcon';
 import TideDayModal from './TideDayModal';
 import MobileBottomBar from './MobileBottomBar';
 import BottomLeftLogo from './BottomLeftLogo';
+import FloatingStarButton from './StarBottomAtal';
 
 const centro: [number, number] = [-2.900, -40.15];
 const bounds: [[number, number], [number, number]] = [
@@ -283,17 +284,33 @@ const MapaInterativo = () => {
                     ))}
                 </MapContainer>
 
-                <div className="absolute z-[1000] right-3 bottom-20 flex flex-col shadow-lg rounded-2xl overflow-hidden">
-                    <button onClick={() => map?.zoomIn()} disabled={currentZoom === map?.getMaxZoom()} className="w-10 h-10 flex items-center justify-center text-xl bg-white hover:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed" aria-label="Aumentar zoom">+</button>
-                    <button onClick={() => map?.zoomOut()} disabled={currentZoom === map?.getMinZoom()} className="w-10 h-10 flex items-center justify-center text-xl bg-white hover:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed" aria-label="Reduzir zoom">-</button>
-                </div>
+                <div className="absolute z-[1000] right-3 bottom-20 hidden sm:flex flex-col shadow-lg rounded-2xl overflow-hidden">
+                    <button
+                        onClick={() => map?.zoomIn()}
+                        disabled={currentZoom === map?.getMaxZoom()}
+                        className="w-10 h-10 flex items-center justify-center text-xl bg-white hover:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
+                        aria-label="Aumentar zoom"
+                    >
+                        +
+                    </button>
+                    <button
+                        onClick={() => map?.zoomOut()}
+                        disabled={currentZoom === map?.getMinZoom()}
+                        className="w-10 h-10 flex items-center justify-center text-xl bg-white hover:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
+                        aria-label="Reduzir zoom"
+                    >
+                        -
+                    </button>
+                    </div>
 
-                <div className="absolute bottom-20 right-4 z-[1000]">
-                    {role === 'user' && !isSuggesting && (
-                        <button onClick={() => setIsSuggesting(true)} className="bg-blue-600 text-white p-3 rounded-md shadow-lg pointer-events-auto hover:bg-blue-700 flex items-center gap-2" aria-label="Sugerir novo local">
-                            <FaPlus /> <span>Sugerir Local</span>
-                        </button>
-                    )}
+                <div className="absolute bottom-4 right-4 z-[1000]">
+                    <div className='sm:flex fixed bottom-20 right-4 z-[1002]'>
+                        {role === 'user' && !isSuggesting && (
+                            <button onClick={() => setIsSuggesting(true)} className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:bg-gray-100" aria-label="Sugerir novo local">
+                                <FaPlus />
+                            </button>
+                        )}
+                    </div>
                     {isSuggesting && (
                         <div className="bg-white p-3 rounded-md shadow-lg pointer-events-auto animate-pulse flex items-center gap-3">
                            <span className="text-gray-700 font-semibold">Clique no mapa para adicionar sua sugestão</span>
@@ -324,6 +341,7 @@ const MapaInterativo = () => {
             <LocationListSidebar isOpen={isListSidebarOpen} pontos={pontos} onLocationClick={handleLocationSelect} />
             <BottomLeftLogo/>
             <MobileBottomBar/>
+            <FloatingStarButton />
         </div>
     );
 };
