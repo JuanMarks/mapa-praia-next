@@ -284,7 +284,7 @@ const MapaInterativo = () => {
                     ))}
                 </MapContainer>
 
-                <div className="absolute z-[1000] right-3 bottom-20 hidden sm:flex flex-col shadow-lg rounded-2xl overflow-hidden">
+                <div className="absolute z-[1000] left-3 top-30 hidden sm:flex flex-col shadow-lg rounded-2xl overflow-hidden"> {/* MODIFICADO AQUI: left-3 e top-20 */}
                     <button
                         onClick={() => map?.zoomIn()}
                         disabled={currentZoom === map?.getMaxZoom()}
@@ -301,10 +301,10 @@ const MapaInterativo = () => {
                     >
                         -
                     </button>
-                    </div>
+                </div>
 
                 <div className="absolute bottom-4 right-4 z-[1000]">
-                    <div className='sm:flex fixed bottom-20 right-4 z-[1002]'>
+                    <div className='sm:flex fixed sm:bottom-6 bottom-20 right-4 z-[1002]'>
                         {role === 'user' && !isSuggesting && (
                             <button onClick={() => setIsSuggesting(true)} className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:bg-gray-100" aria-label="Sugerir novo local">
                                 <FaPlus />
