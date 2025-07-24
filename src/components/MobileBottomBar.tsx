@@ -1,11 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';
 import { FaMapMarkerAlt, FaSignInAlt, FaSignOutAlt, FaPhone, FaInfoCircle} from 'react-icons/fa';
 import { FaPencil } from 'react-icons/fa6';
 
 export default function MobileBottomBar() {
+  const pathname = usePathname();
   const { role, loading } = useAuth();
 
   function logout() {
@@ -18,29 +20,45 @@ export default function MobileBottomBar() {
 
   if (loading) return null;
 
+  const navItems = [
+    {
+      href: '/',
+      label: 'Explorar',
+      icon: <FaMapMarkerAlt size={20} />
+    },
+    {
+      href: '/contato',
+      label: 'Contato',
+      icon: <FaPhone size={20} />
+    },
+    {
+      href: '/sobre',
+      label: 'Sobre',
+      icon: <FaInfoCircle size={22} />
+    }
+  ];
+
+  const isActive = (href: string) => pathname === href;
+
   return (
     <>
       {/* Barra inferior fixa no mobile */}
-      <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 sm:hidden z-[1001]">
+      <nav className="fixed bottom-0 left-0 w-full rounded-t-2xl bg-white border-t border-gray-200 sm:hidden z-[1001]">
         <ul className="grid grid-cols-4 text-center h-16">
-          <li className="flex flex-col items-center justify-center">
-            <Link href="/" className="flex flex-col items-center text-blue-700 hover:text-blue-900">
-              <FaMapMarkerAlt size={20} />
-              <span className="text-xs mt-1">Explorar</span>
-            </Link>
-          </li>
-          <li className="flex flex-col items-center justify-center">
-            <Link href="/contato" className="flex flex-col items-center text-gray-600 hover:text-blue-900">
-              <FaPhone size={20} />
-              <span className="text-xs mt-1">Contato</span>
-            </Link>
-          </li>
-          <li className="flex flex-col items-center justify-center">
-            <Link href="/sobre" className="flex flex-col items-center text-gray-600 hover:text-blue-900">
-              <FaInfoCircle size={22} />
-              <span className="text-xs mt-1">Sobre</span>
-            </Link>
-          </li>
+          {navItems.map(({ href, label, icon }) => (
+            <li
+              key={href}
+              className={`flex flex-col items-center justify-center ${
+                isActive(href) ? 'bg-blue-900/10 border-b-4 rounded-t-2xl border-blue-900' : ''
+              }`}
+            >
+              <Link href={href} className="flex flex-col items-center text-blue-900 hover:text-blue-900">
+                {icon}
+                <span className="text-xs mt-1">{label}</span>
+              </Link>
+            </li>
+          ))}
+
           <li className="flex flex-col items-center justify-center">
             {role ? (
               <button
@@ -51,7 +69,12 @@ export default function MobileBottomBar() {
                 <span className="text-xs mt-1">Sair</span>
               </button>
             ) : (
-              <Link href="/login" className="flex flex-col items-center text-gray-600 hover:text-blue-900">
+              <Link
+                href="/login"
+                className={`flex flex-col items-center text-blue-900 hover:text-blue-900 ${
+                  isActive('/login') ? 'bg-blue-900/40' : ''
+                }`}
+              >
                 <FaSignInAlt size={20} />
                 <span className="text-xs mt-1">Login</span>
               </Link>

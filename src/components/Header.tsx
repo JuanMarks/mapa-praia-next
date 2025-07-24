@@ -28,7 +28,7 @@ export default function Header() {
         <>
           {role === 'admin' && (
             <li className={isMobile ? 'w-full mb-2' : ''}>
-              <Link href="/pageadmin" className={isMobile ? 'block text-lg font-medium bg-blue-900 text-white hover:bg-blue-600 rounded-lg text-center py-2' : "text-white rounded-lg px-5 py-2 font-semibold bg-blue-900 hover:bg-blue-700 text-lg"}>
+              <Link href="/pageadmin" className={isMobile ? 'block text-lg font-medium bg-blue-700 text-white hover:bg-blue-900 rounded-lg text-center py-2' : "text-white rounded-lg px-5 py-2 font-semibold bg-blue-900 hover:bg-blue-700 text-lg"}>
                 Dashboard
               </Link>
             </li>
@@ -44,7 +44,7 @@ export default function Header() {
 
     return (
       <li>
-        <Link href="/login" className="bg-blue-900 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-lg font-semibold">
+        <Link href="/login" className="bg-blue-700 hover:bg-blue-900 text-white px-5 py-2 rounded-lg text-lg font-semibold">
           Login
         </Link>
       </li>
