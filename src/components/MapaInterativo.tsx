@@ -27,10 +27,10 @@ import MobileBottomBar from './MobileBottomBar';
 import BottomLeftLogo from './BottomLeftLogo';
 import FloatingStarButton from './StarBottomAtal';
 
-const centro: [number, number] = [-2.900, -40.15];
+const centro: [number, number] = [-3.07414635412766, -39.657204795003985];
 const bounds: [[number, number], [number, number]] = [
-  [-3.128981, -39.833362],
-  [-2.965702, -39.527987],
+  [-2.9645931074537804, -39.732843894186985],
+  [-3.163798686440656, -39.535951274441054],
 ];
 
 const MapaInterativo = () => {
@@ -218,7 +218,7 @@ const MapaInterativo = () => {
                     </div>
                 </div>
                 
-                <MapContainer center={centro} zoom={13} minZoom={13} maxBounds={bounds} maxBoundsViscosity={1.0} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} ref={setMap} zoomControl={false}>
+                <MapContainer center={centro} zoom={11} minZoom={11} maxBounds={bounds} maxBoundsViscosity={1.0} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} ref={setMap} zoomControl={false}>
                     {mapError && (
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000] bg-red-100 p-4 rounded-lg shadow-lg text-center">
                             <p className="font-bold text-red-700">Falha ao Carregar o Mapa</p>
@@ -312,7 +312,7 @@ const MapaInterativo = () => {
                         )}
                     </div>
                     {isSuggesting && (
-                        <div className="bg-white p-3 rounded-md shadow-lg pointer-events-auto animate-pulse flex items-center gap-3">
+                        <div className="bg-white absolute bottom-15 z-[3000] right-10 w-70 p-3 rounded-md shadow-lg pointer-events-auto animate-pulse flex items-center gap-3">
                            <span className="text-gray-700 font-semibold">Clique no mapa para adicionar sua sugestão</span>
                            <button onClick={() => setIsSuggesting(false)} className="text-red-500 hover:text-red-700" aria-label="Cancelar sugestão"><FaTimes size={20} /></button>
                         </div>
