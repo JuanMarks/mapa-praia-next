@@ -36,10 +36,8 @@ export default function Login() {
             
             let errorMessage = 'Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.';
 
-            // Verifica se é um erro do Axios para acessar detalhes da resposta
             if (isAxiosError(err)) {
                 if (err.response) {
-                    // Erros com resposta do servidor (ex: 401, 404, 500)
                     const status = err.response.status;
                     const serverMessage = err.response.data?.message;
 
@@ -55,14 +53,11 @@ export default function Login() {
                             errorMessage = 'Ocorreu um erro inesperado no servidor. Tente novamente mais tarde.';
                             break;
                         default:
-                            // Usa a mensagem do servidor se existir, senão uma mensagem genérica
                             errorMessage = Array.isArray(serverMessage) ? serverMessage.join(', ') : serverMessage || 'Ocorreu um erro ao tentar fazer o login.';
                             break;
                     }
                 }
-                // Não é necessário o 'else', pois a mensagem padrão de erro de rede já foi definida.
             } else if (err instanceof Error) {
-                // Para outros tipos de erro (não-Axios)
                 errorMessage = err.message;
             }
 
@@ -74,15 +69,12 @@ export default function Login() {
     };
 
     const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
-        // credentialResponse.credential é o ID Token que você envia para o backend
         if (credentialResponse.credential) {
-            setIsLoading(true);
+            setIsLoading(true); // Opcional: pode ter um estado de loading separado para Google
             setError(null);
             try {
-                // Envia o token para o seu backend NestJS
                 const res = await api.post('/auth/google', { token: credentialResponse.credential });
                 
-                // Salva o token e os dados do usuário, assim como no login normal
                 console.log("Login com Google bem-sucedido:", res.data);
                 Cookies.set('token', res.data.access_token, { expires: 1, secure: true, sameSite: 'strict' });
                 Cookies.set('role', res.data.user.role, { expires: 1, secure: true, sameSite: 'strict' });
@@ -99,7 +91,7 @@ export default function Login() {
     };
 
     return (
-        <div className="relative min-h-screen w-full flex items-center justify-center">
+        <div className="relative min-h-screen w-full flex items-center justify-center pb-17">
             <div className="absolute inset-0 bg-blue-950/40"></div>
             <Image
                 src="/images/icaraizinho2.jpeg"
@@ -120,11 +112,11 @@ export default function Login() {
                 <div className="bg-gray-100 rounded-2xl p-8 shadow-2xl">
                     <div className="text-center mb-6">
                         <Image 
-                          src="/images/logo_amoturOFC.png" 
-                          alt="Logo AMOTUR"
-                          width={150}
-                          height={60}
-                          className="mx-auto"
+                            src="/images/logo_amoturOFC.png" 
+                            alt="Logo AMOTUR"
+                            width={150}
+                            height={60}
+                            className="mx-auto"
                         />
                         <p className="text-blue-900">Boas-vindas à nossa plataforma!</p>
                     </div>
@@ -164,13 +156,6 @@ export default function Login() {
                             />
                         </div>
 
-                        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
-                            <GoogleLogin
-                                onSuccess={handleGoogleLogin}
-                                onError={() => setError("Falha ao autenticar com o Google.")}
-                            />
-                        </GoogleOAuthProvider>
-
                         <div className="text-right text-sm">
                             <Link href="#" className="font-medium text-blue-900 hover:text-blue-600">
                                 Esqueceu sua senha?
@@ -187,6 +172,33 @@ export default function Login() {
                             </button>
                         </div>
                     </form>
+
+                    {/* Separador "OU" */}
+                    <div className="relative my-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="bg-gray-100 px-3 text-gray-500 font-semibold">OU</span>
+                        </div>
+                    </div>
+
+                    {/* Botão de Login com Google */}
+                    <div className="mt-6 flex justify-center">
+                        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+                            <GoogleLogin
+                                onSuccess={handleGoogleLogin}
+                                onError={() => setError("Falha ao autenticar com o Google.")}
+                                // Adicione props para personalizar o botão do Google se necessário
+                                // Por exemplo, 'theme="filled_blue"', 'size="large"', 'text="continue_with"'
+                                // Para combinar com o estilo profissional:
+                                theme="outline" // 'outline' ou 'filled_blue'
+                                size="large" // 'large', 'medium', 'small'
+                                text="continue_with" // 'signin_with', 'signup_with', 'continue_with'
+                                width="300" // Largura personalizada para o botão
+                            />
+                        </GoogleOAuthProvider>
+                    </div>
 
                     <div className="text-center mt-6">
                         <p className="text-sm text-blue-900 font-bold">

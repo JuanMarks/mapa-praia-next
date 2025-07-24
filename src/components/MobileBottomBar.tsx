@@ -52,28 +52,32 @@ export default function MobileBottomBar() {
                 isActive(href) ? 'bg-blue-900/10 border-b-4 rounded-t-2xl border-blue-900' : ''
               }`}
             >
-              <Link href={href} className="flex flex-col items-center text-blue-900 hover:text-blue-900">
+              <Link href={href} className="flex flex-col items-center text-blue-900 hover:text-blue-900 h-full w-full justify-center">
                 {icon}
                 <span className="text-xs mt-1">{label}</span>
               </Link>
             </li>
           ))}
 
-          <li className="flex flex-col items-center justify-center">
-            {role ? (
+          {/* Item de Login/Sair - REMOVIDAS AS CLASSES 'isActive' DO LI */}
+          <li className="flex flex-col items-center justify-center"> {/* Removido isActive(...) daqui */}
+            {role ? ( // Se o usuário está logado, mostra "Sair"
               <button
                 onClick={logout}
-                className="flex flex-col items-center text-red-600 hover:text-red-800"
+                className="flex flex-col items-center justify-center h-full w-full
+                           text-red-600 hover:text-red-800" // Removido `isActive('/') ? 'bg-blue-900/10' : ''`
               >
                 <FaSignOutAlt size={20} />
                 <span className="text-xs mt-1">Sair</span>
               </button>
-            ) : (
+            ) : ( // Se não está logado, mostra "Login"
               <Link
                 href="/login"
-                className={`flex flex-col items-center text-blue-900 hover:text-blue-900 ${
-                  isActive('/login') ? 'bg-blue-900/40' : ''
-                }`}
+                className={`flex flex-col items-center justify-center h-full w-full
+                            text-gray-600 hover:text-blue-900 ${
+                              // Mantém o text-blue-900 apenas para o estado ativo do próprio link de login
+                              isActive('/login') ? 'text-blue-900 bg-blue-900/10 border-b-4 rounded-t-2xl border-blue-900' : '' // Aplicado ao Link/Botão diretamente
+                            }`}
               >
                 <FaSignInAlt size={20} />
                 <span className="text-xs mt-1">Login</span>
