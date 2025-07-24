@@ -171,7 +171,7 @@ const MapaInterativo = () => {
                     className: 'custom-label-icon tracking-wider', // Classe para remover estilos padrão
                     html: `<span class="map-label-text">${nome}</span>`,
                     iconSize: [100, 20], // Ajuste o tamanho conforme necessário
-                    iconAnchor: [-20, 20]  // Posição relativa ao marcador principal
+                    iconAnchor: [-20, 35]  // Posição relativa ao marcador principal
                 });
     }
 
