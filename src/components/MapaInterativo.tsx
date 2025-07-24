@@ -213,9 +213,20 @@ const MapaInterativo = () => {
                         <Header />
                     </div>
                     
-                    <div className="absolute top-5 left-40 sm:top-8 sm:left-320 -translate-x-1/2 w-80 max-w-md sm:max-w-lg z-[1002]">
-                        <LocationSearch onLocationSelect={handleLocationSelect} />
-                    </div>
+                    <div
+  className="
+    absolute
+    top-5 sm:top-[120px] lg:top-8
+    left-5 sm:left-auto lg:right-0
+    sm:right-0
+    sm:translate-x-0
+    lg:translate-x-0
+    w-[80%] sm:w-[300px] lg:w-[400px]
+    z-[1002]
+  "
+>
+  <LocationSearch onLocationSelect={handleLocationSelect} />
+</div>
                 </div>
                 
                 <MapContainer center={centro} zoom={11} minZoom={11} maxBounds={bounds} maxBoundsViscosity={1.0} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} ref={setMap} zoomControl={false}>
