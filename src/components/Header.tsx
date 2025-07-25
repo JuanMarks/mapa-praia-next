@@ -54,10 +54,12 @@ export default function Header() {
   return (
     <div className="absolute left-5 top-[-10px] sm:top-0 sm:left-0 w-[calc(100%-2rem)] sm:w-auto pointer-events-none z-[5000]">
       <div className="relative w-full max-w-6xl sm:p-4 pointer-events-auto">
-        <div className={`
-          transition-transform duration-500 ease-in-out
-          ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}
-        `}>
+       <div className={`
+  overflow-hidden transition-all duration-500 ease-in-out
+  ${isHeaderVisible ? 'max-h-[1000px] opacity-100 scale-y-100' : 'max-h-0 opacity-0 scale-y-95'}
+  transform origin-top
+`}>
+
           <header
             className="w-full bg-white px-6 py-2 shadow-lg flex flex-col sm:flex-row items-center justify-between rounded-2xl"
           >

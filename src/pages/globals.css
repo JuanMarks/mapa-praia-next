@@ -115,3 +115,6 @@
   margin: 0 !important;
   padding: 0;
 }
+html {
+  scroll-behavior: smooth;
+}
