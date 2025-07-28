@@ -16,6 +16,13 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        // Adicione também o domínio do Cloudinary, já que você o usa
+        protocol: 'http',
+        hostname: 'www.w3.org',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   // ...outras configurações que você possa ter...

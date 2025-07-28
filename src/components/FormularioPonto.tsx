@@ -17,22 +17,28 @@ interface Props {
 }
 
 const ICONS = [
-    '🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
-    'https://cdn-icons-png.flaticon.com/512/3448/3448609.png',
-    'https://cdn-icons-png.flaticon.com/512/2923/2923500.png',
-    'https://cdn-icons-png.flaticon.com/512/854/854878.png',
-    'https://cdn-icons-png.flaticon.com/512/1046/1046751.png',
-    'https://cdn-icons-png.flaticon.com/512/4901/4901802.png',
-    'https://cdn-icons-png.flaticon.com/512/2271/2271030.png',
-    'https://cdn-icons-png.flaticon.com/512/4287/4287284.png',
-    'https://cdn-icons-png.flaticon.com/512/6978/6978255.png',
-    'https://cdn-icons-png.flaticon.com/512/1669/1669668.png',
-    'https://cdn-icons-png.flaticon.com/512/3656/3656972.png',
-    'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
-    'https://cdn-icons-png.flaticon.com/512/814/814405.png',
+    
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
     "https://cdn-icons-png.flaticon.com/512/1138/1138048.png",
-    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753739633/k6imclhzfk4aig1lxh2c.jpg'
+    'https://cdn-icons-png.flaticon.com/512/7804/7804228.png',
+    'https://cdn-icons-png.flaticon.com/512/6395/6395499.png',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448647.png',
+    'https://cdn-icons-png.flaticon.com/512/9922/9922103.png',
+    'https://cdn-icons-png.flaticon.com/512/5695/5695678.png',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753742693658.svg?token=exp=1753743594~hmac=6bdfba66f8868920e4cbeb8d18cbd887',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753742942073.svg?token=exp=1753743848~hmac=7a12660b60e27942eae22df64b9f3b9a',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743046946.svg?token=exp=1753743947~hmac=8efe3786fbe5a82dc9a48c9b756637f5',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743119229.svg?token=exp=1753744019~hmac=a72a0beb22a73513b48562a807100eca',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743195612.svg?token=exp=1753744106~hmac=15679c5d446abb9507a57d2dafbf785a',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743278295.svg?token=exp=1753744189~hmac=e17707de9f09ed79e7bd402887124ba3',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743362043.svg?token=exp=1753744262~hmac=f89bc4092d4911d5c6acee9b9f7a84b9',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743421210.svg?token=exp=1753744321~hmac=990ca33f08b8f47e2542d1d88d78fffa',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743584576.svg?token=exp=1753744485~hmac=c6b0fbca31da3d4534a136dc96e92f45',
+    'https://cdn-icons-png.flaticon.com/512/7720/7720503.png',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743743308.svg?token=exp=1753744643~hmac=dad57bfaf3be0b698aa345d33edbb3fe',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753745898972.svg?token=exp=1753746799~hmac=0b0ae23d725a3130d0dec6430bef99d8',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746095998.svg?token=exp=1753746996~hmac=d92a8e961ebdd4067043ed09485dc0f3',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746392608.svg?token=exp=1753747293~hmac=1c4b2c758ee3951c4247098c289dceae'
 ];
 
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
