@@ -9,7 +9,7 @@ export default function Home() {
       <MapaInterativo/>
       
       <main id='favoritos' className="p-4 bg-white">
-        <CarrosselHorizontal />
+          <CarrosselHorizontal/>
       </main>
         <Footer/>
     </div>

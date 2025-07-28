@@ -189,13 +189,13 @@ export default function Login() {
                             <GoogleLogin
                                 onSuccess={handleGoogleLogin}
                                 onError={() => setError("Falha ao autenticar com o Google.")}
-                                // Adicione props para personalizar o botão do Google se necessário
-                                // Por exemplo, 'theme="filled_blue"', 'size="large"', 'text="continue_with"'
-                                // Para combinar com o estilo profissional:
-                                theme="outline" // 'outline' ou 'filled_blue'
-                                size="large" // 'large', 'medium', 'small'
-                                text="continue_with" // 'signin_with', 'signup_with', 'continue_with'
-                                width="300" // Largura personalizada para o botão
+                                // Propriedades para estilizar o botão Google para se assemelhar ao botão LOGIN
+                                theme="outline" // Fundo azul
+                                size="large"       // Tamanho grande
+                                text="continue_with" // Texto "Continuar com Google"
+                                // A largura é um valor em pixels. Ajuste '300' para o que melhor se encaixa no seu layout.
+                                // O 'w-full' do Tailwind não se aplica diretamente a este componente de terceiros.
+                                width="318" // Exemplo de largura fixa. Você pode ajustar este valor.
                             />
                         </GoogleOAuthProvider>
                     </div>

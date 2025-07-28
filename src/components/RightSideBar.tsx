@@ -118,14 +118,21 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
     flex items-center justify-center shadow-lg
     transition-opacity duration-300
     ${isSearchExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-    absolute left-10 top-0 z-10
+    absolute left-0 top-0 z-10
   `}
   aria-label="Abrir busca"
 >
   <FaSearch className="text-gray-600" />
 </button>
 
-        <div className={`absolute sm:relative w-full transition-all duration-300 ${isSearchExpanded ? 'opacity-100' : 'opacity-0 sm:opacity-100 pointer-events-none sm:pointer-events-auto'}`}>
+        <div className={`
+  absolute sm:relative
+  w-[90%] max-w-[350px]
+  right-4 sm:right-auto
+  transition-all duration-300
+  ${isSearchExpanded ? 'opacity-100' : 'opacity-0 sm:opacity-100 pointer-events-none sm:pointer-events-auto'}
+`}>
+
             <div className="relative">
                 <div className="pointer-events-none absolute inset-y-0 left-0 pl-1 sm:pl-3 flex items-center ">
                     <FaSearch className="text-gray-400" />
@@ -133,14 +140,14 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
                 <input
                     type="text"
                     placeholder="Pesquisar locais..."
-                    className="bg-white rounded-full w-80 p-3 pl-10 text-base focus:outline-none focus:border-none focus:ring-0 shadow-lg"
+                    className="bg-white rounded-full w-70 p-3 pl-10 text-base focus:outline-none focus:border-none focus:ring-0 shadow-lg"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onFocus={() => { if(searchTerm) setIsDropdownOpen(true) }}
                 />
                 <button 
                   onClick={() => setIsSearchExpanded(false)}
-                  className="sm:hidden absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                  className="sm:hidden absolute inset-y-0 left-60 flex items-center pr-3 text-gray-500"
                   aria-label="Fechar busca"
                 >
                   <FaTimes />
