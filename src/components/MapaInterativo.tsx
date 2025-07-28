@@ -205,7 +205,7 @@ const MapaInterativo = () => {
     
 
     return (
-        <div className="flex h-screen w-full bg-gray-200">
+        <div className="flexw-full h-[90vh] lg:h-screen relative bg-gray-200">
             <div className={`relative flex-grow h-full transition-all duration-300 ease-in-out ${isSuggesting ? 'cursor-crosshair' : ''}`}>
                 
                 <div className='flex'>
@@ -315,7 +315,7 @@ const MapaInterativo = () => {
                 </div>
 
                 <div className="absolute bottom-4 right-4 z-[1000]">
-                    <div className='sm:flex fixed sm:bottom-6 bottom-20 right-4 z-[1002]'>
+                    <div className='sm:flex absolute sm:bottom-6 bottom-5 right-0 z-[1002]'>
                         {role === 'user' && !isSuggesting && (
                             <button onClick={() => setIsSuggesting(true)} className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:bg-gray-100" aria-label="Sugerir novo local">
                                 <FaPlus />
@@ -323,7 +323,7 @@ const MapaInterativo = () => {
                         )}
                     </div>
                     {isSuggesting && (
-                        <div className="bg-white absolute bottom-15 z-[3000] right-10 w-70 p-3 rounded-md shadow-lg pointer-events-auto animate-pulse flex items-center gap-3">
+                        <div className="bg-white absolute bottom-2 z-[3000] right-0 w-60 p-3 rounded-md shadow-lg pointer-events-auto animate-pulse flex items-center gap-3">
                            <span className="text-gray-700 font-semibold">Clique no mapa para adicionar sua sugestão</span>
                            <button onClick={() => setIsSuggesting(false)} className="text-red-500 hover:text-red-700" aria-label="Cancelar sugestão"><FaTimes size={20} /></button>
                         </div>
