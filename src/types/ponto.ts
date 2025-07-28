@@ -7,6 +7,14 @@ export interface Address {
   complemento?: string;
 }
 
+export interface SocialLinks{
+  tripadvisor?: string;
+  whatsapp?: string;
+  instagram?: string;
+  email?: string;
+  website?: string;
+}
+
 // Interface para o objeto Categoria aninhado
 export interface Category {
   id: string;
@@ -15,6 +23,10 @@ export interface Category {
 
 interface AddressUpdatePayload {
   update: Address;
+}
+
+interface SocialLinksUpdatePayload {
+  update: SocialLinks;
 }
 
 export interface PontoTuristico {
@@ -29,8 +41,6 @@ export interface PontoTuristico {
   createdAt?: string;
   categoryId?: string;
   averageRating?: number; 
-  
-  // --- CORREÇÃO AQUI ---
-  // A categoria agora é um objeto que pode ser opcional
   category?: Category;
+  socialLinks?: SocialLinks | SocialLinksUpdatePayload; // Permite tanto o objeto completo quanto a atualização
 }

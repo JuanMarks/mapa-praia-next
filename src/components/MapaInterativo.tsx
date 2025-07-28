@@ -58,6 +58,7 @@ const MapaInterativo = () => {
             setMapError(null);
             const response = await api.get('/places/getPlaces');
             setPontos(response.data);
+            console.log("Pontos carregados:", response.data);
         } catch (err: unknown) { // CORRIGIDO: de 'any' para 'unknown'
             console.error("Erro ao buscar os pontos turísticos:", err);
             
@@ -75,6 +76,7 @@ const MapaInterativo = () => {
     };
 
     useEffect(() => {
+        
         fetchPontos();
     }, []);
 
@@ -161,6 +163,10 @@ const MapaInterativo = () => {
         const pontoNormalizado = { ...pontoAtualizado };
         if (pontoNormalizado.address && 'update' in pontoNormalizado.address) {
             pontoNormalizado.address = pontoNormalizado.address.update;
+        }
+
+        if (pontoNormalizado.socialLinks && 'update' in pontoNormalizado.socialLinks) {
+            pontoNormalizado.socialLinks = pontoNormalizado.socialLinks.update;
         }
         setPontos(prev => prev.map(p => p.id === pontoNormalizado.id ? pontoNormalizado : p));
         setSelectedPonto(pontoNormalizado);
@@ -330,7 +336,7 @@ const MapaInterativo = () => {
                     )}
                 </div>
 
-                <div className="absolute top-1 sm:top-3.5 sm:right-5 right-5 z-[9999] pointer-events-none">
+                <div className="absolute top-1 sm:top-3.5 sm:right-5 right-5 z-[3000] pointer-events-none">
                     <div className="flex items-start gap-4 mt-5">
                         <button onClick={() => setIsListSidebarOpen(!isListSidebarOpen)} className="bg-white p-3 rounded-md shadow-lg pointer-events-auto text-blue-900 hover:bg-gray-100" aria-label="Mostrar lista de locais">
                             <FaBars size={20} />
