@@ -46,6 +46,13 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
+
+    // Social Links
+    const [tripadvisor, setTripadvisor] = useState('');
+    const [whatsapp, setWhatsapp] = useState('');
+    const [instagram, setInstagram] = useState('');
+    const [email, setEmail] = useState('');
+    const [website, setWebsite] = useState('');
     
     // Estados para Categoria
     const [categories, setCategories] = useState<Category[]>([]);
@@ -90,6 +97,11 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
         formData.append('address[numero]', String(numero));
         formData.append('address[bairro]', bairro);
         formData.append('address[complemento]', complemento);
+        formData.append('socialLinks[tripadvisor]', tripadvisor);
+        formData.append('socialLinks[whatsapp]', whatsapp);
+        formData.append('socialLinks[instagram]', instagram);
+        formData.append('socialLinks[email]', email);
+        formData.append('socialLinks[website]', website);
         imagens.forEach((imagem) => {
             formData.append('photos', imagem);
         });
@@ -182,6 +194,33 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             <div>
                                 <label htmlFor="complemento" className="block mb-2 text-sm font-medium text-gray-700">Complemento</label>
                                 <input type="text" id="complemento" value={complemento} onChange={(e) => setComplemento(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                        </div>
+
+                        {/* Campo de Redes Sociais */}
+                        <div>
+                            <label htmlFor="social" className="block mb-2 text-sm font-medium text-gray-700">Redes Sociais</label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label htmlFor="tripadvisor" className="block mb-2 text-sm font-medium text-gray-700">Tripadvisor</label>
+                                    <input type="text" id="tripadvisor" value={tripadvisor} onChange={(e) => setTripadvisor(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                                </div>
+                                <div>
+                                    <label htmlFor="whatsapp" className="block mb-2 text-sm font-medium text-gray-700">WhatsApp</label>
+                                    <input type="text" id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                                </div>
+                                <div>
+                                    <label htmlFor="instagram" className="block mb-2 text-sm font-medium text-gray-700">Instagram</label>
+                                    <input type="text" id="instagram" value={instagram} onChange={(e) => setInstagram(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                                    <input type="text" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                                </div>
+                                <div>
+                                    <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-700">Website</label>
+                                    <input type="text" id="website" value={website} onChange={(e) => setWebsite(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                                </div>
                             </div>
                         </div>
 

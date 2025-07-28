@@ -55,6 +55,13 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoryId, setCategoryId] = useState('');
 
+    //Social Links
+    const [tripadvisor, setTripadvisor] = useState('');
+    const [whatsapp, setWhatsapp] = useState('');
+    const [instagram, setInstagram] = useState('');
+    const [email, setEmail] = useState('');
+    const [website, setWebsite] = useState('');
+
     // Estados para gerenciamento de fotos
     const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
     const [newPhotos, setNewPhotos] = useState<File[]>([]);
@@ -80,6 +87,19 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                 const addressData = (ponto.address && 'update' in ponto.address)
                 ? ponto.address.update
                 : ponto.address;
+
+                type SocialLinks = {
+                    tripadvisor?: string;
+                    whatsapp?: string;
+                    instagram?: string;
+                    email?: string;
+                    website?: string;
+                };
+                const socialLinksData: SocialLinks = (ponto.socialLinks && 'update' in ponto.socialLinks)
+                ? ponto.socialLinks.update as SocialLinks
+                : ponto.socialLinks as SocialLinks;
+
+                
                 setName(ponto.name);
                 setDescription(ponto.description);
                 setIconURL(ponto.iconURL || '');
@@ -90,6 +110,11 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                 setLogradouro(addressData?.logradouro || '');
                 setComplemento(addressData?.complemento || '');
                 setCategoryId(ponto.categoryId || ''); // Define a categoria atual
+                setTripadvisor(socialLinksData?.tripadvisor || '');
+                setWhatsapp(socialLinksData?.whatsapp || '');
+                setInstagram(socialLinksData?.instagram || '');
+                setEmail(socialLinksData?.email || '');
+                setWebsite(socialLinksData?.website || '');
             }
         };
         
@@ -123,6 +148,13 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
         formData.append('address[bairro]', bairro);
         formData.append('address[complemento]', complemento);
         formData.append('photosToDelete', JSON.stringify(photosToDelete));
+
+        // Social Links
+        formData.append('socialLinks[tripadvisor]', tripadvisor);
+        formData.append('socialLinks[whatsapp]', whatsapp);
+        formData.append('socialLinks[instagram]', instagram);
+        formData.append('socialLinks[email]', email);
+        formData.append('socialLinks[website]', website);
         newPhotos.forEach(file => {
             formData.append('photos', file);
         });
@@ -239,6 +271,30 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                             <div>
                                 <label htmlFor="complemento" className="block mb-2 text-sm font-medium text-gray-700">Complemento</label>
                                 <input type="text" id="complemento" value={complemento} onChange={(e) => setComplemento(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                        </div>
+
+                        // Social Links
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label htmlFor="tripadvisor" className="block mb-2 text-sm font-medium text-gray-700">Tripadvisor</label>
+                                <input type="text" id="tripadvisor" value={tripadvisor} onChange={(e) => setTripadvisor(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                            <div>
+                                <label htmlFor="whatsapp" className="block mb-2 text-sm font-medium text-gray-700">WhatsApp</label>
+                                <input type="text" id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                            <div>
+                                <label htmlFor="instagram" className="block mb-2 text-sm font-medium text-gray-700">Instagram</label>
+                                <input type="text" id="instagram" value={instagram} onChange={(e) => setInstagram(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                            <div>
+                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                                <input type="text" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
+                            </div>
+                            <div>
+                                <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-700">Website</label>
+                                <input type="text" id="website" value={website} onChange={(e) => setWebsite(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
                             </div>
                         </div>
 

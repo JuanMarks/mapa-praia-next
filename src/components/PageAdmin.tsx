@@ -144,7 +144,14 @@ const PageAdmin = () => {
     const handleDelete = async (id: string) => {
         if (window.confirm('Tem certeza que deseja apagar este ponto?')) {
             try {
-                await api.delete(`/places/${id}`);
+                await api.delete(`/places/${id}`
+                    //Autorization
+                , {
+                    headers: {
+                        'Authorization': `Bearer ${Cookies.get('token')}`
+                    }
+                });
+                setError(null); // Limpa o erro se a deleção for bem-sucedida
                 setPontos(pontos.filter((ponto) => ponto.id !== id));
             } catch (err: unknown) {
                 console.error("Erro ao apagar ponto:", err);
