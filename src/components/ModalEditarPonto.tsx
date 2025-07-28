@@ -262,7 +262,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                             </div>
                              <div>
                                 <label htmlFor="numero" className="block mb-2 text-sm font-medium text-gray-700">Número</label>
-                                <input type="text" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
+                                <input type="number" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
                             </div>
                             <div>
                                 <label htmlFor="bairro" className="block mb-2 text-sm font-medium text-gray-700">Bairro</label>
@@ -274,8 +274,9 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                             </div>
                         </div>
 
-                        // Social Links
+                        <label htmlFor="social" className="block mb-2 text-sm font-medium text-gray-700">Redes Sociais</label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            
                             <div>
                                 <label htmlFor="tripadvisor" className="block mb-2 text-sm font-medium text-gray-700">Tripadvisor</label>
                                 <input type="text" id="tripadvisor" value={tripadvisor} onChange={(e) => setTripadvisor(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />

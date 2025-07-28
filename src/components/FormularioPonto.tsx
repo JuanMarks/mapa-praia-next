@@ -31,7 +31,8 @@ const ICONS = [
     'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
     'https://cdn-icons-png.flaticon.com/512/814/814405.png',
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
-    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png"
+    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png",
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753739633/k6imclhzfk4aig1lxh2c.jpg'
 ];
 
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
@@ -185,7 +186,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             </div>
                             <div>
                                 <label htmlFor="numero" className="block mb-2 text-sm font-medium text-gray-700">Número</label>
-                                <input type="text" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                                <input type="number" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
                             </div>
                             <div>
                                 <label htmlFor="logradouro" className="block mb-2 text-sm font-medium text-gray-700">Logradouro</label>
