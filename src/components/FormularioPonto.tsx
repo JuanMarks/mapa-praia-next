@@ -38,7 +38,8 @@ const ICONS = [
     'https://cdn-user-icons.flaticon.com/202337/202337775/1753743743308.svg?token=exp=1753744643~hmac=dad57bfaf3be0b698aa345d33edbb3fe',
     'https://cdn-user-icons.flaticon.com/202337/202337775/1753745898972.svg?token=exp=1753746799~hmac=0b0ae23d725a3130d0dec6430bef99d8',
     'https://cdn-user-icons.flaticon.com/202337/202337775/1753746095998.svg?token=exp=1753746996~hmac=d92a8e961ebdd4067043ed09485dc0f3',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746392608.svg?token=exp=1753747293~hmac=1c4b2c758ee3951c4247098c289dceae'
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746392608.svg?token=exp=1753747293~hmac=1c4b2c758ee3951c4247098c289dceae',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746910443.svg?token=exp=1753747811~hmac=181c4eb481a1b9f3dfde7fa5c5633ce4'
 ];
 
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
