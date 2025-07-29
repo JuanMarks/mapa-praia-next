@@ -17,21 +17,29 @@ interface Props {
 }
 
 const ICONS = [
-    '🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
+    'https://cdn-icons-png.flaticon.com/512/7804/7804228.png',
+    'https://cdn-icons-png.flaticon.com/512/6395/6395499.png',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448647.png',
+    'https://cdn-icons-png.flaticon.com/512/9922/9922103.png',
+    'https://cdn-icons-png.flaticon.com/512/5695/5695678.png',
+    'https://cdn-icons-png.flaticon.com/512/7720/7720503.png',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448435.png',
     'https://cdn-icons-png.flaticon.com/512/3448/3448609.png',
-    'https://cdn-icons-png.flaticon.com/512/2923/2923500.png',
-    'https://cdn-icons-png.flaticon.com/512/854/854878.png',
-    'https://cdn-icons-png.flaticon.com/512/1046/1046751.png',
-    'https://cdn-icons-png.flaticon.com/512/4901/4901802.png',
-    'https://cdn-icons-png.flaticon.com/512/2271/2271030.png',
-    'https://cdn-icons-png.flaticon.com/512/4287/4287284.png',
-    'https://cdn-icons-png.flaticon.com/512/6978/6978255.png',
-    'https://cdn-icons-png.flaticon.com/512/1669/1669668.png',
-    'https://cdn-icons-png.flaticon.com/512/3656/3656972.png',
-    'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
-    'https://cdn-icons-png.flaticon.com/512/814/814405.png',
-    'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
-    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png"
+    'https://cdn-icons-png.flaticon.com/512/3448/3448450.png',
+    'https://cdn-icons-png.flaticon.com/512/5203/5203048.png',
+    'https://cdn-icons-png.flaticon.com/512/3307/3307697.png',
+    'https://cdn-icons-png.flaticon.com/512/3368/3368415.png',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448435.png',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448350.png',
+    'https://cdn-icons-png.flaticon.com/512/17531/17531810.png',
+    'https://cdn-icons-png.flaticon.com/512/17823/17823346.png',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448384.png',
+    'https://cdn-icons-png.flaticon.com/512/5203/5203062.png',
+    'https://cdn-icons-png.flaticon.com/512/10472/10472602.png',
+    'https://cdn-icons-png.flaticon.com/512/18789/18789943.png',
+    'https://cdn-icons-png.flaticon.com/512/5193/5193716.png',
+    'https://cdn-icons-png.flaticon.com/512/18582/18582631.png',
+    'https://cdn-icons-png.flaticon.com/512/4931/4931395.png'
 ];
 
 const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
@@ -185,7 +193,7 @@ const FormularioPonto = ({ coordenadas, onClose, onCriado }: Props) => {
                             </div>
                             <div>
                                 <label htmlFor="numero" className="block mb-2 text-sm font-medium text-gray-700">Número</label>
-                                <input type="text" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
+                                <input type="number" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled={isLoading} />
                             </div>
                             <div>
                                 <label htmlFor="logradouro" className="block mb-2 text-sm font-medium text-gray-700">Logradouro</label>

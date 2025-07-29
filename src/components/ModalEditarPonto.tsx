@@ -16,24 +16,31 @@ const TrashIcon = () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
 );
 
-const ICONS = ['🏛️', '🏞️', '🏖️', '🍽️', '🏨', '⛰️', '🌳', '🛍️', '⭐', '🍦', '🍻',
-    'https://cdn-icons-png.flaticon.com/512/3448/3448609.png',
-    'https://cdn-icons-png.flaticon.com/512/2923/2923500.png',
-    'https://cdn-icons-png.flaticon.com/512/854/854878.png',
-    'https://cdn-icons-png.flaticon.com/512/1046/1046751.png',
-    'https://cdn-icons-png.flaticon.com/512/4901/4901802.png',
-    'https://cdn-icons-png.flaticon.com/512/2271/2271030.png',
-    'https://cdn-icons-png.flaticon.com/512/4287/4287284.png',
-    'https://cdn-icons-png.flaticon.com/512/6978/6978255.png',
-    'https://cdn-icons-png.flaticon.com/512/1669/1669668.png',
-    'https://cdn-icons-png.flaticon.com/512/3656/3656972.png',
-    'https://cdn-icons-png.flaticon.com/512/10415/10415475.png',
-    'https://cdn-icons-png.flaticon.com/512/814/814405.png',
+const ICONS = [
+    
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
-    'https://cdn-icons-png.flaticon.com/512/1138/1138048.png',
-    'https://cdn-icons-png.flaticon.com/512/1946/1946788.png'
+    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png",
+    'https://cdn-icons-png.flaticon.com/512/7804/7804228.png',
+    'https://cdn-icons-png.flaticon.com/512/6395/6395499.png',
+    'https://cdn-icons-png.flaticon.com/512/3448/3448647.png',
+    'https://cdn-icons-png.flaticon.com/512/9922/9922103.png',
+    'https://cdn-icons-png.flaticon.com/512/5695/5695678.png',
+    'https://cdn-icons-png.flaticon.com/512/7720/7720503.png',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753745898972.svg?token=exp=1753746799~hmac=0b0ae23d725a3130d0dec6430bef99d8',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746392608.svg?token=exp=1753747293~hmac=1c4b2c758ee3951c4247098c289dceae',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746910443.svg?token=exp=1753747811~hmac=181c4eb481a1b9f3dfde7fa5c5633ce4',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747463790.svg?token=exp=1753748368~hmac=638e67d6cb2484d6f2861c1edae009a1',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747586711.svg?token=exp=1753748487~hmac=4419a8c33207c0e36319603380eb3674',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747659924.svg?token=exp=1753748560~hmac=f73edf0658d48a31c98db42c14fa2b0d',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747795942.svg?token=exp=1753748696~hmac=3cfddcee72e3673e8dbcc7380807cae9',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747917146.svg?token=exp=1753748817~hmac=5cd473dcc00c18ffa4af85a966f12109',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747981896.svg?token=exp=1753748882~hmac=d39de14c80440f41e54351d822c12685',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748060520.svg?token=exp=1753748961~hmac=2fc18596ef82e40999e8252911381fb2',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748132938.svg?token=exp=1753749033~hmac=dde72720e7d0deebc11a32d9e977d35c',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748198310.svg?token=exp=1753749098~hmac=54ed9caf65751f74deea8208cb4f79bc',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748276940.svg?token=exp=1753749177~hmac=85b8ee1bce374d6d37f065c5fd5578a2',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748332673.svg?token=exp=1753749233~hmac=c45213af9248e63cda39595abce6313b'
 ];
-
 interface Props {
     ponto: PontoTuristico;
     onClose: () => void;
@@ -262,7 +269,7 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                             </div>
                              <div>
                                 <label htmlFor="numero" className="block mb-2 text-sm font-medium text-gray-700">Número</label>
-                                <input type="text" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
+                                <input type="number" id="numero" value={numero} onChange={(e) => setNumero(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />
                             </div>
                             <div>
                                 <label htmlFor="bairro" className="block mb-2 text-sm font-medium text-gray-700">Bairro</label>
@@ -274,8 +281,9 @@ const ModalEditarPonto = ({ ponto, onClose, onAtualizado }: Props) => {
                             </div>
                         </div>
 
-                        // Social Links
+                        <label htmlFor="social" className="block mb-2 text-sm font-medium text-gray-700">Redes Sociais</label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            
                             <div>
                                 <label htmlFor="tripadvisor" className="block mb-2 text-sm font-medium text-gray-700">Tripadvisor</label>
                                 <input type="text" id="tripadvisor" value={tripadvisor} onChange={(e) => setTripadvisor(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" disabled={isLoading} />

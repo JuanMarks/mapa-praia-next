@@ -161,6 +161,10 @@ const StarRating = ({ ponto, onAtualizado }: StarRatingProps) => {
     const canRate = role === 'user' || role === 'admin';
 
     const handleRatingSubmit = async (newRatingValue: number) => {
+        if(role === 'admin') {
+            setError("Administradores não podem avaliar.");
+            return;
+        }
         if (!canRate) {
             setError("Você precisa estar logado para avaliar!");
             return;
