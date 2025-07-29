@@ -14,7 +14,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 // Importando ícones
-import { FaStar, FaMapMarkerAlt, FaBookmark, FaWheelchair } from 'react-icons/fa';
+import { FaStar, FaMapMarkerAlt, FaBookmark } from 'react-icons/fa';
 
 
 interface Props {
