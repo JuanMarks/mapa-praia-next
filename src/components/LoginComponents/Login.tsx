@@ -157,11 +157,11 @@ export default function Login() {
                             />
                         </div>
 
-                        <div className="text-right text-sm">
+                        {/* <div className="text-right text-sm">
                             <Link href="#" className="font-medium text-blue-900 hover:text-blue-600">
                                 Esqueceu sua senha?
                             </Link>
-                        </div>
+                        </div> */}
 
                         <div>
                             <button

@@ -54,7 +54,15 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
   
 
   const temFotos = ponto?.photos && ponto.photos.length > 0;
-   const temSocialLinks = socialLinksData && Object.values(socialLinksData).some(link => link);
+  const temSocialLinks = socialLinksData && Object.values(socialLinksData).some(link => link);
+
+  const normalizeUrl = (url: string) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    // Se não tiver o protocolo, adiciona https:// por padrão
+    return `https://${url}`;
+  };
   
 
   return (
@@ -88,9 +96,9 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
             {ponto && <StarRating ponto={ponto} onAtualizado={onAtualizado} />}
             <div className="grid grid-cols-4 gap-2 my-4 text-center">
               <ActionButton icon={<FaRoute />} label="Rotas" onClick={handleRouteClick} />
-              <ActionButton icon={<FaBookmark />} label="Salvar" />
-              <ActionButton icon={<FaShare />} label="Partilhar" />
-              <ActionButton icon={<FaMapMarkerAlt />} label="Mapa" />
+              <ActionButton icon={<FaBookmark />} label="Salvar" disabled={true} />
+              <ActionButton icon={<FaShare />} label="Partilhar" disabled={true} />
+              <ActionButton icon={<FaMapMarkerAlt />} label="Mapa" disabled={true} />
             </div>
 
             {/* --- Seção de Redes Sociais --- */}
@@ -99,10 +107,10 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
             <h3 className="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wider">Contato e Redes</h3>
             <div className="flex flex-wrap gap-4">
               {/* 3. Use 'socialLinksData' em vez de 'ponto.socialLinks' */}
-              {socialLinksData.website && <SocialLink href={socialLinksData.website} icon={<FaGlobe />} />}
-              {socialLinksData.instagram && <SocialLink href={socialLinksData.instagram} icon={<FaInstagram />} />}
+              {socialLinksData.website && <SocialLink href={normalizeUrl(socialLinksData.website)} icon={<FaGlobe />} />}
+              {socialLinksData.instagram && <SocialLink href={normalizeUrl(socialLinksData.instagram)} icon={<FaInstagram />} />}
               {socialLinksData.whatsapp && <SocialLink href={`https://wa.me/${socialLinksData.whatsapp}`} icon={<FaWhatsapp />} />}
-              {socialLinksData.tripadvisor && <SocialLink href={socialLinksData.tripadvisor} icon={<FaTripadvisor />} />}
+              {socialLinksData.tripadvisor && <SocialLink href={normalizeUrl(socialLinksData.tripadvisor)} icon={<FaTripadvisor />} />}
               {socialLinksData.email && <SocialLink href={`mailto:${socialLinksData.email}`} icon={<FaEnvelope />} />}
             </div>
           </div>
@@ -236,8 +244,19 @@ const StarRating = ({ ponto, onAtualizado }: StarRatingProps) => {
     );
 };
 
-const ActionButton = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick?: () => void }) => (
-    <button onClick={onClick} className="flex flex-col items-center cursor-pointer text-blue-600 hover:text-blue-800 transition focus:outline-none">
+const ActionButton = ({ icon, label, onClick, disabled }: { icon: React.ReactNode; label: string; onClick?: () => void; disabled?: boolean }) => (
+    <button 
+        onClick={onClick}
+        disabled={disabled} // Desativa a funcionalidade do botão
+        title={disabled ? 'Em breve' : label} // Mostra 'Em breve' ao passar o mouse
+        className={`
+            flex flex-col items-center transition focus:outline-none 
+            ${disabled 
+                ? 'text-gray-400 cursor-not-allowed' // Estilo quando desativado
+                : 'text-blue-600 hover:text-blue-800 cursor-pointer' // Estilo quando ativo
+            }
+        `}
+    >
         {icon}
         <span className="text-[10px] mt-1">{label}</span>
     </button>
