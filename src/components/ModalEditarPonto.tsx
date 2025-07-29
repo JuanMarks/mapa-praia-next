@@ -39,7 +39,28 @@ const ICONS = [
     'https://cdn-icons-png.flaticon.com/512/18789/18789943.png',
     'https://cdn-icons-png.flaticon.com/512/5193/5193716.png',
     'https://cdn-icons-png.flaticon.com/512/18582/18582631.png',
-    'https://cdn-icons-png.flaticon.com/512/4931/4931395.png'
+    'https://cdn-icons-png.flaticon.com/512/4931/4931395.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806196/farmacia_posto_c5c9h7.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806136/praia_jhjjwo.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806195/pousada_sayt0j.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806156/igreja_mlq5ir.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806134/bar_goo7rs.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806157/sorvete_hmvjpe.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806196/restaurante_ooxdvu.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806156/acai_t4vqtl.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806155/petiscaria_xmundx.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806135/dunas_jpgpp3.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806135/coqueiro_t90q05.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806134/pizza_liaqac.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806133/barco_hvaxz6.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806133/lagoa_g8n6ua.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806132/peixe_xhitqs.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806131/hamburguer_ug6o8u.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806131/estrela_ui9f31.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806016/windsurf_t3j4vg.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806129/hospital_gftoyk.png',
+    'https://res.cloudinary.com/dvsgvt984/image/upload/v1753806130/mecanica_gexper.png',
+
 ];
 interface Props {
     ponto: PontoTuristico;
