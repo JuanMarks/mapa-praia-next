@@ -11,6 +11,7 @@ import api from '@/axios/config';
 import { isAxiosError } from 'axios'; // Importa o type guard do Axios
 import { useTideData } from '../hooks/useTideData';
 import mareData from '../data/tabua-mares-2025.json';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 // import Link from 'next/link';
 // import Image from 'next/image';
 // Importando componentes
@@ -132,22 +133,44 @@ const MapaInterativo = () => {
     };
 
     const createCustomIcon = (iconURL: string) => {
-    const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
-    if (isUrl) {
-        return icon({
-        iconUrl: iconURL,
-        iconSize: [40, 40],         // aumente se necessário
-        iconAnchor: [20, 40],       // base central do ícone
-        popupAnchor: [0, -35],      // ajusta posição do popup
+        const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
+        if (isUrl) {
+            return icon({
+            iconUrl: iconURL,
+            iconSize: [40, 40],         // aumente se necessário
+            iconAnchor: [20, 40],       // base central do ícone
+            popupAnchor: [0, -35],      // ajusta posição do popup
+            });
+        }
+        return divIcon({
+            html: `<span style="font-size: 32px;">${iconURL}</span>`,
+            className: 'emoji-icon',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -35],
         });
-    }
-    return divIcon({
-        html: `<span style="font-size: 32px;">${iconURL}</span>`,
-        className: 'emoji-icon',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -35],
-    });
+    };
+
+    const createPontoIcon = (iconURL: string, nome: string) => {
+        const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
+        
+        // O HTML agora contém um contêiner, a imagem/emoji, e o rótulo de texto
+        const iconHtml = `
+            <div class="ponto-icon-container">
+                ${isUrl 
+                    ? `<img src="${iconURL}" class="ponto-icon-image" alt="ícone"/>` 
+                    : `<span class="ponto-icon-emoji">${iconURL}</span>`
+                }
+                <span class="ponto-icon-label">${nome}</span>
+            </div>
+        `;
+
+        return divIcon({
+            html: iconHtml,
+            className: 'leaflet-custom-div-icon', // Classe para remover estilos padrão
+            iconSize: [120, 60], // Largura e altura do contêiner total (ícone + texto)
+            iconAnchor: [60, 40], // Ponto de ancoragem (centro inferior do ícone)
+        });
     };
 
     const handleLocationSelect = (ponto: PontoTuristico | null) => {
@@ -271,13 +294,13 @@ const MapaInterativo = () => {
 
                     
                     
-
+                    <MarkerClusterGroup>
                     {pontos.map((ponto) => (
                         <>
                             <Marker
                                 key={ponto.id}
                                 position={[ponto.latitude, ponto.longitude]}
-                                icon={createCustomIcon(ponto.iconURL ?? '📍')}
+                                icon={createPontoIcon(ponto.iconURL ?? '📍', ponto.name)}
                                 eventHandlers={{
                                     click: () => handleLocationSelect(ponto),
                                     mouseover: (e) => e.target.openPopup(),
@@ -290,15 +313,16 @@ const MapaInterativo = () => {
                                 
                             </Marker>
 
-                            <Marker
+                            {/* <Marker
                                 key={`${ponto.id}-label`}
                                 position={[ponto.latitude, ponto.longitude]}
                                 icon={createLabelIcon(ponto.name)}
                                 interactive={false} // Faz com que o rótulo não seja clicável
                                 
-                            />
+                            /> */}
                         </>
                     ))}
+                    </MarkerClusterGroup>
                 </MapContainer>
 
                 <div className="absolute z-[1000] left-3 top-30 hidden sm:flex flex-col shadow-lg rounded-2xl overflow-hidden"> {/* MODIFICADO AQUI: left-3 e top-20 */}

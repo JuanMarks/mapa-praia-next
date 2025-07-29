@@ -118,3 +118,46 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Estilos para o contêiner do ícone customizado do Leaflet */
+.leaflet-custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Contêiner principal para o ícone e o rótulo */
+.ponto-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Estilo para o emoji */
+.ponto-icon-emoji {
+  font-size: 32px;
+  line-height: 1;
+}
+
+/* Estilo para a imagem */
+.ponto-icon-image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* Estilo para o rótulo de texto */
+.ponto-icon-label {
+  margin-top: 4px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap; /* Impede que o nome quebre a linha */
+  
+  /* Efeito de borda preta para legibilidade */
+  text-shadow: 
+    -1.5px -1.5px 0 #000,  
+     1.5px -1.5px 0 #000,
+    -1.5px  1.5px 0 #000,
+     1.5px  1.5px 0 #000;
+}
