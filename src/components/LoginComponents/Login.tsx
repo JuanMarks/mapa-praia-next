@@ -195,7 +195,7 @@ export default function Login() {
                                 text="continue_with" // Texto "Continuar com Google"
                                 // A largura é um valor em pixels. Ajuste '300' para o que melhor se encaixa no seu layout.
                                 // O 'w-full' do Tailwind não se aplica diretamente a este componente de terceiros.
-                                width="318" // Exemplo de largura fixa. Você pode ajustar este valor.
+                                width="296" // Exemplo de largura fixa. Você pode ajustar este valor.
                             />
                         </GoogleOAuthProvider>
                     </div>

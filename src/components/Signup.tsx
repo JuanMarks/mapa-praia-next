@@ -69,7 +69,7 @@ export default function Register() {
 
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center">
-            <div className="absolute inset-0 bg-blue-950 opacity-60"></div>
+            <div className="absolute inset-0 bg-blue-950/40"></div>
             <Image
                 src="/images/icaraizinho2.jpeg"
                 alt="Praia de Icaraizinho de Amontada"
