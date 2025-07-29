@@ -211,7 +211,7 @@ const MapaInterativo = () => {
     
 
     return (
-        <div className="flexw-full h-[90vh] lg:h-screen relative bg-gray-200">
+        <div className="flexw-full h-[90vh] md:h-screen lg:h-screen relative bg-gray-200">
             <div className={`relative flex-grow h-full transition-all duration-300 ease-in-out ${isSuggesting ? 'cursor-crosshair' : ''}`}>
                 
                 <div className='flex'>
@@ -223,7 +223,7 @@ const MapaInterativo = () => {
   className="
     absolute
     top-5 sm:top-[120px] lg:top-8
-    left-5 sm:left-auto lg:right-0
+    left-2 sm:left-auto lg:right-0
     sm:right-0
     sm:translate-x-0
     lg:translate-x-0
@@ -320,7 +320,7 @@ const MapaInterativo = () => {
                     </button>
                 </div>
 
-                <div className="absolute bottom-4 right-4 z-[1000]">
+                <div className="absolute bottom-4 right-5 z-[1000]">
                     <div className='sm:flex absolute sm:bottom-6 bottom-5 right-0 z-[1002]'>
                         {role === 'user' && !isSuggesting && (
                             <button onClick={() => setIsSuggesting(true)} className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:bg-gray-100" aria-label="Sugerir novo local">
@@ -336,10 +336,10 @@ const MapaInterativo = () => {
                     )}
                 </div>
 
-                <div className="absolute top-1 sm:top-3.5 sm:right-5 right-5 z-[3000] pointer-events-none">
+                <div className="absolute top-0 sm:top-3.5 sm:right-5 right-5 z-[3000] pointer-events-none">
                     <div className="flex items-start gap-4 mt-5">
                         <button onClick={() => setIsListSidebarOpen(!isListSidebarOpen)} className="bg-white p-3 rounded-md shadow-lg pointer-events-auto text-blue-900 hover:bg-gray-100" aria-label="Mostrar lista de locais">
-                            <FaBars size={20} />
+                            <FaBars size={23} />
                         </button>
                     </div>
                 </div>

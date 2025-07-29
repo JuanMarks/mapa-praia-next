@@ -127,14 +127,14 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
 
         <div className={`
   absolute sm:relative
-  w-[90%] max-w-[350px]
+  w-[90%] max-w-[380px]
   right-4 sm:right-auto
   transition-all duration-300
   ${isSearchExpanded ? 'opacity-100' : 'opacity-0 sm:opacity-100 pointer-events-none sm:pointer-events-auto'}
 `}>
 
             <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 pl-1 sm:pl-3 flex items-center ">
+                <div className="pointer-events-none absolute inset-y-0 left-2 pl-1 sm:pl-3 flex items-center ">
                     <FaSearch className="text-gray-400" />
                 </div>
                 <input
