@@ -73,13 +73,13 @@ export default function Login() {
             setIsLoading(true); // Opcional: pode ter um estado de loading separado para Google
             setError(null);
             try {
-                const res = await api.post('/auth/google', { token: credentialResponse.credential });
+                const res = await api.post('/auth/google', { idToken: credentialResponse.credential });
                 
                 console.log("Login com Google bem-sucedido:", res.data);
-                Cookies.set('token', res.data.access_token, { expires: 1, secure: true, sameSite: 'strict' });
-                Cookies.set('role', res.data.user.role, { expires: 1, secure: true, sameSite: 'strict' });
-                Cookies.set('username', res.data.user.name, { expires: 1, secure: true, sameSite: 'strict' });
-                
+                Cookies.set('token', res.data.access_token.access_token, { expires: 1, secure: true, sameSite: 'strict' });
+                Cookies.set('role', res.data.access_token.user.role, { expires: 1, secure: true, sameSite: 'strict' });
+                Cookies.set('username', res.data.access_token.user.name, { expires: 1, secure: true, sameSite: 'strict' });
+
                 router.push('/');
             } catch (err) {
                 console.error("Erro no login com Google:", err);
