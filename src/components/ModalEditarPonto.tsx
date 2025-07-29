@@ -17,31 +17,30 @@ const TrashIcon = () => (
 );
 
 const ICONS = [
+    
     'https://cdn-icons-png.flaticon.com/512/16438/16438096.png',
-    'https://cdn-icons-png.flaticon.com/512/1138/1138048.png',
-    'https://cdn-icons-png.flaticon.com/512/1946/1946788.png',
+    "https://cdn-icons-png.flaticon.com/512/1138/1138048.png",
     'https://cdn-icons-png.flaticon.com/512/7804/7804228.png',
     'https://cdn-icons-png.flaticon.com/512/6395/6395499.png',
     'https://cdn-icons-png.flaticon.com/512/3448/3448647.png',
     'https://cdn-icons-png.flaticon.com/512/9922/9922103.png',
     'https://cdn-icons-png.flaticon.com/512/5695/5695678.png',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753742693658.svg?token=exp=1753743594~hmac=6bdfba66f8868920e4cbeb8d18cbd887',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753742942073.svg?token=exp=1753743848~hmac=7a12660b60e27942eae22df64b9f3b9a',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743046946.svg?token=exp=1753743947~hmac=8efe3786fbe5a82dc9a48c9b756637f5',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743119229.svg?token=exp=1753744019~hmac=a72a0beb22a73513b48562a807100eca',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743195612.svg?token=exp=1753744106~hmac=15679c5d446abb9507a57d2dafbf785a',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743278295.svg?token=exp=1753744189~hmac=e17707de9f09ed79e7bd402887124ba3',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743362043.svg?token=exp=1753744262~hmac=f89bc4092d4911d5c6acee9b9f7a84b9',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743421210.svg?token=exp=1753744321~hmac=990ca33f08b8f47e2542d1d88d78fffa',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743584576.svg?token=exp=1753744485~hmac=c6b0fbca31da3d4534a136dc96e92f45',
     'https://cdn-icons-png.flaticon.com/512/7720/7720503.png',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753743743308.svg?token=exp=1753744643~hmac=dad57bfaf3be0b698aa345d33edbb3fe',
     'https://cdn-user-icons.flaticon.com/202337/202337775/1753745898972.svg?token=exp=1753746799~hmac=0b0ae23d725a3130d0dec6430bef99d8',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746095998.svg?token=exp=1753746996~hmac=d92a8e961ebdd4067043ed09485dc0f3',
     'https://cdn-user-icons.flaticon.com/202337/202337775/1753746392608.svg?token=exp=1753747293~hmac=1c4b2c758ee3951c4247098c289dceae',
-    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746910443.svg?token=exp=1753747811~hmac=181c4eb481a1b9f3dfde7fa5c5633ce4'
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753746910443.svg?token=exp=1753747811~hmac=181c4eb481a1b9f3dfde7fa5c5633ce4',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747463790.svg?token=exp=1753748368~hmac=638e67d6cb2484d6f2861c1edae009a1',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747586711.svg?token=exp=1753748487~hmac=4419a8c33207c0e36319603380eb3674',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747659924.svg?token=exp=1753748560~hmac=f73edf0658d48a31c98db42c14fa2b0d',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747795942.svg?token=exp=1753748696~hmac=3cfddcee72e3673e8dbcc7380807cae9',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747917146.svg?token=exp=1753748817~hmac=5cd473dcc00c18ffa4af85a966f12109',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753747981896.svg?token=exp=1753748882~hmac=d39de14c80440f41e54351d822c12685',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748060520.svg?token=exp=1753748961~hmac=2fc18596ef82e40999e8252911381fb2',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748132938.svg?token=exp=1753749033~hmac=dde72720e7d0deebc11a32d9e977d35c',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748198310.svg?token=exp=1753749098~hmac=54ed9caf65751f74deea8208cb4f79bc',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748276940.svg?token=exp=1753749177~hmac=85b8ee1bce374d6d37f065c5fd5578a2',
+    'https://cdn-user-icons.flaticon.com/202337/202337775/1753748332673.svg?token=exp=1753749233~hmac=c45213af9248e63cda39595abce6313b'
 ];
-
 interface Props {
     ponto: PontoTuristico;
     onClose: () => void;

@@ -10,14 +10,26 @@ const nextConfig = {
         pathname: '/**',
       },
       {
-        // Adicione também o domínio do Cloudinary, já que você o usa
+        protocol: 'https',
+        hostname: 'cdn-user-icons.flaticon.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'backend-teste-production-e474.up.railway.app',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
         pathname: '/**',
       },
       {
-        // Adicione também o domínio do Cloudinary, já que você o usa
+        
         protocol: 'http',
         hostname: 'www.w3.org',
         port: '',
