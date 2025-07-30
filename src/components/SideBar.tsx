@@ -68,7 +68,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
   className={`
     absolute left-0 
     top-[75px] sm:top-[120px] 
-    bottom-[75px] sm:bottom-[80px]
+    bottom-[73px] sm:bottom-[80px]
     w-[260px] sm:w-[320px] max-w-[90vw]
     bg-white 
     rounded-br-2xl rounded-tr-2xl 
