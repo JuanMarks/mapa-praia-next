@@ -2,15 +2,20 @@
 
 import { useState, useEffect, FC, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules'; // ✅ Autoplay adicionado
+import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+
 import Image from 'next/image';
 import { PontoTuristico } from '@/types/ponto';
 import { motion } from 'framer-motion';
 import api from '@/axios/config';
 import { isAxiosError } from 'axios';
 import { FaImage } from 'react-icons/fa';
+
+interface CarrosselHorizontalProps {
+  onPontoClick: (ponto: PontoTuristico) => void;
+}
 
 const CATEGORIAS = {
   'Todos': 'todos',
@@ -20,7 +25,7 @@ const CATEGORIAS = {
   'Bares': 'bares',
 };
 
-const CarrosselHorizontal: FC = () => {
+const CarrosselHorizontal: FC<CarrosselHorizontalProps> = ({ onPontoClick }) => {
   const [pontos, setPontos] = useState<PontoTuristico[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +38,6 @@ const CarrosselHorizontal: FC = () => {
         const response = await api.get('/places/getPlaces');
         setPontos(response.data);
       } catch (err: unknown) {
-        console.error("Erro ao buscar pontos para o carrossel:", err);
         let errorMessage = 'Não foi possível carregar os destaques.';
         if (isAxiosError(err)) {
           errorMessage = 'Ocorreu um erro no servidor ao buscar os locais.';
@@ -58,24 +62,34 @@ const CarrosselHorizontal: FC = () => {
   }, [pontos, filtroAtivo]);
 
   if (loading) {
-    return <div className="text-center p-10 text-gray-500">Carregando destaques...</div>;
+    return (
+      <div className="w-full bg-white py-8">
+        <div className="max-w-screen-xl mx-auto px-4 text-center text-gray-500">
+          Carregando destaques...
+        </div>
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div className="text-center p-10 bg-red-50 rounded-lg mx-4">
-        <p className="font-semibold text-red-600">Ops! Algo deu errado.</p>
-        <p className="text-red-500 mt-1">{error}</p>
+      <div className="w-full bg-white py-8">
+        <div className="max-w-screen-xl mx-auto px-4">
+          <div className="text-center p-10 bg-red-50 rounded-lg">
+            <p className="font-semibold text-red-600">Ops! Algo deu errado.</p>
+            <p className="text-red-500 mt-1">{error}</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (pontosFiltrados.length === 0) {
     return (
-      <div id='favoritos' className="w-full bg-white py-8">
+      <div id="favoritos" className="w-full bg-white py-8">
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h2 className="text-2xl font-bold text-gray-900">Melhores Avaliados ⭐</h2>
+            <h2 className="text-2xl font-bold text-gray-900 tracking-wide">Melhores Avaliados ⭐</h2>
             <div className="flex flex-wrap gap-2">
               {Object.entries(CATEGORIAS).map(([nome, tipo]) => (
                 <button
@@ -138,20 +152,23 @@ const CarrosselHorizontal: FC = () => {
             }}
             spaceBetween={20}
             navigation
-            loop={true} // ✅ loop infinito
+            loop={true}
             autoplay={{
-              delay: 4000, // 4 segundos
-              disableOnInteraction: false, // continua mesmo se o usuário interagir
-              pauseOnMouseEnter: true, // pausa quando passa o mouse
+              delay: 4000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
             }}
-            modules={[Navigation, Autoplay]} // ✅ Autoplay ativado
+            modules={[Navigation, Autoplay]}
           >
             {pontosFiltrados.map((ponto) => {
               const hasPhotos = ponto.photos && ponto.photos.length > 0;
 
               return (
                 <SwiperSlide key={ponto.id}>
-                  <div className="bg-white rounded-2xl transition p-2 h-full shadow-md hover:shadow-xl">
+                  <div
+                    className="bg-white rounded-2xl p-2 h-full shadow-md hover:shadow-xl cursor-pointer transition-all duration-200"
+                    onClick={() => onPontoClick(ponto)}
+                  >
                     <div className="w-full h-40 sm:h-48 relative rounded-xl overflow-hidden">
                       {hasPhotos ? (
                         <Image

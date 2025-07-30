@@ -7,7 +7,7 @@ export default function BottomLeftLogo() {
   return (
     <>  
       {/* Logo fixa no canto inferior esquerdo */}
-      <div className="absolute bottom-3 left-4 sm:hidden z-[1002]">
+      <div className="absolute bottom-5 left-4 sm:hidden z-[1002]">
         <Image
           src="/images/logo_amoturOFC.png" // ajuste o caminho conforme seu projeto
           alt="Logo AMOTUR"
