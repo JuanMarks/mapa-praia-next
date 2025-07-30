@@ -40,7 +40,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
 
     const handleRouteClick = () => {
         if (ponto) {
-            const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=$${ponto.latitude},${ponto.longitude}`;
+            const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${ponto.latitude},${ponto.longitude}`;
             window.open(mapsUrl, '_blank');
         }
     };

@@ -136,7 +136,7 @@ const MapaInterativo = () => {
     if (isUrl) {
         return icon({
         iconUrl: iconURL,
-        iconSize: [40, 40],         // aumente se necessário
+        iconSize: [30, 52],         // aumente se necessário
         iconAnchor: [20, 40],       // base central do ícone
         popupAnchor: [0, -35],      // ajusta posição do popup
         });
