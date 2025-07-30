@@ -76,7 +76,7 @@ export default function MobileBottomBar() {
                 className={`flex flex-col items-center justify-center h-full w-full
                             text-blue-900 hover:text-blue-900 ${
                               // Mantém o text-blue-900 apenas para o estado ativo do próprio link de login
-                              isActive('/login') ? 'text-blue-900 bg-blue-900/10 border-b-4 rounded-t-2xl border-blue-900' : '' // Aplicado ao Link/Botão diretamente
+                              isActive('/login') ? 'text-blue-900 bg-blue-900/10 border-b-4 border-blue-900' : '' // Aplicado ao Link/Botão diretamente
                             }`}
               >
                 <FaSignInAlt size={20} />
