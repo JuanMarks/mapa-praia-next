@@ -67,7 +67,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
       <div
   className={`
     absolute left-0 
-    top-[73px] sm:top-[120px] 
+    top-[75px] sm:top-[120px] 
     bottom-[75px] sm:bottom-[80px]
     w-[260px] sm:w-[320px] max-w-[90vw]
     bg-white 
