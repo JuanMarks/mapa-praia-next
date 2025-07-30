@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PontoTuristico, SocialLinks } from '@/types/ponto';
 import {
-  FaMapMarkerAlt, FaShare, FaBookmark, FaRoute, FaTimes,
+  FaRoute, FaTimes,
   FaInfoCircle, FaStar, FaInstagram, FaWhatsapp,
   FaEnvelope, FaGlobe, FaTripadvisor
 } from 'react-icons/fa';
@@ -66,10 +66,10 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
 
       <div className={`
         absolute 
-        top-1/2 sm:top-0 
+        top-102 sm:top-0 
         -translate-y-1/2 sm:translate-y-0 
         left-0 
-        h-[95%] sm:h-full 
+        h-[80%] sm:h-full 
         bg-white rounded-br-2xl rounded-tr-2xl shadow-lg z-[5000] 
         transition-transform duration-300 ease-in-out 
         w-[260px] sm:w-[320px] 
