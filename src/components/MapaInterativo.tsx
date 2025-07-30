@@ -144,7 +144,7 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
     if (isUrl) {
         return icon({
         iconUrl: iconURL,
-        iconSize: [30, 52],         // aumente se necessário
+        iconSize: [26, 52],         // aumente se necessário
         iconAnchor: [20, 40],       // base central do ícone
         popupAnchor: [0, -35],      // ajusta posição do popup
         });
