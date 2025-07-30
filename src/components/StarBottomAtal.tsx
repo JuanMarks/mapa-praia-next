@@ -5,7 +5,7 @@ import { FaStar } from 'react-icons/fa';
 
 export default function FloatingStarButton() {
   return (
-    <div className="absolute bottom-25 sm:bottom-25 right-5 z-[1002]">
+    <div className="absolute bottom-27 sm:bottom-25 right-5 z-[1002]">
       <Link
         href="#favoritos"
         className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg"

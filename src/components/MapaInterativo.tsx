@@ -29,11 +29,11 @@ import FloatingStarButton from './StarBottomAtal';
 
 const centro: [number, number] = [-3.07414635412766, -39.657204795003985];
 const bounds: [[number, number], [number, number]] = [
-  [-2.9645931074537804, -39.732843894186985],
-  [-3.163798686440656, -39.535951274441054],
+    [-2.9645931074537804, -39.732843894186985],
+    [-3.163798686440656, -39.535951274441054],
 ];
-   interface MapaInterativoProps {
-  pontoSelecionado?: PontoTuristico | null;
+interface MapaInterativoProps {
+    pontoSelecionado?: PontoTuristico | null;
 }
 const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
@@ -54,7 +54,7 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
 
         }
         return true; // fallback para SSR
-        });
+    });
     const fetchPontos = async () => {
         try {
             setMapError(null);
@@ -63,7 +63,7 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
             console.log("Pontos carregados:", response.data);
         } catch (err: unknown) { // CORRIGIDO: de 'any' para 'unknown'
             console.error("Erro ao buscar os pontos turísticos:", err);
-            
+
             let errorMessage = 'Não foi possível carregar os pontos no mapa. Verifique sua conexão e tente recarregar a página.';
 
             if (isAxiosError(err) && err.response) {
@@ -71,20 +71,20 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
             } else if (err instanceof Error) {
                 errorMessage = err.message;
             }
-            
+
             setMapError(errorMessage);
             setPontos([]);
         }
     };
     useEffect(() => {
-  if (pontoSelecionado && map) {
-    map.flyTo([pontoSelecionado.latitude, pontoSelecionado.longitude], 17);
-    setSelectedPonto(pontoSelecionado);
-    setIsListSidebarOpen(false);
-  }
-}, [pontoSelecionado, map]);
+        if (pontoSelecionado && map) {
+            map.flyTo([pontoSelecionado.latitude, pontoSelecionado.longitude], 17);
+            setSelectedPonto(pontoSelecionado);
+            setIsListSidebarOpen(false);
+        }
+    }, [pontoSelecionado, map]);
     useEffect(() => {
-        
+
         fetchPontos();
     }, []);
 
@@ -140,22 +140,22 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
     };
 
     const createCustomIcon = (iconURL: string) => {
-    const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
-    if (isUrl) {
-        return icon({
-        iconUrl: iconURL,
-        iconSize: [26, 52],         // aumente se necessário
-        iconAnchor: [20, 40],       // base central do ícone
-        popupAnchor: [0, -35],      // ajusta posição do popup
+        const isUrl = iconURL.startsWith('http') || iconURL.startsWith('/');
+        if (isUrl) {
+            return icon({
+                iconUrl: iconURL,
+                iconSize: [26, 52],         // aumente se necessário
+                iconAnchor: [20, 40],       // base central do ícone
+                popupAnchor: [0, -35],      // ajusta posição do popup
+            });
+        }
+        return divIcon({
+            html: `<span style="font-size: 32px;">${iconURL}</span>`,
+            className: 'emoji-icon',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -35],
         });
-    }
-    return divIcon({
-        html: `<span style="font-size: 32px;">${iconURL}</span>`,
-        className: 'emoji-icon',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -35],
-    });
     };
 
     const handleLocationSelect = (ponto: PontoTuristico | null) => {
@@ -180,20 +180,20 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
         setSelectedPonto(pontoNormalizado);
     };
 
-    const createLabelIcon = (nome : string) => {
-        return  divIcon({
-                    className: 'custom-label-icon tracking-wider', // Classe para remover estilos padrão
-                    html: `<span class="map-label-text">${nome}</span>`,
-                    iconSize: [100, 20], // Ajuste o tamanho conforme necessário
-                    iconAnchor: [-20, 35]  // Posição relativa ao marcador principal
-                });
+    const createLabelIcon = (nome: string) => {
+        return divIcon({
+            className: 'custom-label-icon tracking-wider', // Classe para remover estilos padrão
+            html: `<span class="map-label-text">${nome}</span>`,
+            iconSize: [100, 20], // Ajuste o tamanho conforme necessário
+            iconAnchor: [-20, 35]  // Posição relativa ao marcador principal
+        });
     }
 
     const adjustZoomForMobile = () => {
         if (map) {
             const isMobile = window.innerWidth < 768; // Exemplo: 768px como breakpoint para mobile
             if (isMobile) {
-                map.setMinZoom(11); 
+                map.setMinZoom(11);
                 map.setMaxZoom(18);
                 if (map.getZoom() > 18) { // Se o zoom atual for muito alto para mobile, ajusta
                     map.setZoom(18);
@@ -216,33 +216,33 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
     }, [map]);
 
 
-    
+
 
     return (
         <div className="flexw-full h-[90vh] md:h-screen lg:h-screen relative bg-gray-200">
             <div className={`relative flex-grow h-full transition-all duration-300 ease-in-out ${isSuggesting ? 'cursor-crosshair' : ''}`}>
-                
+
                 <div className='flex'>
                     <div className='hidden sm:block'>
                         <Header />
                     </div>
-                    
+
                     <div
-  className="
-    absolute
-    top-5 sm:top-[120px] lg:top-8
-    left-2 sm:left-auto lg:right-0
-    sm:right-0
-    sm:translate-x-0
-    lg:translate-x-0
-    w-[80%] sm:w-[300px] lg:w-[400px]
-    z-[1002]
-  "
->
-  <LocationSearch onLocationSelect={handleLocationSelect} />
-</div>
+                        className="
+                        absolute
+                        top-5 sm:top-[120px] lg:top-8
+                        left-2 sm:left-auto lg:right-0
+                        sm:right-0
+                        sm:translate-x-0
+                        lg:translate-x-0
+                        w-[80%] sm:w-[300px] lg:w-[400px]
+                        z-[1002]
+                        "
+                    >
+                        <LocationSearch onLocationSelect={handleLocationSelect} />
+                    </div>
                 </div>
-                
+
                 <MapContainer center={centro} zoom={11} minZoom={11} maxBounds={bounds} maxBoundsViscosity={1.0} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} ref={setMap} zoomControl={false}>
                     {mapError && (
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000] bg-red-100 p-4 rounded-lg shadow-lg text-center">
@@ -250,35 +250,35 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
                             <p className="text-sm text-red-600 mt-1">{mapError}</p>
                         </div>
                     )}
-                    
+
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap" />
-                    
+
                     <MapClickHandler />
                     {isPaneReady && (
                         <>
-                            <TideStatusIcon 
+                            <TideStatusIcon
                                 position={[-3.00818, -39.66286]} // Posição fixa no "mar" do mapa
                                 onClick={() => setIsTideModalOpen(true)}
                                 pane="tideIconPane" // Usando o pane customizado
                             />
 
-                            <TideStatusIcon 
+                            <TideStatusIcon
                                 position={[-2.99550, -39.72106]} // Posição fixa no "mar" do mapa
                                 onClick={() => setIsTideModalOpen(true)}
                                 pane="tideIconPane" // Usando o pane customizado
                             />
 
-                            <TideStatusIcon 
+                            <TideStatusIcon
                                 position={[-3.04912, -39.57949]} // Posição fixa no "mar" do mapa
                                 onClick={() => setIsTideModalOpen(true)}
                                 pane="tideIconPane" // Usando o pane customizado
                             />
                         </>
                     )}
-                    
 
-                    
-                    
+
+
+
 
                     {pontos.map((ponto) => (
                         <>
@@ -295,7 +295,7 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
                                 <Popup closeButton={false} autoClose={false} closeOnClick={false} autoPan={false} className="map-popup">
                                     <PopupContent ponto={ponto} />
                                 </Popup>
-                                
+
                             </Marker>
 
                             <Marker
@@ -303,7 +303,7 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
                                 position={[ponto.latitude, ponto.longitude]}
                                 icon={createLabelIcon(ponto.name)}
                                 interactive={false} // Faz com que o rótulo não seja clicável
-                                
+
                             />
                         </>
                     ))}
@@ -328,25 +328,25 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
                     </button>
                 </div>
 
-                <div className="absolute bottom-4 right-5 z-[1000]">
+                <div className="absolute bottom-6 sm:bottom-4 right-5 z-[1000]">
                     <div className='sm:flex absolute sm:bottom-6 bottom-5 right-0 z-[1002]'>
                         {role === 'user' && !isSuggesting && (
                             <button onClick={() => setIsSuggesting(true)} className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:bg-gray-100" aria-label="Sugerir novo local">
                                 <span className='text-gray-700'>
-                                <FaPlus />
+                                    <FaPlus />
                                 </span>
                             </button>
                         )}
                     </div>
                     {isSuggesting && (
                         <div className="bg-white absolute bottom-2 z-[3000] right-0 w-60 p-3 rounded-md shadow-lg pointer-events-auto animate-pulse flex items-center gap-3">
-                           <span className="text-gray-700 font-semibold">Clique no mapa para adicionar sua sugestão</span>
-                           <button onClick={() => setIsSuggesting(false)} className="text-red-500 hover:text-red-700" aria-label="Cancelar sugestão"><FaTimes size={20} /></button>
+                            <span className="text-gray-700 font-semibold">Clique no mapa para adicionar sua sugestão</span>
+                            <button onClick={() => setIsSuggesting(false)} className="text-red-500 hover:text-red-700" aria-label="Cancelar sugestão"><FaTimes size={20} /></button>
                         </div>
                     )}
                 </div>
 
-                <div className="absolute top-0 sm:top-3.5 sm:right-5 right-5 z-[3000] pointer-events-none">
+                <div className="absolute top-0 sm:top-3.5 sm:right-5 right-3 z-[3000] pointer-events-none">
                     <div className="flex items-start gap-4 mt-5">
                         <button onClick={() => setIsListSidebarOpen(!isListSidebarOpen)} className="bg-white p-3 rounded-md shadow-lg pointer-events-auto text-blue-900 hover:bg-gray-100" aria-label="Mostrar lista de locais">
                             <FaBars size={23} />
@@ -357,8 +357,8 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
                 <Sidebar ponto={selectedPonto} onClose={handleSidebarClose} onAtualizado={handlePontoAtualizado} />
                 {novaPosicao && <FormularioPonto coordenadas={novaPosicao} onClose={() => setNovaPosicao(null)} onCriado={fetchPontos} />}
                 {suggestionCoords && <FormularioSugestao coordenadas={suggestionCoords} onClose={() => setSuggestionCoords(null)} onSuccess={() => { setSuggestionCoords(null); alert('Obrigado! Sua sugestão foi enviada para análise.'); }} />}
-                
-                <TideDayModal 
+
+                <TideDayModal
                     isOpen={isTideModalOpen}
                     onClose={() => setIsTideModalOpen(false)}
                     maresDoDia={maresDoDia}
@@ -366,8 +366,8 @@ const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => 
                 />
             </div>
             <LocationListSidebar isOpen={isListSidebarOpen} pontos={pontos} onLocationClick={handleLocationSelect} />
-            <BottomLeftLogo/>
-            <MobileBottomBar/>
+            <BottomLeftLogo />
+            <MobileBottomBar />
             <FloatingStarButton />
         </div>
     );

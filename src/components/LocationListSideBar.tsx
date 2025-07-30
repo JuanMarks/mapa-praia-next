@@ -37,7 +37,7 @@ const LocationListSidebar = ({ isOpen, pontos, onLocationClick }: Props) => {
       {/* Sidebar absoluta no canto, com transição e sumindo corretamente */}
       <div
         className={`
-          absolute top-20 right-5 sm:top-22 w-52 sm:w-60 h-[500px] bg-white shadow-lg z-[9999]
+          absolute top-20 sm:right-5 right-3 sm:top-22 w-52 sm:w-60 h-[500px] bg-white shadow-lg z-[9999]
           flex flex-col transition-all duration-300 ease-in-out
           rounded-2xl
           ${isOpen ? 'opacity-100 visible pointer-events-auto p-2' : 'opacity-0 invisible pointer-events-none p-0'}

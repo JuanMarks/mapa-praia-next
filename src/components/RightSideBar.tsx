@@ -96,7 +96,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
 
   return (
     <>
-      <div ref={searchContainerRef} className="relative w-full max-w-[250px] sm:max-w-[300px]">
+      <div ref={searchContainerRef} className="relative w-full px-4 max-w-[90vw] sm:max-w-[320px] md:max-w-[300px]">
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-2 pl-1 flex items-center">
             <FaSearch className="text-gray-400" />
@@ -114,7 +114,7 @@ const LocationSearch = ({ onLocationSelect }: LocationSearchProps) => {
         </div>
 
         {isDropdownOpen && (
-          <ul className="absolute  mt-2 w-full bg-white overflow-hidden rounded-xl shadow-lg overflow-y-auto max-h-60 z-50">
+          <ul className="absolute mt-2 w-full bg-white overflow-hidden rounded-xl shadow-lg overflow-y-auto max-h-60 z-50">
             {filteredPontos.length > 0 ? (
               filteredPontos.map(ponto => (
                 <li

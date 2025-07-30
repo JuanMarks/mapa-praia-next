@@ -89,7 +89,7 @@ export default function MobileBottomBar() {
 
       {/* Dashboard (apenas para admin) */}
       {role === 'admin' && (
-        <div className="absolute bottom-9 right-5 sm:hidden z-[1002]">
+        <div className="absolute bottom-11 right-5 sm:hidden z-[1002]">
           <Link href="/pageadmin" className="sm:hidden bg-white rounded-full h-12 w-12
     flex items-center justify-center shadow-lg">
             <span className='text-gray-700'><FaPencil size={20}/></span>
