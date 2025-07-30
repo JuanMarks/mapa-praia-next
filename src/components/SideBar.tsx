@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PontoTuristico, SocialLinks } from '@/types/ponto';
 import {
-  FaMapMarkerAlt, FaShare, FaBookmark, FaRoute, FaTimes,
+  FaRoute, FaTimes,
   FaInfoCircle, FaStar, FaInstagram, FaWhatsapp,
   FaEnvelope, FaGlobe, FaTripadvisor
 } from 'react-icons/fa';

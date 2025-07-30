@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { FaGithub, FaEnvelope, FaInfoCircle } from 'react-icons/fa';
+import {FaEnvelope, FaInfoCircle } from 'react-icons/fa';
 import Link from 'next/link';
 export default function Footer() {
   return (
