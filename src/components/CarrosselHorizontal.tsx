@@ -22,7 +22,7 @@ const CATEGORIAS = {
   'Restaurantes': 'restaurante',
   'Hotéis': 'hotel',
   'Praias': 'praia',
-  'Bares': 'bar',
+  'Bares': 'bares',
 };
 
 const CarrosselHorizontal: FC<CarrosselHorizontalProps> = ({ onPontoClick }) => {
