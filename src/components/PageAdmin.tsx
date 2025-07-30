@@ -226,7 +226,7 @@ const PageAdmin = () => {
             {/* Sidebar */}
             <aside className={`
                 bg-gray-800 text-white w-64 flex-shrink-0
-                fixed top-0 left-0 sm:h-screen h-210 z-40 
+                fixed top-0 left-0 sm:h-screen h-full z-40 
                 transition-transform duration-300 ease-in-out
                 md:translate-x-0 
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}

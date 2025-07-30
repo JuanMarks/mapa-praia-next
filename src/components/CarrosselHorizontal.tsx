@@ -166,7 +166,7 @@ const CarrosselHorizontal: FC<CarrosselHorizontalProps> = ({ onPontoClick }) => 
               return (
                 <SwiperSlide key={ponto.id}>
                   <div
-                    className="bg-white rounded-2xl p-2 h-full shadow-md hover:shadow-xl cursor-pointer transition-all duration-200"
+                    className="bg-white rounded-2xl p-2 h-full  hover:shadow-xl cursor-pointer transition-all duration-200"
                     onClick={() => onPontoClick(ponto)}
                   >
                     <div className="w-full h-40 sm:h-48 relative rounded-xl overflow-hidden">

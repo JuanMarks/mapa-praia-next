@@ -39,14 +39,6 @@ export default function Footer() {
         >
           <FaEnvelope /> Contato
         </Link>
-        <Link
-          href="https://github.com/seu-repo"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 border border-gray-300 px-3 py-1.5 rounded-4xl hover:bg-gray-100 transition"
-        >
-          <FaGithub /> GitHub
-        </Link>
       </div>
     </footer>
   );
