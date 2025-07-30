@@ -6,22 +6,57 @@ import Image from 'next/image';
 // Importando o Swiper e seus módulos
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
+import { useEffect, useState } from 'react';
+import api from '@/axios/config';
 
 // Importando os estilos do Swiper
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 // Importando ícones
-import { FaStar, FaMapMarkerAlt, FaBookmark, FaWheelchair } from 'react-icons/fa';
+import { FaStar, FaMapMarkerAlt, FaBookmark } from 'react-icons/fa';
 
 
 interface Props {
   ponto: PontoTuristico;
 }
+  
+interface totalRatingsResponse {
+  comment : string;
+  createdAt: string;
+  id: string;
+  placeId: string;
+  user: {
+    name: string;
+  };
+  userId: string;
+  value: number;
+}
+
+
+
 
 const PopupContent = ({ ponto }: Props) => {
 
   const temFotos = ponto.photos && ponto.photos.length > 0;
+  const [totalRatings, setTotalRatings] = useState<totalRatingsResponse[]>([]);
+
+  useEffect(() => {
+    const fetchTotalRatings = async () => {
+      try {
+        const response = await api.get(`/ratings/place/${ponto.id}`);
+        console.log("Total de avaliações:", response.data);
+        setTotalRatings(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar total de avaliações:", error);
+        setTotalRatings([]);
+      }
+    };
+
+    if (ponto?.id) {
+      fetchTotalRatings();
+    }
+  }, [ponto?.id]);
 
   return (
     // Card principal: largura reduzida de 320px para 192px (60%)
@@ -71,19 +106,19 @@ const PopupContent = ({ ponto }: Props) => {
             {/* Demais textos: fonte reduzida de text-sm para text-xs */}
             <div className="flex items-center text-xs text-gray-600 mt-1">
               <FaStar className="text-yellow-500 mr-1" />
-              <span>4,9</span>
-              <span className="ml-1.5">(7)</span>
+              <span>{ponto.averageRating || 0}</span>
+              <span className="ml-1.5">{totalRatings.length}</span>
             </div>
 
-            <div className="flex items-center text-xs text-gray-600 mt-1">
+            {/* <div className="flex items-center text-xs text-gray-600 mt-1">
               <span>Quadra</span>
               <FaWheelchair className="ml-1.5" />
-            </div>
+            </div> */}
 
-            <p className="text-xs mt-1">
+            {/* <p className="text-xs mt-1">
               <span className="text-green-600 font-semibold">Aberto</span>
               <span className="text-gray-600"> ⋅ Fecha 00:00</span>
-            </p>
+            </p> */}
           </div>
           
           {/* Botões de Ação: tamanho reduzido de h/w-10 para h/w-8 e ícones de 18 para 14 */}

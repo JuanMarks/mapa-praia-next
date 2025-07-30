@@ -15,6 +15,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const idGoogle = "557373359232-9j6q5spj3j5bm0rra09pngjgsse68bam.apps.googleusercontent.com"
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
@@ -156,11 +157,11 @@ export default function Login() {
                             />
                         </div>
 
-                        <div className="text-right text-sm">
+                        {/* <div className="text-right text-sm">
                             <Link href="#" className="font-medium text-blue-900 hover:text-blue-600">
                                 Esqueceu sua senha?
                             </Link>
-                        </div>
+                        </div> */}
 
                         <div>
                             <button
@@ -185,7 +186,7 @@ export default function Login() {
 
                     {/* Botão de Login com Google */}
                     <div className="mt-6 flex justify-center">
-                        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+                        <GoogleOAuthProvider clientId={idGoogle || ''}>
                             <GoogleLogin
                                 onSuccess={handleGoogleLogin}
                                 onError={() => setError("Falha ao autenticar com o Google.")}
