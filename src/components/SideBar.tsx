@@ -57,14 +57,24 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
       {ponto && (
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`absolute top-1/2 bg-white p-2 shadow-md focus:outline-none z-[5001] transition-all duration-300 ease-in-out ${isOpen ? 'left-[250px] sm:left-[320px] rounded-r-full' : 'left-0 rounded-r-full'}`}
+          className={`absolute top-1/2 bg-white p-2 shadow-md focus:outline-none z-[5001] transition-all duration-300 ease-in-out ${isOpen ? 'left-[260px] sm:left-[320px] rounded-r-full' : 'left-0 rounded-r-full'}`}
           aria-label={isOpen ? "Esconder sidebar" : "Mostrar sidebar"}
         >
           {isOpen ? <IoChevronBack size={20} /> : <IoChevronForward size={20} />}
         </button>
       )}
 
-      <div className={`absolute top-5 sm:top-0 left-0 h-[550px] sm:h-full bg-white rounded-br-2xl rounded-tr-2xl shadow-lg z-[5000] transition-transform duration-300 ease-in-out w-[250px] sm:w-[320px] ${isOpen ? 'transform-none' : '-translate-x-full'}`}>
+      <div className={`
+        absolute 
+        top-1/2 sm:top-0 
+        -translate-y-1/2 sm:translate-y-0 
+        left-0 
+        h-[95%] sm:h-full 
+        bg-white rounded-br-2xl rounded-tr-2xl shadow-lg z-[5000] 
+        transition-transform duration-300 ease-in-out 
+        w-[260px] sm:w-[320px] 
+        ${isOpen ? 'transform-none' : '-translate-x-full'}
+      `}>
         <button
           onClick={onClose}
           className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-1.5 hover:bg-opacity-75 transition z-20"
@@ -74,26 +84,26 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
         </button>
 
         <div className="flex flex-col h-full">
-          <div className="relative w-full h-48">
+          <div className="relative w-full h-48 ">
             <Image src={imagemCapa} alt={`Foto de ${ponto?.name}`} fill style={{ objectFit: 'cover' }} className="rounded-t-lg" />
           </div>
 
           <div className="p-4 flex-grow overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-800 tracking-wide">{ponto?.name}</h2>
+            <h2 className="text-2xl font-bold text-gray-800 tracking-wide text-center">{ponto?.name}</h2>
 
             {ponto && <StarRating ponto={ponto} onAtualizado={onAtualizado} />}
 
-            <div className="grid grid-cols-4 gap-2 my-4 text-center">
+            <div className="grid gap-2 my-4 text-center justify-center">
               <ActionButton icon={<FaRoute />} label="Rotas" onClick={handleRouteClick} />
-              <ActionButton icon={<FaBookmark />} label="Salvar" disabled />
+              {/* <ActionButton icon={<FaBookmark />} label="Salvar" disabled />
               <ActionButton icon={<FaShare />} label="Partilhar" disabled />
-              <ActionButton icon={<FaMapMarkerAlt />} label="Mapa" disabled />
+              <ActionButton icon={<FaMapMarkerAlt />} label="Mapa" disabled /> */}
             </div>
 
             {temSocialLinks && (
               <div className="my-4 pt-4 border-t">
-                <h3 className="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wider">Contato e Redes</h3>
-                <div className="flex flex-wrap gap-4">
+                <h3 className="text-sm text-center font-bold text-gray-600 mb-3 uppercase tracking-wider">Contato e Redes</h3>
+                <div className="flex flex-wrap gap-4 justify-center">
                   {socialLinksData.website && <SocialLink href={normalizeUrl(socialLinksData.website)} icon={<FaGlobe />} />}
                   {socialLinksData.instagram && <SocialLink href={normalizeUrl(socialLinksData.instagram)} icon={<FaInstagram />} />}
                   {socialLinksData.whatsapp && <SocialLink href={`https://wa.me/${socialLinksData.whatsapp}`} icon={<FaWhatsapp />} />}
@@ -107,7 +117,7 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
 
             {temFotos && (
               <div className="mt-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Galeria</h3>
+                <h3 className="text-lg font-semibold text-center text-gray-800 mb-2">Galeria</h3>
                 <div className="grid grid-cols-3 gap-2">
                   {ponto.photos?.map((fotoUrl, index) => (
                     <div key={index} className="relative w-full h-20 rounded-lg overflow-hidden">
@@ -174,7 +184,7 @@ const StarRating = ({ ponto, onAtualizado }: StarRatingProps) => {
 
   return (
     <div className="flex flex-col my-3">
-      <div className="flex items-center gap-2">
+      <div className="flex gap-2 justify-center">
         <div className="flex">
           {[...Array(5)].map((_, i) => {
             const ratingValue = i + 1;
