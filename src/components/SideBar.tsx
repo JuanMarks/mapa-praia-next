@@ -64,17 +64,21 @@ const Sidebar = ({ ponto, onClose, onAtualizado }: SidebarProps) => {
         </button>
       )}
 
-      <div className={`
-        absolute 
-        top-102 sm:top-0 
-        -translate-y-1/2 sm:translate-y-0 
-        left-0 
-        h-[80%] sm:h-full 
-        bg-white rounded-br-2xl rounded-tr-2xl shadow-lg z-[5000] 
-        transition-transform duration-300 ease-in-out 
-        w-[260px] sm:w-[320px] 
-        ${isOpen ? 'transform-none' : '-translate-x-full'}
-      `}>
+      <div
+  className={`
+    absolute left-0 
+    top-[73px] sm:top-[120px] 
+    bottom-[75px] sm:bottom-[80px]
+    w-[260px] sm:w-[320px] max-w-[90vw]
+    bg-white 
+    rounded-br-2xl rounded-tr-2xl 
+    shadow-lg 
+    z-[5000] 
+    transition-transform duration-300 ease-in-out 
+    ${isOpen ? 'transform-none' : '-translate-x-full'}
+  `}
+>
+
         <button
           onClick={onClose}
           className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-1.5 hover:bg-opacity-75 transition z-20"
@@ -204,9 +208,9 @@ const StarRating = ({ ponto, onAtualizado }: StarRatingProps) => {
         </div>
         <span className="text-gray-600 font-semibold">{currentRating.toFixed(1)}</span>
       </div>
-      {error && <span className="text-xs text-red-600 mt-1">{error}</span>}
-      {successMessage && <span className="text-xs text-green-600 mt-1">{successMessage}</span>}
-      {!role && <span className="text-xs text-gray-500 mt-1">(Faça login para avaliar)</span>}
+      {error && <span className="text-xs text-center text-red-600 mt-1">{error}</span>}
+      {successMessage && <span className="text-xs text-center text-green-600 mt-1">{successMessage}</span>}
+      {!role && <span className="text-xs text-center text-gray-500 mt-1">(Faça login para avaliar)</span>}
     </div>
   );
 };
