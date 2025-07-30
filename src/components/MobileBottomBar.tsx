@@ -65,7 +65,7 @@ export default function MobileBottomBar() {
               <button
                 onClick={logout}
                 className="flex flex-col items-center justify-center h-full w-full
-                           text-gray-500 hover:text-red-800" // Removido `isActive('/') ? 'bg-blue-900/10' : ''`
+                           text-gray-700 hover:text-red-800" // Removido `isActive('/') ? 'bg-blue-900/10' : ''`
               >
                 <FaSignOutAlt size={20} />
                 <span className="text-xs mt-1">Sair</span>
@@ -92,7 +92,7 @@ export default function MobileBottomBar() {
         <div className="absolute bottom-9 right-5 sm:hidden z-[1002]">
           <Link href="/pageadmin" className="sm:hidden bg-white rounded-full h-12 w-12
     flex items-center justify-center shadow-lg">
-            <FaPencil size={20}/>
+            <span className='text-gray-700'><FaPencil size={20}/></span>
           </Link>
         </div>
       )}

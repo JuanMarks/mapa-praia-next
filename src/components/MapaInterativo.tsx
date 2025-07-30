@@ -32,8 +32,10 @@ const bounds: [[number, number], [number, number]] = [
   [-2.9645931074537804, -39.732843894186985],
   [-3.163798686440656, -39.535951274441054],
 ];
-
-const MapaInterativo = () => {
+   interface MapaInterativoProps {
+  pontoSelecionado?: PontoTuristico | null;
+}
+const MapaInterativo: React.FC<MapaInterativoProps> = ({ pontoSelecionado }) => {
     const [pontos, setPontos] = useState<PontoTuristico[]>([]);
     const [novaPosicao, setNovaPosicao] = useState<[number, number] | null>(null);
     const [suggestionCoords, setSuggestionCoords] = useState<[number, number] | null>(null);
@@ -49,10 +51,10 @@ const MapaInterativo = () => {
     const [isListSidebarOpen, setIsListSidebarOpen] = useState(() => {
         if (typeof window !== 'undefined') {
             return window.innerWidth >= 640; // true no desktop, false no mobile
+
         }
         return true; // fallback para SSR
         });
-    
     const fetchPontos = async () => {
         try {
             setMapError(null);
@@ -74,7 +76,13 @@ const MapaInterativo = () => {
             setPontos([]);
         }
     };
-
+    useEffect(() => {
+  if (pontoSelecionado && map) {
+    map.flyTo([pontoSelecionado.latitude, pontoSelecionado.longitude], 17);
+    setSelectedPonto(pontoSelecionado);
+    setIsListSidebarOpen(false);
+  }
+}, [pontoSelecionado, map]);
     useEffect(() => {
         
         fetchPontos();
@@ -324,7 +332,9 @@ const MapaInterativo = () => {
                     <div className='sm:flex absolute sm:bottom-6 bottom-5 right-0 z-[1002]'>
                         {role === 'user' && !isSuggesting && (
                             <button onClick={() => setIsSuggesting(true)} className="bg-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:bg-gray-100" aria-label="Sugerir novo local">
+                                <span className='text-gray-700'>
                                 <FaPlus />
+                                </span>
                             </button>
                         )}
                     </div>
